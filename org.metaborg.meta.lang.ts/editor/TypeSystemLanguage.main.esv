@@ -1,0 +1,17 @@
+
+module TypeSystemLanguage.main
+
+imports TypeSystemLanguage-Builders TypeSystemLanguage-Refactorings TypeSystemLanguage-Colorer TypeSystemLanguage-Completions TypeSystemLanguage-Folding TypeSystemLanguage-References TypeSystemLanguage-Syntax
+
+language General properties
+                  
+  name          : TypeSystemLanguage
+  id            : org.metaborg.meta.lang.ts
+  extends       : Root
+                  
+  description   : "Spoofax/IMP-generated editor for the TypeSystemLanguage language"
+  url           : http://strategoxt.org
+                  
+  extensions    : ts
+  table         : include/TypeSystemLanguage.tbl
+  start symbols : Start
