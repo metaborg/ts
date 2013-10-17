@@ -1,0 +1,17 @@
+module pp
+
+imports
+  Terms.pp.generated
+  TypeSystemLanguage.pp.generated
+  Common.pp.generated
+  Identifiers.pp.generated
+  Layout.pp.generated
+  Constants.pp.generated
+  Vars.pp.generated
+  libstratego-gpp
+  
+strategies 
+  
+  pp-pattern = prettyprint-Pattern; box2text-string(|80)
+  
+  pp-term = prettyprint-Term; box2text-string(|80)

@@ -12,11 +12,12 @@ builders
 builders
                                                                                                              
   provider : include/typesystemlanguage.ctree                                                                
-  provider : include/typesystemlanguage-java.jar                                                             
+  //provider : include/typesystemlanguage-java.jar                                                             
                                                                                                              
   observer : editor-analyze                      (multifile)                                                 
                                                                                                              
-  builder  : "Generate Java"                     = generate-java (openeditor) (realtime)                     
+  builder  : "Generate Stratego"                 = generate-stratego (openeditor) (realtime)                 
+  builder  : "Desugar"                           = desugar-service (openeditor) (realtime)                     
   builder  : "Show abstract syntax"              = debug-show-aterm (openeditor) (realtime) (meta) (source)  
   builder  : "Show analyzed syntax"              = debug-show-analyzed (openeditor) (realtime) (meta)        
   builder  : "Show index (current)"              = debug-show-index-current (openeditor) (meta)              

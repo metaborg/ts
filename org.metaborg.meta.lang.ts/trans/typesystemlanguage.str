@@ -7,14 +7,18 @@ imports
 	libstratego-aterm
 	include/TypeSystemLanguage
 	lib/editor-common.generated
-	lib/runtime/analysis/-
-	lib/runtime/nbl/-
-	lib/runtime/task/-
-	lib/runtime/index/-
+	lib/analysis/-
+	lib/nabl/-
+	lib/task/-
+	lib/index/- 
+	lib/tmpl/-
 	names
 	check
 	generate
   editor/TypeSystemLanguage-Outliner
+  pp
+  TypeSystemLanguage.pp.generated
+  include/TypeSystemLanguage-parenthesize
 
 rules // Analysis
 	
@@ -74,3 +78,30 @@ rules // Debugging
 		
 	debug-reanalyze = 
 		analysis-debug-reanalyze(|<language>)
+		
+rules // code generation
+  
+  // Transforms a selection to Stratego
+  generate-stratego:
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"generated.str")> path;
+      result   := <to-stratego(|<guarantee-extension(|"generated")> path)> selected
+ 
+  desugar-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts")> path;
+      result   := <desugar-all; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      
+  pp-ts-string =
+    prettyprint-example
+    ; !V([], <id>)
+    ; box2text-string(|80)
+
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-ts-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-ts-string); debug(!"cannot pp ")))> ast
+    ;  result := ""

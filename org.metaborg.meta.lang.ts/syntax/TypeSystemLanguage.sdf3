@@ -1,0 +1,84 @@
+module TypeSystemLanguage
+
+imports 
+  common/Identifiers   
+  common/Layout 
+  terms/Terms
+
+context-free start-symbols TsModule
+
+templates
+
+  TsModule.Module = <
+    module <Id> 
+      <TypeRules*; separator="\n\n">
+  >  
+
+  TypeRules.TypeRules = <
+    type rules
+      <TypeRule*; separator="\n\n">
+  >
+
+  TypeRule.TypeRuleUnCond = <
+    <PropPattern> 
+  > 
+
+  TypeRule.TypeRule = <
+    <PropPattern>
+    where <Formula>
+  >
+
+templates // formulas
+
+  Formula = <<Prop>>
+
+  Formula.Else = <
+    <Formula> else error <Term> on <Term>
+  > {left} 
+    
+  Formula.Or = <
+    <Formula> 
+    or <Formula>
+  > {assoc}
+   
+  Formula.And = <
+    <Formula> 
+    and <Formula>
+  > {assoc}
+  
+  Formula.Label = <
+    <Id> "::" <Formula>
+  >
+  
+  Formula = <(<Formula>)> {bracket}
+  
+context-free priorities
+
+   {Formula.Label Formula.Else} > Formula.And > Formula.Or
+   
+templates // propositions
+  
+  Prop.True    = <true>
+  Prop.False   = <false>
+  Prop.HasType = <<Term> : <Pattern>>
+  Prop.SubType = [[Term] <: [Term]]  
+  Prop.Has     = <<Term> has <Id> <Pattern>>  
+  Prop.Match   = [[Term] => [Pattern]]
+  Prop.Eq      = [[Term] == [Term]] 
+  
+templates // proposition patterns
+   
+  PropPattern.HasTypePat = <<Pattern> : <Term>>
+  PropPattern.SubTypePat = [[Pattern] <: [Pattern]] 
+  PropPattern.HasPat     = <<Term> has <Id> <Pattern>>
+     
+templates // term operators
+
+  Term.DefOf = <definition of <Term>>
+  
+  
+
+  
+  
+  
+   

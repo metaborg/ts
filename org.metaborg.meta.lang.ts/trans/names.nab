@@ -4,7 +4,21 @@ imports
 	
 	include/TypeSystemLanguage
 	
-namespaces
+namespaces Variable ListVariable
 	
 binding rules
 
+  TypeRule(_, _) : 
+    scopes Variable
+    
+  Var(x) :
+    defines non-unique Variable x
+    
+  ListVar(x) :
+    defines non-unique ListVariable x
+    
+  VarRef(x) :
+    refers to Variable x
+    
+  ListVarRef(x) :
+    refers to ListVariable x
