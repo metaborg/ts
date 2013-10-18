@@ -9,6 +9,7 @@ imports
   Constants.pp.generated
   Vars.pp.generated
   libstratego-gpp
+  Module.pp.generated
   
 strategies 
   
