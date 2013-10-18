@@ -14,4 +14,4 @@ language General properties
                   
   extensions    : ts
   table         : include/TypeSystemLanguage.tbl
-  start symbols : TsModule
+  start symbols : Module

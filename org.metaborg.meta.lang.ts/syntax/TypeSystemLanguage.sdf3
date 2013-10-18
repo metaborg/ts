@@ -4,29 +4,30 @@ imports
   common/Identifiers   
   common/Layout 
   terms/Terms
+  Module
 
-context-free start-symbols TsModule
+context-free start-symbols Module
 
 templates
 
-  TsModule.Module = <
-    module <Id> 
-      <TypeRules*; separator="\n\n">
-  >  
+  // TsModule.Module = <
+  //   module <Id> 
+  //     <TypeRules*; separator="\n\n">
+  // >  
 
-  TypeRules.TypeRules = <
+  ModuleSection.TypeRules = <
     type rules
+    
       <TypeRule*; separator="\n\n">
-  >
+    >
 
-  TypeRule.TypeRuleUnCond = <
-    <PropPattern> 
-  > 
+  TypeRule.TypeRuleUnCond = 
+    <<PropPattern>>
 
   TypeRule.TypeRule = <
     <PropPattern>
     where <Formula>
-  >
+    >
 
 templates // formulas
 
@@ -47,14 +48,14 @@ templates // formulas
   > {assoc}
   
   Formula.Label = <
-    <Id> "::" <Formula>
+    <Id> :: <Formula>
   >
   
   Formula = <(<Formula>)> {bracket}
   
 context-free priorities
 
-   {Formula.Label Formula.Else} > Formula.And > Formula.Or
+   Formula.Label > Formula.Else > Formula.And > Formula.Or
    
 templates // propositions
   
