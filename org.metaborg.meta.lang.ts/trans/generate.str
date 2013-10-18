@@ -83,7 +83,7 @@ rules
     form@HasType(trm, Var(t)) -> Label(t, form)
     
   label-formula :
-    form@SubType(trm1, trm2) -> Label(<newname> "subtype", form)
+    form@SubType(trm1, op, trm2) -> Label(<newname> "subtype", form)
   
   label-formula :
     form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
@@ -146,16 +146,12 @@ rules // formula
       (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
             
   formula-to-stratego :
-    Label(l, SubType(trm1, trm2)) -> 
-      $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])>[<term-to-stratego>trm1]]
-    // where
-    //   res := <newname> "check"
+    Label(l, SubType(trm1, op, trm2)) ->
+      (l, $[[l] := <type-match(|ctx, "[op]", [<term-to-stratego>trm2])>[<term-to-stratego>trm1]])
  
   formula-to-stratego :
     Label(l, Eq(trm1, trm2)) -> 
       (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
-    // where
-    //   task := <newname> "task"
 
   formula-to-stratego :
     Match(VarRef(x), pat) -> (<Hd> ys, strat)
