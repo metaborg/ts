@@ -1,0 +1,66 @@
+module Module.pp.generated
+
+strategies
+  prettyprint-Module :
+    Module(a, b) -> [ H(
+                        [SOpt(HS(), "0")]
+                      , [S("module "), a3]
+                      )
+                    , H(
+                        []
+                      , [S("")]
+                      )
+                    , H(
+                        [SOpt(HS(), "0")]
+                      , [b2]
+                      )
+                    ]
+    where a3 := <pp-one-Z(prettyprint-ModuleID)> a
+    where b2 := <pp-V-list(prettyprint-ModuleSection|"1")> b
+
+  prettyprint-ModuleSection :
+    Imports(a) -> [ H(
+                      [SOpt(HS(), "0")]
+                    , [S("imports "), a4]
+                    )
+                  ]
+    where a4 := <pp-H-list(prettyprint-ImportModule)> a
+
+  prettyprint-ImportModule :
+    ImportWildcard(a) -> [ H(
+                             [SOpt(HS(), "0")]
+                           , [a5, S("/-")]
+                           )
+                         ]
+    where a5 := <pp-one-Z(prettyprint-ModuleID)> a
+
+  prettyprint-ImportModule :
+    Import(a) -> [ H(
+                     [SOpt(HS(), "0")]
+                   , [a6]
+                   )
+                 ]
+    where a6 := <pp-one-Z(prettyprint-ModuleID)> a
+
+  prettyprint-example =
+    prettyprint-Module
+
+  prettyprint-example =
+    prettyprint-ModuleSection
+
+  prettyprint-example =
+    prettyprint-ImportModule
+
+
+strategies
+  prettyprint-ModuleIDPart =
+    ![S(<is-string>)]
+
+  prettyprint-ModuleID =
+    ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-ModuleIDPart
+
+  prettyprint-example =
+    prettyprint-ModuleID

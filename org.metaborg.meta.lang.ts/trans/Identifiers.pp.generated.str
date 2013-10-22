@@ -1,0 +1,60 @@
+module Identifiers.pp.generated
+
+strategies
+  prettyprint-LId =
+    ![S(<is-string>)]
+
+  prettyprint-Id =
+    ![S(<is-string>)]
+
+  prettyprint-LCID =
+    ![S(<is-string>)]
+
+  prettyprint-UCID =
+    ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-LId
+
+  prettyprint-example =
+    prettyprint-Id
+
+  prettyprint-example =
+    prettyprint-LCID
+
+  prettyprint-example =
+    prettyprint-UCID
+
+
+strategies
+  prettyprint-Id =
+    ![S(<is-string>)]
+
+  prettyprint-LId =
+    ![S(<is-string>)]
+
+  prettyprint-LCID =
+    ![S(<is-string>)]
+
+  prettyprint-UCID =
+    ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-Id
+
+  prettyprint-example =
+    prettyprint-LId
+
+  prettyprint-example =
+    prettyprint-LCID
+
+  prettyprint-example =
+    prettyprint-UCID
+
+
+strategies
+  prettyprint-Keyword =
+    ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-Keyword
