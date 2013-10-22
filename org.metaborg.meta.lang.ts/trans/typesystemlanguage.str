@@ -7,11 +7,11 @@ imports
 	libstratego-aterm
 	include/TypeSystemLanguage
 	lib/editor-common.generated
-	lib/analysis/-
-	lib/nabl/-
-	lib/task/-
-	lib/index/- 
-	lib/tmpl/-
+	lib/runtime/analysis/-
+	lib/runtime/nabl/-
+	lib/runtime/task/-
+	lib/runtime/index/- 
+	lib/runtime/tmpl/-
 	names
 	check
 	generate
