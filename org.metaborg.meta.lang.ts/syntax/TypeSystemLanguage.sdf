@@ -40,22 +40,24 @@ exports
     Term ":" Pattern      -> Prop {cons("HasType")}
     Term SubTypeOp Term   -> Prop {cons("SubType")}
     Term "has" Id Pattern -> Prop {cons("Has")}
-    Term "=>" Pattern     -> Prop {cons("Match")}
     Term "==" Term        -> Prop {cons("Eq")}
+    Term "=>" Pattern     -> Prop {cons("Match")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
 
   context-free syntax
-    Pattern ":" Term      -> PropPattern {cons("HasTypePat")}
-    Pattern "<:" Pattern  -> PropPattern {cons("SubTypePat")}
-    Term "has" Id Pattern -> PropPattern {cons("HasPat")}
+    Pattern ":" Term          -> PropPattern {cons("HasTypePat")}
+    Pattern SubTypeOp Pattern -> PropPattern {cons("SubTypePat")}
+    Pattern "has" Id Term     -> PropPattern {cons("HasPat")}
+    Pattern ":-"              -> PropPattern {cons("IsWF")}
 
   context-free syntax
     CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}
 
   context-free syntax
     "definition" "of" Term -> Term {cons("DefOf")}
+    Term "or" Term         -> Term {cons("Combine")}
 
   context-free syntax
     CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}

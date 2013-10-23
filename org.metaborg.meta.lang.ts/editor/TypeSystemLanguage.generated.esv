@@ -29,19 +29,23 @@ completions
     <Term:Term> " " <SubTypeOp:SubTypeOp> " " <Term:Term>  
   completion template Prop : "Term has Id Pattern" =
     <Term:Term> " has " <Id:Id> " " <Pattern:Pattern>  
-  completion template Prop : "Term => Pattern" =
-    <Term:Term> " => " <Pattern:Pattern>  
   completion template Prop : "Term == Term" =
     <Term:Term> " == " <Term:Term>  
+  completion template Prop : "Term => Pattern" =
+    <Term:Term> " => " <Pattern:Pattern>  
 
 completions
   completion template PropPattern : "Pattern : Term" =
     <Pattern:Pattern> " : " <Term:Term>  
-  completion template PropPattern : "Pattern <: Pattern" =
-    <Pattern:Pattern> " <: " <Pattern:Pattern>  
-  completion template PropPattern : "Term has Id Pattern" =
-    <Term:Term> " has " <Id:Id> " " <Pattern:Pattern>  
+  completion template PropPattern : "Pattern SubTypeOp Pattern" =
+    <Pattern:Pattern> " " <SubTypeOp:SubTypeOp> " " <Pattern:Pattern>  
+  completion template PropPattern : "Pattern has Id Term" =
+    <Pattern:Pattern> " has " <Id:Id> " " <Term:Term>  
+  completion template PropPattern : "Pattern :-" =
+    <Pattern:Pattern> " :-"  
 
 completions
   completion template Term : "definition of Term" =
     "definition of " <Term:Term>  
+  completion template Term : "Term or Term" =
+    <Term:Term> " or " <Term:Term>  

@@ -4,9 +4,9 @@ imports
 	
 	include/TypeSystemLanguage
 	pp
-
+ 
 rules 
-
+ 
   to-stratego(|modname) :
     Module(name, def*) ->
     $[module [modname]
@@ -115,7 +115,7 @@ rules // conditional rule
       create-type-task(|ctx) :
         [<term-to-stratego>pat] -> <type-is(|ctx, $[$[deps]$]$)> [<term-to-stratego>trm]
         where [s]
-    ]
+    ] 
     where (_, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
 
