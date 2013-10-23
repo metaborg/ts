@@ -24,3 +24,11 @@ lib/runtime
 lib/*.generated.str
 lib-refactoring/*.generated.str
 /include
+lib/analysis
+lib/editor
+lib/index
+lib/nabl
+lib/properties
+lib/task
+lib/tmpl
+lib/types

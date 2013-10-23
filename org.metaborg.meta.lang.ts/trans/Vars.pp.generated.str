@@ -1,0 +1,65 @@
+module Vars.pp.generated
+
+strategies
+  prettyprint-Wld :
+    Wld() -> [ H(
+                 [SOpt(HS(), "0")]
+               , [S("_")]
+               )
+             ]
+
+  prettyprint-Var :
+    ListWld() -> [ H(
+                     [SOpt(HS(), "0")]
+                   , [S("...")]
+                   )
+                 ]
+
+  prettyprint-Var :
+    a -> [ H(
+             [SOpt(HS(), "0")]
+           , [a45]
+           )
+         ]
+    where a45 := <pp-one-Z(prettyprint-Wld)> a
+
+  prettyprint-Var :
+    Var(a) -> [ H(
+                  [SOpt(HS(), "0")]
+                , [a46]
+                )
+              ]
+    where a46 := <pp-one-Z(prettyprint-Id)> a
+
+  prettyprint-Var :
+    ListVar(a) -> [ H(
+                      [SOpt(HS(), "0")]
+                    , [a47]
+                    )
+                  ]
+    where a47 := <pp-one-Z(prettyprint-LId)> a
+
+  prettyprint-VarRef :
+    VarRef(a) -> [ H(
+                     [SOpt(HS(), "0")]
+                   , [a48]
+                   )
+                 ]
+    where a48 := <pp-one-Z(prettyprint-Id)> a
+
+  prettyprint-VarRef :
+    ListVarRef(a) -> [ H(
+                         [SOpt(HS(), "0")]
+                       , [a49]
+                       )
+                     ]
+    where a49 := <pp-one-Z(prettyprint-LId)> a
+
+  prettyprint-example =
+    prettyprint-Wld
+
+  prettyprint-example =
+    prettyprint-Var
+
+  prettyprint-example =
+    prettyprint-VarRef

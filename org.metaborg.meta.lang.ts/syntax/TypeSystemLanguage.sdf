@@ -1,0 +1,61 @@
+module TypeSystemLanguage
+imports common/Identifiers common/Layout terms/Terms Module
+
+exports
+  context-free start-symbols
+    Module
+
+  context-free syntax
+    "type" "rules" TypeRule*    -> ModuleSection {cons("TypeRules")}
+    PropPattern                 -> TypeRule      {cons("TypeRuleUnCond")}
+    PropPattern "where" Formula -> TypeRule      {cons("TypeRule")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}
+    CONTENTCOMPLETE -> TypeRule      {cons("COMPLETION-TypeRule")}
+
+  context-free syntax
+    Prop                                  -> Formula 
+    Formula "else" "error" Term "on" Term -> Formula {cons("Else"), left}
+    Formula "or" Formula                  -> Formula {cons("Or"), assoc}
+    Formula "and" Formula                 -> Formula {cons("And"), assoc}
+    LId "::" Formula                      -> Formula {cons("Label")}
+    "(" Formula ")"                       -> Formula {bracket}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Formula {cons("COMPLETION-Formula")}
+
+  context-free priorities
+    LId "::" Formula -> Formula >
+    Formula "else" "error" Term "on" Term -> Formula >
+    Formula "and" Formula -> Formula >
+    Formula "or" Formula -> Formula
+
+  lexical syntax
+    "<" Id? ":" -> SubTypeOp 
+
+  context-free syntax
+    "true"                -> Prop {cons("True")}
+    "false"               -> Prop {cons("False")}
+    Term ":" Pattern      -> Prop {cons("HasType")}
+    Term SubTypeOp Term   -> Prop {cons("SubType")}
+    Term "has" Id Pattern -> Prop {cons("Has")}
+    Term "=>" Pattern     -> Prop {cons("Match")}
+    Term "==" Term        -> Prop {cons("Eq")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
+
+  context-free syntax
+    Pattern ":" Term      -> PropPattern {cons("HasTypePat")}
+    Pattern "<:" Pattern  -> PropPattern {cons("SubTypePat")}
+    Term "has" Id Pattern -> PropPattern {cons("HasPat")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}
+
+  context-free syntax
+    "definition" "of" Term -> Term {cons("DefOf")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}

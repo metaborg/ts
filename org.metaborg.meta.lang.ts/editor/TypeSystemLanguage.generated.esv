@@ -1,0 +1,47 @@
+module TypeSystemLanguage.generated
+
+completions
+  completion template ModuleSection : "type rules " =
+    "type rules\n\n\t" (cursor) (blank)  
+  completion template TypeRule : "PropPattern where Formula" =
+    <PropPattern:PropPattern> "\nwhere " <Formula:Formula> (blank)  
+
+completions
+  completion template Formula : "Formula else error Term on Term" =
+    <Formula:Formula> " else error " <Term:Term> " on " <Term:Term> (blank)  
+  completion template Formula : "Formula or Formula" =
+    <Formula:Formula> "\nor " <Formula:Formula> (blank)  
+  completion template Formula : "Formula and Formula" =
+    <Formula:Formula> "\nand " <Formula:Formula> (blank)  
+  completion template Formula : "LId :: Formula" =
+    <LId:LId> " :: " <Formula:Formula> (blank)  
+  completion template Formula : "(Formula)" =
+    "(" <Formula:Formula> ")"  
+
+completions
+  completion template Prop : "true" =
+    "true"           
+  completion template Prop : "false" =
+    "false"         
+  completion template Prop : "Term : Pattern" =
+    <Term:Term> " : " <Pattern:Pattern>  
+  completion template Prop : "Term SubTypeOp Term" =
+    <Term:Term> " " <SubTypeOp:SubTypeOp> " " <Term:Term>  
+  completion template Prop : "Term has Id Pattern" =
+    <Term:Term> " has " <Id:Id> " " <Pattern:Pattern>  
+  completion template Prop : "Term => Pattern" =
+    <Term:Term> " => " <Pattern:Pattern>  
+  completion template Prop : "Term == Term" =
+    <Term:Term> " == " <Term:Term>  
+
+completions
+  completion template PropPattern : "Pattern : Term" =
+    <Pattern:Pattern> " : " <Term:Term>  
+  completion template PropPattern : "Pattern <: Pattern" =
+    <Pattern:Pattern> " <: " <Pattern:Pattern>  
+  completion template PropPattern : "Term has Id Pattern" =
+    <Term:Term> " has " <Id:Id> " " <Pattern:Pattern>  
+
+completions
+  completion template Term : "definition of Term" =
+    "definition of " <Term:Term>  
