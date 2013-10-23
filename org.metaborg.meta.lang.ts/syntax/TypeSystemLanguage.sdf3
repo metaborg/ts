@@ -68,20 +68,22 @@ templates // propositions
   Prop.HasType = <<Term> : <Pattern>>
   Prop.SubType = [[Term] [SubTypeOp] [Term]]  
   Prop.Has     = <<Term> has <Id> <Pattern>>  
-  Prop.Match   = [[Term] => [Pattern]]
   Prop.Eq      = [[Term] == [Term]] 
+   
+  Prop.Match   = [[Term] => [Pattern]]
   
 templates // proposition patterns
    
   PropPattern.HasTypePat = <<Pattern> : <Term>>
-  PropPattern.SubTypePat = [[Pattern] <: [Pattern]] 
-  PropPattern.HasPat     = <<Term> has <Id> <Pattern>>
+  PropPattern.SubTypePat = [[Pattern] [SubTypeOp] [Pattern]]
+  PropPattern.HasPat     = <<Pattern> has <Id> <Term>>
+  PropPattern.IsWF       = <<Pattern> :->
      
 templates // term operators
 
   Term.DefOf = <definition of <Term>>
   
-  
+  Term.Combine = <<Term> or <Term>>
 
   
   

@@ -49,10 +49,13 @@ rules // desugaring
     where <not(?Var(_))> pat; t := <newname> "t"
     
   desugar :
-    ListVar(x) -> Var(x)
+    ListVar(x) -> Var(<unstar>x)
     
   desugar :
-    ListVarRef(x) -> VarRef(x)
+    ListVarRef(x) -> VarRef(<unstar>x) 
+    
+  unstar = 
+    explode-string; map(try(\ 42 -> 95 \)); implode-string
     
 rules
 
@@ -78,7 +81,10 @@ rules
 
   label-formula :
     Else(form, msg, target) -> Else(<label-formula>form, msg, target)
-    
+
+  label-formula :
+    form@Has(trm, op, Var(t)) -> Label(t, form)
+        
   label-formula :
     form@HasType(trm, Var(t)) -> Label(t, form)
     
@@ -89,8 +95,11 @@ rules
     form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
     
   label-formula :
-    form@Match(_, _) -> form
+    form@Match(VarRef(_), _) -> form
 
+  label-formula :
+    form@Match(Combine(_,_), Var(x)) -> Label(x, form)
+    
 rules
 	
 	task-dependencies =
@@ -110,6 +119,34 @@ rules // conditional rule
     where (_, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
 
+  rule-to-stratego :
+    TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
+      create-[op]-task(|ctx) :
+        [<term-to-stratego>pat] -> [l]
+        where [s]
+    ]
+    where (l, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+          
+  // todo: target for WF rules
+  rule-to-stratego :
+    TypeRule(IsWF(pat), form) -> $[
+      nabl-constraint(|ctx) :
+        [<term-to-stratego>pat] -> <fail>
+        where [s]
+    ]
+    where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+
+  rule-to-stratego :
+    TypeRule(SubTypePat(pat1, op, pat2), form) -> $[
+      create-subtype-task(|ctx) :
+        ("[op]", [<term-to-stratego>pat1], [<term-to-stratego>pat2]) -> [dep]
+        where [s]
+    ]
+    where (dep, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+                    
 rules // formula
       
   formula-to-stratego :
@@ -140,14 +177,22 @@ rules // formula
   formula-to-stratego :
     Label(l, HasType(VarRef(x), Var(t))) -> 
       (t, $[[t] := <type-task(|ctx)> [x]])
-             
+
+  formula-to-stratego :
+    Label(l, Has(VarRef(x), attr, Var(t))) -> 
+      (t, $[[t] := <[attr]-lookup(|ctx)> [x]])
+      
+  formula-to-stratego :
+    Label(l, Has(DefOf(trm), op, Var(t))) -> 
+      (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
+                   
   formula-to-stratego :
     Label(l, HasType(DefOf(trm), Var(t))) -> 
       (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
             
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
-      (l, $[[l] := <type-match(|ctx, "[op]", [<term-to-stratego>trm2])>[<term-to-stratego>trm1]])
+      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm2], [<term-to-stratego>trm1])])
  
   formula-to-stratego :
     Label(l, Eq(trm1, trm2)) -> 
@@ -158,7 +203,11 @@ rules // formula
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
-      
+
+  formula-to-stratego :
+    Label(l, Match(Combine(trm1, trm2), Var(x))) -> 
+      (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+            
    mk-projection(|x, pat) :
      y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [x])]
      where rl := <newname> "proj"
