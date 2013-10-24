@@ -29,7 +29,7 @@ rules // Analysis
 	analysis-multiple-default-interface = 
 		analysis-multiple-default(parse-file <+ !(), id, id, id|<language>, <project-path>)
 	
-	editor-save = analysis-save-default(|<language>)
+	editor-save = where(generate-stratego; write-string-to-file); analysis-save-default(|<language>)
 
 rules // Editor services
 	
@@ -87,7 +87,19 @@ rules // code generation
     with
       filename := <guarantee-extension(|"generated.str")> path;
       result   := <to-stratego(|<guarantee-extension(|"generated")> path)> selected
- 
+
+  // When given a tuple (path, string) this writes string into path.
+  write-string-to-file =
+    ?(filename, string);
+    if <dirname; readdir> filename then
+      with(
+        handle := <fopen> (filename, "w");
+        <fputs> (string, handle);
+        <fclose> handle;
+        <refresh-workspace-file> filename
+      )
+    end
+     
   desugar-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
