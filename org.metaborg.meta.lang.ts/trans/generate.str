@@ -4,7 +4,7 @@ imports
 	
 	include/TypeSystemLanguage
 	pp
- 
+  
 rules 
  
   to-stratego(|modname) :

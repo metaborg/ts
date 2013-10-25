@@ -1,0 +1,18 @@
+module TypeSystemLanguage-Menus
+
+menus
+
+  menu: "TypeSystem"
+
+  action  : "Generate Stratego"                 = generate-stratego (openeditor) (realtime)                 
+  action  : "Desugar"                           = desugar-service (openeditor) (realtime)                     
+ 
+  separator
+  
+  action  : "Show abstract syntax"              = debug-show-aterm (openeditor) (realtime) (meta) (source)  
+  action  : "Show analyzed syntax"              = debug-show-analyzed (openeditor) (realtime) (meta)        
+  action  : "Show index (current)"              = debug-show-index-current (openeditor) (meta)              
+  action  : "Show index (all)"                  = debug-show-index-all (openeditor) (meta)                  
+  action  : "Show tasks (selection)"            = debug-show-tasks-selection (openeditor) (meta)            
+  action  : "Reset and reanalyze"               = debug-reanalyze (meta)                                    
+                         
