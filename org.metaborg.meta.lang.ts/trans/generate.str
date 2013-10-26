@@ -12,10 +12,10 @@ rules
     $[module [modname]
     
       imports
-        lib/nabl/-
-        lib/task/-
-        lib/types/-
-        lib/properties/-
+        lib/runtime/nabl/-
+        lib/runtime/task/-
+        lib/runtime/types/-
+        lib/runtime/properties/-
         
       rules
         [rule*]

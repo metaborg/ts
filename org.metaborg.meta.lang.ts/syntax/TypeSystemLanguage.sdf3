@@ -85,6 +85,9 @@ templates // term operators
   
   Term.Combine = <<Term> or <Term>>
 
+templates // keywords
+
+  Id = <where> {reject}
   
   
   

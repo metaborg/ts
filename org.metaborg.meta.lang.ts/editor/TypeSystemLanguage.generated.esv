@@ -49,3 +49,6 @@ completions
     "definition of " <Term:Term>  
   completion template Term : "Term or Term" =
     <Term:Term> " or " <Term:Term>  
+
+completions
+  

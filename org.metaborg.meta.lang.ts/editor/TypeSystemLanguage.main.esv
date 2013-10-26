@@ -1,7 +1,10 @@
 
 module TypeSystemLanguage.main
 
-imports TypeSystemLanguage-Builders TypeSystemLanguage-Refactorings TypeSystemLanguage-Colorer TypeSystemLanguage-Completions TypeSystemLanguage-Folding TypeSystemLanguage-References TypeSystemLanguage-Syntax
+imports TypeSystemLanguage-Builders TypeSystemLanguage-Refactorings 
+  TypeSystemLanguage-Colorer TypeSystemLanguage-Completions TypeSystemLanguage-Folding 
+  TypeSystemLanguage-References TypeSystemLanguage-Syntax
+  //TypeSystemLanguage-Menus
 
 language General properties
                   
@@ -15,5 +18,6 @@ language General properties
   extensions    : ts
   table         : include/TypeSystemLanguage.tbl
   start symbols : Module
+
   
      
