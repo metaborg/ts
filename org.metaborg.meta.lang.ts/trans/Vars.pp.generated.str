@@ -18,42 +18,42 @@ strategies
   prettyprint-Var :
     a -> [ H(
              [SOpt(HS(), "0")]
-           , [a311]
+           , [a495]
            )
          ]
-    where a311 := <pp-one-Z(prettyprint-Wld)> a
+    where a495 := <pp-one-Z(prettyprint-Wld)> a
 
   prettyprint-Var :
     Var(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a312]
+                , [a496]
                 )
               ]
-    where a312 := <pp-one-Z(prettyprint-Id)> a
+    where a496 := <pp-one-Z(prettyprint-Id)> a
 
   prettyprint-Var :
     ListVar(a) -> [ H(
                       [SOpt(HS(), "0")]
-                    , [a313]
+                    , [a497]
                     )
                   ]
-    where a313 := <pp-one-Z(prettyprint-LId)> a
+    where a497 := <pp-one-Z(prettyprint-LId)> a
 
   prettyprint-VarRef :
     VarRef(a) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [a314]
+                   , [a498]
                    )
                  ]
-    where a314 := <pp-one-Z(prettyprint-Id)> a
+    where a498 := <pp-one-Z(prettyprint-Id)> a
 
   prettyprint-VarRef :
     ListVarRef(a) -> [ H(
                          [SOpt(HS(), "0")]
-                       , [a315]
+                       , [a499]
                        )
                      ]
-    where a315 := <pp-one-Z(prettyprint-LId)> a
+    where a499 := <pp-one-Z(prettyprint-LId)> a
 
   prettyprint-example =
     prettyprint-Wld

@@ -12,9 +12,9 @@ rules
     $[module [modname]
     
       imports
-        lib/runtime/nabl/-
-        lib/runtime/task/-
-        lib/runtime/types/-
+        lib/nabl/-
+        lib/task/-
+        lib/types/-
         lib/runtime/properties/-
         
       rules
@@ -95,7 +95,12 @@ rules
     form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
     
   label-formula :
-    form@Match(VarRef(_), _) -> form
+    form@Match(VarRef(_), pat) -> form'
+    where if <pattern-vars> pat => [] then
+            form' := Label(<newname> "match", form)
+          else
+            form' := form
+          end
 
   label-formula :
     form@Match(Combine(_,_), Var(x)) -> Label(x, form)
@@ -203,7 +208,18 @@ rules // formula
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
-
+      
+  formula-to-stratego :
+    Label(l, Match(VarRef(x), pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [x])])
+    where
+      [] := <pattern-vars> pat;
+      rl := <newname> "match";
+      r := $[
+        task-rewrite :
+          ("[rl]", x@[<term-to-stratego>pat]) -> x
+      ];
+      rules( Projections :+ _ -> r)
+      
   formula-to-stratego :
     Label(l, Match(Combine(trm1, trm2), Var(x))) -> 
       (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
