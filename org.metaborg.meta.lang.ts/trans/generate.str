@@ -7,15 +7,12 @@ imports
   
 rules 
  
-  to-stratego(|modname) :
+  to-stratego(|project-path, modname) :
     Module(name, def*) ->
     $[module [modname]
     
       imports
-        lib/nabl/-
-        lib/task/-
-        lib/types/-
-        lib/runtime/properties/-
+        [import]
         
       rules
         [rule*]
@@ -25,7 +22,22 @@ rules
     ]
     where rule* := <desugar-all; collect(rule-to-stratego)> def*
         ; projection* := <bagof-Projections>
-    
+        ; if <file-exists> $[[project-path]/lib/nabl/collect.str] then
+            import := 
+              $[lib/nabl/-
+                lib/task/-
+                lib/types/-
+                lib/properties/-
+               ]
+          else
+            import :=
+              $[lib/runtime/nabl/-
+                lib/runtime/task/-
+                lib/runtime/types/-
+                lib/runtime/properties/-
+               ]
+          end
+   
 rules // desugaring
   
   desugar-all = 
