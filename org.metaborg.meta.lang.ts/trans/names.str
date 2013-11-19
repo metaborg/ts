@@ -31,6 +31,9 @@ rules
   nabl-get-name :
     Var(x) -> x
 
+  nabl-name-apply(s) =
+    Var(s)
+
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?Var(x)
     ; origin-track-forced(
@@ -47,6 +50,7 @@ rules
           , NonUnique()
           , Current()
           , []
+          , []
           )
         )
         ; match(child-uris__|c-uri1__)
@@ -57,6 +61,9 @@ rules
 
   nabl-get-name :
     ListVar(x) -> x
+
+  nabl-name-apply(s) =
+    ListVar(s)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?ListVar(x)
@@ -74,6 +81,7 @@ rules
           , NonUnique()
           , Current()
           , []
+          , []
           )
         )
         ; match(child-uris__|c-uri1__)
@@ -84,6 +92,9 @@ rules
 
   nabl-get-name :
     VarRef(x) -> x
+
+  nabl-name-apply(s) =
+    VarRef(s)
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?VarRef(x)
@@ -109,6 +120,9 @@ rules
 
   nabl-get-name :
     ListVarRef(x) -> x
+
+  nabl-name-apply(s) =
+    ListVarRef(s)
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?ListVarRef(x)
