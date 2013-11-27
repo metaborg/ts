@@ -209,7 +209,7 @@ rules // formula
             
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
-      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm2], [<term-to-stratego>trm1])])
+      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm1], [<term-to-stratego>trm2])])
  
   formula-to-stratego :
     Label(l, Eq(trm1, trm2)) -> 
