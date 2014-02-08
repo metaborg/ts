@@ -1,0 +1,36 @@
+module desugar
+
+imports
+  
+  include/TypeSystemLanguage
+
+rules // desugaring
+  
+  desugar-all = 
+    innermost(desugar)
+    
+  desugar :
+    And(x, And(y, z)) -> And(And(x, y), z) 
+    
+  desugar :
+    And(True(), p) -> p
+    
+  desugar :
+    And(p, True()) -> p 
+  
+  desugar :
+    TypeRuleUnCond(prop) -> TypeRule(prop, True())
+      
+  desugar :
+    HasType(trm, pat) -> And(HasType(trm, Var(t)), Match(VarRef(t), pat))
+    where <not(?Var(_))> pat; t := <newname> "t"
+    
+  desugar :
+    ListVar(x) -> Var(<unstar>x)
+    
+  desugar :
+    ListVarRef(x) -> VarRef(<unstar>x) 
+    
+  unstar = 
+    explode-string; map(try(\ 42 -> 95 \)); implode-string
+    
