@@ -9,6 +9,8 @@ completions
 completions
   completion template Formula : "Formula else error Term on Term" =
     <Formula:Formula> " else error " <Term:Term> " on " <Term:Term> (blank)  
+  completion template Formula : "not Formula" =
+    "not " <Formula:Formula> (blank)  
   completion template Formula : "Formula or Formula" =
     <Formula:Formula> "\nor " <Formula:Formula> (blank)  
   completion template Formula : "Formula and Formula" =

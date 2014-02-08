@@ -17,6 +17,7 @@ exports
   context-free syntax
     Prop                                  -> Formula 
     Formula "else" "error" Term "on" Term -> Formula {cons("Else"), left}
+    "not" Formula                         -> Formula {cons("Not")}
     Formula "or" Formula                  -> Formula {cons("Or"), assoc}
     Formula "and" Formula                 -> Formula {cons("And"), assoc}
     LId "::" Formula                      -> Formula {cons("Label")}

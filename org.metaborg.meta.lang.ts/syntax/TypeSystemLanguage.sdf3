@@ -36,6 +36,10 @@ templates // formulas
   Formula.Else = <
     <Formula> else error <Term> on <Term>
   > {left} 
+  
+  Formula.Not = <
+    not <Formula>
+  >
     
   Formula.Or = <
     <Formula> 
