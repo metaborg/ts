@@ -8,36 +8,51 @@ imports
 rules 
  
   to-stratego(|project-path, modname) :
-    Module(name, def*) ->
+    Module(name, section*) ->
     $[module [modname]
     
-      imports
-        [import]
-        
+      [import]
+      [import*]
       rules
         [rule*]
         
       rules // projections
         [projection*]
     ]
-    where rule* := <collect(rule-to-stratego)> def*
+    where rule* := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
-        ; if <file-exists> $[[project-path]/lib/nabl/collect.str] then
-            import := 
-              $[lib/nabl/-
-                lib/task/-
-                lib/types/-
-                lib/properties/-
+        ; import*     := <collect(imports-to-stratego)> section*
+        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/nabl")>))> section* => [] then
+        import := 
+              $[imports
+              	  
+                  lib/runtime/nabl/-
+                  lib/runtime/task/-
+                  lib/runtime/types/-
+                  lib/runtime/properties/-
                ]
-          else
-            import :=
-              $[lib/runtime/nabl/-
-                lib/runtime/task/-
-                lib/runtime/types/-
-                lib/runtime/properties/-
-               ]
-          end
-   
+      else
+        import := ""
+      end 
+ 
+rules
+  
+  imports-to-stratego:
+    Imports(import*) -> 
+    $[imports
+      
+        [<map(import-to-stratego)> import*]]
+    
+  import-to-stratego:
+    Import(t) -> 
+    $[[t]
+    ]
+    
+  import-to-stratego:
+    ImportWildcard(t) -> 
+    $[[t]/-
+    ]
+        
 rules
 	
 	task-dependencies =
