@@ -11,6 +11,8 @@ completions
     "[" <:Pattern> "]"  
   completion template Pattern : "[ | Pattern]" =
     "[" <:Pattern> " | " <Pattern:Pattern> "]"  
+  completion template Pattern : "Var@Pattern" =
+    <Var:Var> "@" <Pattern:Pattern>  
 
 completions
   completion template Term : "Id()" =

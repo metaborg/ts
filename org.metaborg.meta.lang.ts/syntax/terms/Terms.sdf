@@ -15,6 +15,7 @@ exports
     "(" {Pattern ","}* ")"             -> Pattern {cons("Tuple")}
     "[" {Pattern ","}* "]"             -> Pattern {cons("List")}
     "[" {Pattern ","}* "|" Pattern "]" -> Pattern {cons("ListTail")}
+    Var "@" Pattern                    -> Pattern {cons("As")}
 
   context-free syntax
     CONTENTCOMPLETE -> Pattern {cons("COMPLETION-Pattern")}

@@ -17,6 +17,7 @@ module terms/Terms
     Pattern.Tuple    = <(<Pattern*; separator=", ">)>
     Pattern.List     = <[<Pattern*; separator=", ">]>
     Pattern.ListTail = <[<Pattern*; separator=", "> | <Pattern>]>
+    Pattern.As       = <<Var>@<Pattern>>
     
   sorts Term // term referencing variables
   templates 
