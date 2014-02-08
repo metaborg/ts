@@ -168,6 +168,9 @@ rules // formula
 rules // term
   
   term-to-stratego :
+    Wld() -> "_"
+    
+  term-to-stratego :
     Var(x) -> x
     
   term-to-stratego :
@@ -191,6 +194,9 @@ rules // term
   term-to-stratego :
     Char(s) -> s
         
+  term-to-stratego :
+    As(v, p) -> $[[<term-to-stratego>v]@[<term-to-stratego>p]]
+    
   term-to-stratego :
     Op(cns, t*) -> $[[cns]([<map(term-to-stratego); separate-by(|", ")> t*])]
     
