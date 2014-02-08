@@ -28,6 +28,7 @@ exports
 
   context-free priorities
     LId "::" Formula -> Formula >
+    "not" Formula -> Formula >
     Formula "else" "error" Term "on" Term -> Formula >
     Formula "and" Formula -> Formula >
     Formula "or" Formula -> Formula

@@ -59,7 +59,7 @@ templates // formulas
   
 context-free priorities
 
-   Formula.Label > Formula.Else > Formula.And > Formula.Or
+   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
    
 lexical syntax
 
