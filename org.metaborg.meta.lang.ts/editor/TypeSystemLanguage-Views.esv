@@ -1,0 +1,6 @@
+module TypeSystemLanguage-Views
+
+views
+  
+  outline view: outline
+    expand to level: 3
