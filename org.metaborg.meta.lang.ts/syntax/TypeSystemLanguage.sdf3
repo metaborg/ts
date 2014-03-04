@@ -4,7 +4,11 @@ imports
   common/Identifiers   
   common/Layout 
   terms/Terms
+  
   Module
+  Signatures
+  TypeFunctions
+  PP
 
 context-free start-symbols Module
 
@@ -73,15 +77,14 @@ templates // propositions
   Prop.SubType = [[Term] [SubTypeOp] [Term]]  
   Prop.Has     = <<Term> has <Id> <Pattern>>  
   Prop.Eq      = [[Term] == [Term]] 
-   
   Prop.Match   = [[Term] => [Pattern]]
   
 templates // proposition patterns
    
-  PropPattern.HasTypePat = <<Pattern> : <Term>>
+  PropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
   PropPattern.SubTypePat = [[Pattern] [SubTypeOp] [Pattern]]
   PropPattern.HasPat     = <<Pattern> has <Id> <Term>>
-  PropPattern.IsWF       = <<Pattern> :->
+  PropPattern.IsWF       = <<Pattern+; separator=" + "> :->
      
 templates // term operators
 
@@ -92,7 +95,3 @@ templates // term operators
 templates // keywords
 
   Id = <where> {reject}
-  
-  
-  
-   

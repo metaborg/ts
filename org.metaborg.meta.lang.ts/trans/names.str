@@ -6,13 +6,6 @@ imports
   lib/runtime/properties/-
   lib/runtime/types/-
   lib/runtime/editor/-
-  include/TypeSystemLanguage
-
-
-signature
-  constructors
-    NablNsVariable     : Namespace
-    NablNsListVariable : Namespace
 
 
 rules
@@ -142,3 +135,13 @@ rules
         )
       |
       )
+
+
+imports
+  include/TypeSystemLanguage
+
+
+signature
+  constructors
+    NablNsVariable     : Namespace
+    NablNsListVariable : Namespace

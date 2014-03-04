@@ -1,0 +1,10 @@
+module PP
+
+imports
+
+	terms/Terms
+
+templates
+
+  PropPattern.IsWF       = <<Pattern> :->      {avoid}
+  PropPattern.HasTypePat = <<Pattern>: <Term>> {avoid}

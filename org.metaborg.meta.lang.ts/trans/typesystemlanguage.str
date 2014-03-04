@@ -106,7 +106,7 @@ rules // code generation
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts")> path;
-      result   := <desugar-all; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      result   := <desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
       
   pp-ts-string =
     prettyprint-example

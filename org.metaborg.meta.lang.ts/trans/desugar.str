@@ -3,12 +3,22 @@ module desugar
 imports
   
   include/TypeSystemLanguage
+	label
 
 rules // desugaring
   
   desugar-all = 
     innermost(desugar)
-    
+   
+  desugar :
+  	TypeRules(t*) -> TypeRules(<concat> t*)
+   
+  desugar :
+  	TypeRule(HasTypePat(pattern*, val), body) -> <map(\p -> TypeRule(HasTypePat(p, val), body)\)> pattern*
+  	
+  desugar :
+  	TypeRule(IsWF(pattern*), body) -> <map(\p -> TypeRule(IsWF(p), body)\)> pattern*
+  	
   desugar :
     And(x, And(y, z)) -> And(And(x, y), z) 
     

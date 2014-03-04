@@ -151,13 +151,13 @@ rules // formula
       (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
 
   formula-to-stratego :
-    Match(VarRef(x), pat) -> (<Hd> ys, strat)
+    Match(x, pat) -> (<Hd> ys, strat)
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
       
   formula-to-stratego :
-    Label(l, Match(VarRef(x), pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [x])])
+    Label(l, Match(x, pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])])
     where
       [] := <pattern-vars> pat;
       rl := <newname> "match";
@@ -172,7 +172,7 @@ rules // formula
       (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
             
    mk-projection(|x, pat) :
-     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [x])]
+     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
      where rl := <newname> "proj"
          ; r := $[
              task-rewrite :

@@ -1,5 +1,6 @@
 module TypeSystemLanguage
-imports common/Identifiers common/Layout terms/Terms Module
+imports common/Identifiers common/Layout terms/Terms Module Signatures
+        TypeFunctions PP
 
 exports
   context-free start-symbols
@@ -49,10 +50,10 @@ exports
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
 
   context-free syntax
-    Pattern ":" Term          -> PropPattern {cons("HasTypePat")}
+    {Pattern "+"}+ ":" Term   -> PropPattern {cons("HasTypePat")}
     Pattern SubTypeOp Pattern -> PropPattern {cons("SubTypePat")}
     Pattern "has" Id Term     -> PropPattern {cons("HasPat")}
-    Pattern ":-"              -> PropPattern {cons("IsWF")}
+    {Pattern "+"}+ ":-"       -> PropPattern {cons("IsWF")}
 
   context-free syntax
     CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}

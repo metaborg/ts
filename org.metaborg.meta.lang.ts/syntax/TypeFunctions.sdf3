@@ -1,0 +1,28 @@
+module TypeFunctions
+
+imports
+
+	common/Identifiers
+	terms/Terms
+	TypeSystemLanguage
+
+templates
+
+	ModuleSections.TypeFunctions = <
+		type functions
+		
+		<TypeFunction*; separator="\n\n">
+	>
+	
+	TypeFunction.TypeFunctionUnCond = [
+		[Id] : 
+			[Pattern] -> [Term]
+	]
+	
+	TypeFunction.TypeFunction = [
+		[Id] :
+			[Pattern] -> [Term]
+			where [Formula]
+	]
+	
+	Prop.Appl = [<[Id]> [Term] => [Pattern]]

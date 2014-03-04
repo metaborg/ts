@@ -1,0 +1,10 @@
+module PP
+imports terms/Terms
+
+exports
+  context-free syntax
+    Pattern ":-"     -> PropPattern {cons("IsWF"), avoid}
+    Pattern ":" Term -> PropPattern {cons("HasTypePat"), avoid}
+
+  context-free syntax
+    CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}

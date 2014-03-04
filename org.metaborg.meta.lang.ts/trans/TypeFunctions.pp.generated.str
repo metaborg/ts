@@ -1,0 +1,73 @@
+module TypeFunctions.pp.generated
+
+strategies
+  prettyprint-ModuleSections :
+    TypeFunctions(a) -> [ H(
+                            [SOpt(HS(), "0")]
+                          , [S("type functions")]
+                          )
+                        , H(
+                            []
+                          , [S("")]
+                          )
+                        , H(
+                            [SOpt(HS(), "0")]
+                          , [a6]
+                          )
+                        ]
+    where a6 := <pp-V-list(prettyprint-TypeFunction|"1")> a
+
+  prettyprint-TypeFunction :
+    TypeFunctionUnCond(a, b, c) -> [ H(
+                                       [SOpt(HS(), "0")]
+                                     , [a7, S(" :")]
+                                     )
+                                   , b2
+                                   ]
+    where a7 := <pp-one-Z(prettyprint-Id)> a
+    where b2 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
+                                  , S(" -> ")
+                                  , <pp-one-Z(prettyprint-Term)> c
+                                  ]
+
+  prettyprint-TypeFunction :
+    TypeFunction(a, b, c, d) -> [ H(
+                                    [SOpt(HS(), "0")]
+                                  , [a8, S(" :")]
+                                  )
+                                , b3
+                                , d0
+                                ]
+    where a8 := <pp-one-Z(prettyprint-Id)> a
+    where b3 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
+                                  , S(" -> ")
+                                  , <pp-one-Z(prettyprint-Term)> c
+                                  ]
+    where d0 := <pp-indent(|"2")> [ S("where ")
+                                  , <pp-one-Z(prettyprint-Formula)> d
+                                  ]
+
+  prettyprint-Prop :
+    Appl(a, b, c) -> [ H(
+                         [SOpt(HS(), "0")]
+                       , [ S("<")
+                         , a9
+                         , S("> ")
+                         , b4
+                         , S(" => ")
+                         , c0
+                         ]
+                       )
+                     ]
+    where a9 := <pp-one-Z(prettyprint-Id)> a
+    where b4 := <pp-one-Z(prettyprint-Term)> b
+    where c0 := <pp-one-Z(prettyprint-Pattern)> c
+
+  prettyprint-example =
+    prettyprint-ModuleSections
+
+  prettyprint-example =
+    prettyprint-TypeFunction
+
+  prettyprint-example =
+    prettyprint-Prop

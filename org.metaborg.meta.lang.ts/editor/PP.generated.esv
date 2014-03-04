@@ -1,0 +1,7 @@
+module PP.generated
+
+completions
+  completion template PropPattern : "Pattern :-" =
+    <Pattern:Pattern> " :-"  
+  completion template PropPattern : "Pattern: Term" =
+    <Pattern:Pattern> ": " <Term:Term>  
