@@ -63,21 +63,12 @@ rules
 rules // conditional rule
   
   rule-to-stratego :
-    TypeRule(HasTypePat(pat, trm), form) -> $[
-      create-type-task(|ctx) :
-        [<term-to-stratego>pat] -> <type-is(|ctx, $[$[deps]$]$)> [<term-to-stratego>trm]
-        where [s]
-    ] 
+    TypeRule(HasPat(pat, kind, trm), form) -> ${
+      create-{kind}-task(|ctx) :
+        {<term-to-stratego>pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm}
+        where {s}
+    } 
     where (_, s) := <formula-to-stratego> form
-        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-
-  rule-to-stratego :
-    TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
-      create-[op]-task(|ctx) :
-        [<term-to-stratego>pat] -> [l]
-        where [s]
-    ]
-    where (l, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
           
   // todo: target for WF rules
@@ -127,21 +118,13 @@ rules // formula
     where (t, s) := <formula-to-stratego> form
             
   formula-to-stratego :
-    Label(l, HasType(VarRef(x), Var(t))) -> 
-      (t, $[[t] := <type-task(|ctx)> [x]])
-
-  formula-to-stratego :
     Label(l, Has(VarRef(x), attr, Var(t))) -> 
-      (t, $[[t] := <[attr]-lookup(|ctx)> [x]])
+      (t, $[[t] := <[attr]-task(|ctx)> [x]])
       
   formula-to-stratego :
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
       (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
-                   
-  formula-to-stratego :
-    Label(l, HasType(DefOf(trm), Var(t))) -> 
-      (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
-            
+                              
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
       (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm1], [<term-to-stratego>trm2])])

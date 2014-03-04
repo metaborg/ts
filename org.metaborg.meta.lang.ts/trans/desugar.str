@@ -32,7 +32,13 @@ rules // desugaring
     TypeRuleUnCond(prop) -> TypeRule(prop, True())
       
   desugar :
-    HasType(trm, pat) -> And(HasType(trm, Var(t)), Match(VarRef(t), pat))
+    HasType(trm, pat) -> Has(trm, "type", pat)
+  
+  desugar :
+    HasTypePat(pat, trm) -> HasPat(pat, "type", trm)
+    
+  desugar :
+    Has(trm, kind, pat) -> And(Has(trm, kind, Var(t)), Match(VarRef(t), pat))
     where <not(?Var(_))> pat; t := <newname> "t"
     
   desugar :

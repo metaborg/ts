@@ -8,6 +8,16 @@ imports
   lib/runtime/editor/-
 
 
+imports
+  include/TypeSystemLanguage
+
+
+signature
+  constructors
+    NablNsVariable     : Namespace
+    NablNsListVariable : Namespace
+
+
 rules
 
   nabl-scoping-site =
@@ -135,13 +145,3 @@ rules
         )
       |
       )
-
-
-imports
-  include/TypeSystemLanguage
-
-
-signature
-  constructors
-    NablNsVariable     : Namespace
-    NablNsListVariable : Namespace
