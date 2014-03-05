@@ -25,4 +25,4 @@ templates
 			where [Formula]
 	]
 	
-	Prop.Appl = [<[Id]> [Term] => [Pattern]]
+	Prop.FuncAppl = [<[Id]> [Term] => [Pattern]]

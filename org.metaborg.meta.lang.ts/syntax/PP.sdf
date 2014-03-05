@@ -1,10 +1,11 @@
 module PP
-imports terms/Terms
+imports common/Identifiers terms/Terms
 
 exports
   context-free syntax
-    Pattern ":-"     -> PropPattern {cons("IsWF"), avoid}
-    Pattern ":" Term -> PropPattern {cons("HasTypePat"), avoid}
+    Pattern ":" Term      -> PropPattern {cons("HasTypePat"), avoid}
+    Pattern "has" Id Term -> PropPattern {cons("HasPat"), avoid}
+    Pattern ":-"          -> PropPattern {cons("IsWF"), avoid}
 
   context-free syntax
     CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}

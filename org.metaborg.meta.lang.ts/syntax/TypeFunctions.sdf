@@ -6,7 +6,7 @@ exports
     "type" "functions" TypeFunction*         -> ModuleSection {cons("TypeFunctions")}
     Id ":" Pattern "->" Term                 -> TypeFunction  {cons("TypeFunctionUnCond")}
     Id ":" Pattern "->" Term "where" Formula -> TypeFunction  {cons("TypeFunction")}
-    "<" Id ">" Term "=>" Pattern             -> Prop          {cons("Appl")}
+    "<" Id ">" Term "=>" Pattern             -> Prop          {cons("FuncAppl")}
 
   context-free syntax
     CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}

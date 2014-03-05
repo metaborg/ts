@@ -84,7 +84,7 @@ templates // proposition patterns
    
   PropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
   PropPattern.SubTypePat = [[Pattern] [SubTypeOp] [Pattern]]
-  PropPattern.HasPat     = <<Pattern> has <Id> <Term>>
+  PropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
   PropPattern.IsWF       = <<Pattern+; separator=" + "> :->
      
 templates // term operators

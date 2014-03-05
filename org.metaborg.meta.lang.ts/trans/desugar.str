@@ -11,13 +11,22 @@ rules // desugaring
     innermost(desugar)
    
   desugar :
-  	TypeRules(t*) -> TypeRules(<mapconcat(split-pattern <+ MkSingleton); not(?t*)> t*)
-   
-  split-pattern :
-  	TypeRule(HasPat(pattern*, kind, val), body) -> <map(!TypeRule(HasPat(<id>, kind, val), body))> pattern*
+  	TypeRules(t*) -> TypeRules(<mapconcat(split-rule <+ MkSingleton); not(?t*)> t*)
+  
+  split-patterns : 
+  	HasTypePat(pat*, trm) -> <map(!HasTypePat(<id>, trm))> pat*
   	
-  desugar :
-  	TypeRule(IsWF(pattern*), body) -> <map(\p -> TypeRule(IsWF(p), body)\)> pattern*
+  split-patterns : 
+  	HasPat(pat*, kind, trm) -> <map(!HasPat(<id>, kind, trm))> pat*
+  	
+  split-patterns : 
+  	IsWF(pat*) -> <map(!IsWF(<id>))> pat*
+   
+  split-rule :
+  	TypeRule(pat, form) -> <split-patterns; map(!TypeRule(<id>, form))> pat
+  	
+  split-rule :
+  	TypeRuleUnCond(pat) -> <split-patterns; map(!TypeRuleUnCond(<id>))> pat
   	
   desugar :
     And(x, And(y, z)) -> And(And(x, y), z) 

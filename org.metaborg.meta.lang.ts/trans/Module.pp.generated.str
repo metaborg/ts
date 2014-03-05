@@ -4,7 +4,7 @@ strategies
   prettyprint-Module :
     Module(a, b) -> [ H(
                         [SOpt(HS(), "0")]
-                      , [S("module "), a0]
+                      , [S("module "), a89]
                       )
                     , H(
                         []
@@ -12,35 +12,35 @@ strategies
                       )
                     , H(
                         [SOpt(HS(), "0")]
-                      , [b0]
+                      , [b48]
                       )
                     ]
-    where a0 := <pp-one-Z(prettyprint-ModuleID)> a
-    where b0 := <pp-V-list(prettyprint-ModuleSection|"1")> b
+    where a89 := <pp-one-Z(prettyprint-ModuleID)> a
+    where b48 := <pp-V-list(prettyprint-ModuleSection|"1")> b
 
   prettyprint-ModuleSection :
     Imports(a) -> [ H(
                       [SOpt(HS(), "0")]
-                    , [S("imports "), a1]
+                    , [S("imports "), a90]
                     )
                   ]
-    where a1 := <pp-H-list(prettyprint-ImportModule)> a
+    where a90 := <pp-H-list(prettyprint-ImportModule)> a
 
   prettyprint-ImportModule :
     ImportWildcard(a) -> [ H(
                              [SOpt(HS(), "0")]
-                           , [a2, S("/-")]
+                           , [a91, S("/-")]
                            )
                          ]
-    where a2 := <pp-one-Z(prettyprint-ModuleID)> a
+    where a91 := <pp-one-Z(prettyprint-ModuleID)> a
 
   prettyprint-ImportModule :
     Import(a) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [a3]
+                   , [a92]
                    )
                  ]
-    where a3 := <pp-one-Z(prettyprint-ModuleID)> a
+    where a92 := <pp-one-Z(prettyprint-ModuleID)> a
 
   prettyprint-example =
     prettyprint-Module

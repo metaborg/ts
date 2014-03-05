@@ -2,9 +2,11 @@ module PP
 
 imports
 
+	common/Identifiers
 	terms/Terms
 
-templates
+templates // Productions for desugared patterns, used to pretty print desugared code.
 
-  PropPattern.IsWF       = <<Pattern> :->      {avoid}
-  PropPattern.HasTypePat = <<Pattern>: <Term>> {avoid}
+  PropPattern.HasTypePat = <<Pattern> : <Term>> {avoid}
+  PropPattern.HasPat     = <<Pattern> has <Id> <Term>> {avoid}
+  PropPattern.IsWF       = <<Pattern> :-> {avoid}
