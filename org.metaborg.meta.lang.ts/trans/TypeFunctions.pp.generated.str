@@ -1,7 +1,7 @@
 module TypeFunctions.pp.generated
 
 strategies
-  prettyprint-ModuleSections :
+  prettyprint-ModuleSection :
     TypeFunctions(a) -> [ H(
                             [SOpt(HS(), "0")]
                           , [S("type functions")]
@@ -64,7 +64,7 @@ strategies
     where c0 := <pp-one-Z(prettyprint-Pattern)> c
 
   prettyprint-example =
-    prettyprint-ModuleSections
+    prettyprint-ModuleSection
 
   prettyprint-example =
     prettyprint-TypeFunction

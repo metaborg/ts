@@ -3,12 +3,12 @@ imports common/Identifiers terms/Terms TypeSystemLanguage
 
 exports
   context-free syntax
-    "type" "functions" TypeFunction*         -> ModuleSections {cons("TypeFunctions")}
-    Id ":" Pattern "->" Term                 -> TypeFunction   {cons("TypeFunctionUnCond")}
-    Id ":" Pattern "->" Term "where" Formula -> TypeFunction   {cons("TypeFunction")}
-    "<" Id ">" Term "=>" Pattern             -> Prop           {cons("Appl")}
+    "type" "functions" TypeFunction*         -> ModuleSection {cons("TypeFunctions")}
+    Id ":" Pattern "->" Term                 -> TypeFunction  {cons("TypeFunctionUnCond")}
+    Id ":" Pattern "->" Term "where" Formula -> TypeFunction  {cons("TypeFunction")}
+    "<" Id ">" Term "=>" Pattern             -> Prop          {cons("Appl")}
 
   context-free syntax
-    CONTENTCOMPLETE -> ModuleSections {cons("COMPLETION-ModuleSections")}
-    CONTENTCOMPLETE -> TypeFunction   {cons("COMPLETION-TypeFunction")}
-    CONTENTCOMPLETE -> Prop           {cons("COMPLETION-Prop")}
+    CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}
+    CONTENTCOMPLETE -> TypeFunction  {cons("COMPLETION-TypeFunction")}
+    CONTENTCOMPLETE -> Prop          {cons("COMPLETION-Prop")}

@@ -2,7 +2,7 @@
 module TypeFunctions.generated
 
 completions
-  completion template ModuleSections : "type functions " =
+  completion template ModuleSection : "type functions " =
     "type functions\n\n" (cursor) (blank)  
   completion template TypeFunction : "Id : Pattern -> Term" =
     <Id:Id> " :\n\t" <Pattern:Pattern> " -> " <Term:Term> (blank)  

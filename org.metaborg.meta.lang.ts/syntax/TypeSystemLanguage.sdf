@@ -38,13 +38,14 @@ exports
     "<" Id? ":" -> SubTypeOp 
 
   context-free syntax
-    "true"                -> Prop {cons("True")}
-    "false"               -> Prop {cons("False")}
-    Term ":" Pattern      -> Prop {cons("HasType")}
-    Term SubTypeOp Term   -> Prop {cons("SubType")}
-    Term "has" Id Pattern -> Prop {cons("Has")}
-    Term "==" Term        -> Prop {cons("Eq")}
-    Term "=>" Pattern     -> Prop {cons("Match")}
+    "true"                      -> Prop {cons("True")}
+    "false"                     -> Prop {cons("False")}
+    Term ":" Pattern            -> Prop {cons("HasType")}
+    Term SubTypeOp Term         -> Prop {cons("SubType")}
+    "store" Term SubTypeOp Term -> Prop {cons("StoreSubType")}
+    Term "has" Id Pattern       -> Prop {cons("Has")}
+    Term "==" Term              -> Prop {cons("Eq")}
+    Term "=>" Pattern           -> Prop {cons("Match")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
