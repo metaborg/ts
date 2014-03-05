@@ -58,13 +58,13 @@ strategies
                          , S(" else error ")
                          , b7
                          , S(" on ")
-                         , c2
+                         , c1
                          ]
                        )
                      ]
     where a16 := <pp-one-Z(prettyprint-Formula)> a
     where b7 := <pp-one-Z(prettyprint-Term)> b
-    where c2 := <pp-one-Z(prettyprint-Term)> c
+    where c1 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-Formula :
     Not(a) -> [ H(
@@ -160,13 +160,13 @@ strategies
                             , S(" ")
                             , b12
                             , S(" ")
-                            , c3
+                            , c2
                             ]
                           )
                         ]
     where a23 := <pp-one-Z(prettyprint-Term)> a
     where b12 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c3 := <pp-one-Z(prettyprint-Term)> c
+    where c2 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-Prop :
     Has(a, b, c) -> [ H(
@@ -175,13 +175,13 @@ strategies
                         , S(" has ")
                         , b13
                         , S(" ")
-                        , c4
+                        , c3
                         ]
                       )
                     ]
     where a24 := <pp-one-Z(prettyprint-Term)> a
     where b13 := <pp-one-Z(prettyprint-Id)> b
-    where c4 := <pp-one-Z(prettyprint-Pattern)> c
+    where c3 := <pp-one-Z(prettyprint-Pattern)> c
 
   prettyprint-Prop :
     Eq(a, b) -> [ H(
@@ -222,13 +222,13 @@ strategies
                                , S(" ")
                                , b17
                                , S(" ")
-                               , c5
+                               , c4
                                ]
                              )
                            ]
     where a28 := <pp-one-Z(prettyprint-Pattern)> a
     where b17 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c5 := <pp-one-Z(prettyprint-Pattern)> c
+    where c4 := <pp-one-Z(prettyprint-Pattern)> c
 
   prettyprint-PropPattern :
     HasPat(a, b, c) -> [ H(
@@ -237,13 +237,13 @@ strategies
                            , S(" has ")
                            , b18
                            , S(" ")
-                           , c6
+                           , c5
                            ]
                          )
                        ]
     where a29 := <pp-one-Z(prettyprint-Pattern)> a
     where b18 := <pp-one-Z(prettyprint-Id)> b
-    where c6 := <pp-one-Z(prettyprint-Term)> c
+    where c5 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-PropPattern :
     IsWF(a) -> [ H(

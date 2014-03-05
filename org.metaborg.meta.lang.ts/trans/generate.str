@@ -63,7 +63,7 @@ rules
 rules // conditional rule
   
   rule-to-stratego :
-    TypeRule(HasPat([pat], kind, trm), form) -> ${
+    TypeRule(HasPat(pat, kind, trm), form) -> ${
       create-{kind}-task(|ctx) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm}
         where {s}
