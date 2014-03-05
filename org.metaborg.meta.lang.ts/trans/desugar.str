@@ -14,7 +14,7 @@ rules // desugaring
   	TypeRules(t*) -> TypeRules(<concat> t*)
    
   desugar :
-  	TypeRule(HasTypePat(pattern*, val), body) -> <map(\p -> TypeRule(HasTypePat(p, val), body)\)> pattern*
+  	TypeRule(HasTypePat(pattern*, val), body) -> <map(!TypeRule(HasTypePat(<id>, val), body))> pattern*
   	
   desugar :
   	TypeRule(IsWF(pattern*), body) -> <map(\p -> TypeRule(IsWF(p), body)\)> pattern*
