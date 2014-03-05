@@ -3,7 +3,7 @@ module terms/Terms
   imports 
 	  terms/Constants
 	  common/Identifiers 
-	  terms/Vars 
+	  terms/Vars
 
   sorts Pattern // term binding variables  
   templates 
@@ -21,20 +21,19 @@ module terms/Terms
     
   sorts Term // term referencing variables
   templates 
-    Term          = <<VarRef>>
-    Term.Int      = <<Int>>
-    Term.Real     = <<Real>>
-    Term.Str      = <<String>>   
-    Term.Op       = <<Id>(<Term*; separator=", ">)>
-    Term.OpQ      = <<String>(<Term*; separator=", ">)>
-    Term.Char     = <<Char>>
-    Term.Tuple    = <(<Term*; separator=", ">)>
-    Term.List     = <[<Term*; separator=", ">]>
-    Term.ListTail = <[<Term*; separator=", "> | <Term>]>
-        
-
-  
-
-     
-
-    
+    Term           = <<VarRef>>
+    Term.Int       = <<Int>>
+    Term.Real      = <<Real>>
+    Term.Str       = <<String>>   
+    Term.Op        = <<Id>(<Term*; separator=", ">)>
+    Term.OpQ       = <<String>(<Term*; separator=", ">)>
+    Term.Char      = <<Char>>
+    Term.Tuple     = <(<Term*; separator=", ">)>
+    Term.List      = <[<Term*; separator=", ">]>
+    Term.ListTail  = <[<Term*; separator=", "> | <Term>]>
+		// Term.StrInterp = <$[<InterpPart*>]>
+		
+	// sorts InterpPart // Simple string interpolation
+	// templates
+	// 	InterpPart.InterpStr = <<IString>>
+	// 	InterpPart.InterpRef = <[<VarRef>]>

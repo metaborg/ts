@@ -1,6 +1,6 @@
 module terms/Constants
 
-  sorts Int Real String StrChar
+  sorts Int Real String StrChar IString IStrChar
 
   lexical syntax
 
@@ -9,6 +9,9 @@ module terms/Constants
     "\"" StrChar* "\""        -> String
     ~[\"\\]                   -> StrChar
     [\\] [\"tnr\\]            -> StrChar
+    
+    IStrChar+   -> IString
+    ~[\"\\\[\]] -> IStrChar
 
   sorts Char CharChar
 

@@ -8,7 +8,7 @@ imports
 
 templates
 
-	ModuleSections.TypeFunctions = <
+	ModuleSection.TypeFunctions = <
 		type functions
 		
 		<TypeFunction*; separator="\n\n">

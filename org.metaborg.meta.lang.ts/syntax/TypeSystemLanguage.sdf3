@@ -71,13 +71,14 @@ lexical syntax
    
 templates // propositions
   
-  Prop.True    = <true>
-  Prop.False   = <false>
-  Prop.HasType = <<Term> : <Pattern>>
-  Prop.SubType = [[Term] [SubTypeOp] [Term]]  
-  Prop.Has     = <<Term> has <Id> <Pattern>>  
-  Prop.Eq      = [[Term] == [Term]] 
-  Prop.Match   = [[Term] => [Pattern]]
+  Prop.True         = <true>
+  Prop.False        = <false>
+  Prop.HasType      = <<Term> : <Pattern>>
+  Prop.SubType      = [[Term] [SubTypeOp] [Term]]
+  Prop.StoreSubType = [store [Term] [SubTypeOp] [Term]]
+  Prop.Has          = <<Term> has <Id> <Pattern>>  
+  Prop.Eq           = [[Term] == [Term]] 
+  Prop.Match        = [[Term] => [Pattern]]
   
 templates // proposition patterns
    
