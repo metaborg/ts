@@ -13,13 +13,17 @@ rules
     
       [import]
       [import*]
-      rules
+      rules // functions
+      	[func*]
+      	
+      rules // rules
         [rule*]
         
       rules // projections
         [projection*]
     ]
-    where rule* := <collect(rule-to-stratego)> section*
+    where func* := <collect(function-to-stratego)> section*
+    	  ; rule* := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*
         ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] then
@@ -30,6 +34,7 @@ rules
                   lib/runtime/task/-
                   lib/runtime/types/-
                   lib/runtime/properties/-
+                  lib/runtime/relations/-
                ]
       else
         import := ""
@@ -89,6 +94,23 @@ rules // conditional rule
     ]
     where (dep, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+
+rules // functions
+	
+	function-to-stratego :
+		TypeFunction(n, pat, trm, form) -> ${
+			type-function-{n}(|ctx) : 
+				{<term-to-stratego> pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego> trm}
+				where {s}
+		}
+		where (_, s) := <formula-to-stratego> form
+		    ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+		
+	function-to-stratego :
+		TypeFunctionUnCond(n, pat, trm) -> $[
+			type-function-[n](|ctx) : 
+				[<term-to-stratego> pat] -> [<term-to-stratego> trm]
+		]
                     
 rules // formula
       

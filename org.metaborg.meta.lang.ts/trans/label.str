@@ -5,7 +5,7 @@ imports include/TypeSystemLanguage
 rules
 
   label-formulas =
-    alltd(TypeRule(id, label-formula))
+    alltd(TypeRule(id, label-formula) + TypeFunction(id, id, id, label-formula))
     
   label-formula :
     True() -> True()

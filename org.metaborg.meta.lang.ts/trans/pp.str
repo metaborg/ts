@@ -10,6 +10,8 @@ imports
   Vars.pp.generated
   libstratego-gpp
   Module.pp.generated
+  TypeFunctions.pp.generated
+  Signatures.pp.generated
   
 strategies 
   
