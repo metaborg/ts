@@ -51,6 +51,8 @@ completions
 completions
   completion template Term : "definition of Term" =
     "definition of " <Term:Term>  
+  completion template Term : "Term union Term" =
+    <Term:Term> " union " <Term:Term>  
   completion template Term : "Term or Term" =
     <Term:Term> " or " <Term:Term>  
 

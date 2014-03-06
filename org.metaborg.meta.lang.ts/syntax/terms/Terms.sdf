@@ -1,5 +1,5 @@
 module terms/Terms
-imports terms/Constants common/Identifiers terms/Vars
+imports terms/Constants common/Identifiers terms/Vars terms/StringQuotations
 
 exports
   sorts Pattern
@@ -33,6 +33,7 @@ exports
     "(" {Term ","}* ")"          -> Term {cons("Tuple")}
     "[" {Term ","}* "]"          -> Term {cons("List")}
     "[" {Term ","}* "|" Term "]" -> Term {cons("ListTail")}
+    PPTerm                       -> Term {cons("StrInterp")}
 
   context-free syntax
     CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}

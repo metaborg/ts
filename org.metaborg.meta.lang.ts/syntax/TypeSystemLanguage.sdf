@@ -61,7 +61,8 @@ exports
 
   context-free syntax
     "definition" "of" Term -> Term {cons("DefOf")}
-    Term "or" Term         -> Term {cons("Combine")}
+    Term "union" Term      -> Term {cons("Union")}
+    Term "or" Term         -> Term {cons("Choice")}
 
   context-free syntax
     CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}

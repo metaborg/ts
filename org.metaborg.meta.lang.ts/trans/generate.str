@@ -24,12 +24,13 @@ rules
       rules // projections
         [projection*]
     ]
-    where func* := <collect(function-to-stratego)> section*
-    	  ; rule* := <collect(rule-to-stratego)> section*
+    where func*       := <collect(function-to-stratego)> section*
+    	  ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*
-        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] then
-        import := 
+        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] 
+          then
+            import := 
               $[imports
               	  
                   lib/runtime/nabl/-
@@ -38,9 +39,9 @@ rules
                   lib/runtime/properties/-
                   lib/runtime/relations/-
                ]
-      else
-        import := ""
-      end 
+         else
+           import := ""
+         end 
  
 rules
   
@@ -69,14 +70,6 @@ rules
     collect(?Var(<id>))
 			     
 rules // conditional rule
-
-  // rule-to-stratego :
-  //   TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
-  //     create-[op]-task(|ctx) :
-  //       [<term-to-stratego>pat] -> [l]
-  //       where [s]
-  //   ]
-  //   where (l, s) := <formula-to-stratego> form
 
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, trm), form) -> ${
@@ -173,9 +166,6 @@ rules // formula
 
   formula-to-stratego :
     Match(VarRef(x), pat) -> (<Hd> ys, strat)
-// =======
-//     Match(x, pat) -> (<Hd> ys, strat)
-// >>>>>>> parent of f2beb87... support e => x match clauses
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
@@ -192,8 +182,13 @@ rules // formula
       rules( Projections :+ _ -> r)
       
   formula-to-stratego :
-    Label(l, Match(Combine(trm1, trm2), Var(x))) -> 
+    Label(l, Match(Union(trm1, trm2), Var(x))) -> 
       (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+
+  formula-to-stratego :
+    Label(l, Match(Choice(trm1, trm2), Var(x))) -> 
+      (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+
             
    mk-projection(|x, pat) :
      y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]

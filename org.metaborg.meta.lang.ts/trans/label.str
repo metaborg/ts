@@ -3,6 +3,12 @@ module label
 imports include/TypeSystemLanguage
 
 rules
+  
+  form-vars    = collect-all(?Var(_))
+  
+  form-varrefs = collect-all(?VarRef(_))
+
+rules
 
   label-formulas =
     alltd(TypeRule(id, label-formula) + TypeFunction(id, id, id, label-formula))
@@ -41,17 +47,20 @@ rules
     
   label-formula :
     form@Match(_, pat) -> Label(<newname> "match", form)
-    where <collect-all(?Var(_))> pat => [] 
+    where <form-vars> pat => [] 
 
   label-formula :
     form@Match(pat, Var(x)) -> Label(x, form)
     
   label-formula :
     form@Match(_, pat) -> form
-    where <not(?Var(_))> pat; <collect-all(?Var(_))> pat => [_|_]
+    where <not(?Var(_))> pat; <form-vars> pat => [_|_]
     
   label-formula :
-    form@Match(Combine(_,_), Var(x)) -> Label(x, form)
+    form@Match(Union(_,_), Var(x)) -> Label(x, form)
     
+  label-formula :
+    form@Match(Choice(_,_), Var(x)) -> Label(x, form)
+        
   label-formula : 
   	form@FuncAppl(n, trm, Var(x)) -> Label(x, form)
