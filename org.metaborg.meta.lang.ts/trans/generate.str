@@ -8,72 +8,144 @@ imports
 rules 
  
   to-stratego(|project-path, modname) :
-    Module(name, section*) ->
+    Module(name, def*) ->
     $[module [modname]
     
-      [import]
-      [import*]
-      rules // functions
-      	[func*]
-      	
-      rules // rules
+      imports
+        [import]
+        
+      rules
         [rule*]
         
       rules // projections
         [projection*]
     ]
-    where func* := <collect(function-to-stratego)> section*
-    	  ; rule* := <collect(rule-to-stratego)> section*
+    where rule* := <desugar-all; collect(rule-to-stratego)> def*
         ; projection* := <bagof-Projections>
-        ; import*     := <collect(imports-to-stratego)> section*
-        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] then
-        import := 
-              $[imports
-              	  
-                  lib/runtime/nabl/-
-                  lib/runtime/task/-
-                  lib/runtime/types/-
-                  lib/runtime/properties/-
-                  lib/runtime/relations/-
+        ; if <file-exists> $[[project-path]/lib/nabl/collect.str] then
+            import := 
+              $[lib/nabl/-
+                lib/task/-
+                lib/types/-
+                lib/properties/-
                ]
-      else
-        import := ""
-      end 
- 
-rules
+          else
+            import :=
+              $[lib/runtime/nabl/-
+                lib/runtime/task/-
+                lib/runtime/types/-
+                lib/runtime/properties/-
+               ]
+          end
+   
+rules // desugaring
   
-  imports-to-stratego:
-    Imports(import*) -> 
-    $[imports
+  desugar-all = 
+    innermost(desugar)
+    ; label-formulas
+    
+  desugar :
+    And(x, And(y, z)) -> And(And(x, y), z) 
+    
+  desugar :
+    And(True(), p) -> p
+    
+  desugar :
+    And(p, True()) -> p 
+  
+  desugar :
+    TypeRuleUnCond(prop) -> TypeRule(prop, True())
       
-        [<map(import-to-stratego)> import*]]
+  desugar :
+    HasType(trm, pat) -> And(HasType(trm, Var(t)), Match(VarRef(t), pat))
+    where <not(?Var(_))> pat; t := <newname> "t"
     
-  import-to-stratego:
-    Import(t) -> 
-    $[[t]
-    ]
+  desugar :
+    ListVar(x) -> Var(<unstar>x)
     
-  import-to-stratego:
-    ImportWildcard(t) -> 
-    $[[t]/-
-    ]
+  desugar :
+    ListVarRef(x) -> VarRef(<unstar>x) 
+    
+  unstar = 
+    explode-string; map(try(\ 42 -> 95 \)); implode-string
+    
+rules
+
+  label-formulas =
+    alltd(TypeRule(id, label-formula))
+    
+  label-formula :
+    True() -> True()
+    
+  label-formula :
+    Label(l, form) -> <label-formula> form
+    
+  label-formula :
+    And(form1, form2) -> And(form1', form2')
+    where form1' := <label-formula> form1
+        ; form2' := <label-formula> form2
+
+  label-formula :
+    Or(form1, form2) -> Label(l, Or(form1', form2'))
+    where form1' := <label-formula> form1
+        ; form2' := <label-formula> form2   
+        ; l := <newname> "or"    
+
+  label-formula :
+    Else(form, msg, target) -> Else(<label-formula>form, msg, target)
+
+  label-formula :
+    form@Has(trm, op, Var(t)) -> Label(t, form)
         
+  label-formula :
+    form@HasType(trm, Var(t)) -> Label(t, form)
+    
+  label-formula :
+    form@SubType(trm1, op, trm2) -> Label(<newname> "subtype", form)
+  
+  label-formula :
+    form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
+    
+  label-formula :
+     form@Match(pat, Var(x)) -> Label(x, form)
+
+  label-formula :
+    form@Match(VarRef(_), pat) -> form'
+    where if <pattern-vars> pat => [] then
+            form' := Label(<newname> "match", form)
+          else
+            form' := form
+          end
+          
+  label-formula :
+    form@Match(Combine(_,_), Var(x)) -> Label(x, form)
+    
 rules
 	
 	task-dependencies =
 		collect(?Label(<![<id>]>, _) <+ ?Match(_, <pattern-vars>)); concat; make-set
+		
   pattern-vars =
-    collect(?Var(<id>))
+  	collect(?Var(<id>))
 			     
 rules // conditional rule
   
   rule-to-stratego :
-    TypeRule(HasPat(pat, kind, trm), form) -> ${
-      create-{kind}-task(|ctx) :
-        {<term-to-stratego>pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm}
-        where {s}
-    } 
+    TypeRule(HasTypePat(pat, trm), form) -> $[
+      create-type-task(|ctx) :
+        [<term-to-stratego>pat] -> <type-is(|ctx, $[$[deps]$]$)> [<term-to-stratego>trm]
+        where [s]
+    ] 
     where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+
+  rule-to-stratego :
+    TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
+      create-[op]-task(|ctx) :
+        [<term-to-stratego>pat] -> [l]
+        where [s]
+    ]
+    where (l, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
           
   // todo: target for WF rules
@@ -94,23 +166,6 @@ rules // conditional rule
     ]
     where (dep, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-
-rules // functions
-	
-	function-to-stratego :
-		TypeFunction(n, pat, trm, form) -> ${
-			type-func-{n}(|ctx) : 
-				{<term-to-stratego> pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego> trm}
-				where {s}
-		}
-		where (_, s) := <formula-to-stratego> form
-		    ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-		
-	function-to-stratego :
-		TypeFunctionUnCond(n, pat, trm) -> $[
-			type-func-[n](|ctx) : 
-				[<term-to-stratego> pat] -> [<term-to-stratego> trm]
-		]
                     
 rules // formula
       
@@ -140,29 +195,42 @@ rules // formula
     where (t, s) := <formula-to-stratego> form
             
   formula-to-stratego :
+    Label(l, HasType(VarRef(x), Var(t))) -> 
+      (t, $[[t] := <type-task(|ctx)> [x]])
+
+  formula-to-stratego :
     Label(l, Has(VarRef(x), attr, Var(t))) -> 
-      (t, $[[t] := <[attr]-task(|ctx)> [x]])
+      (t, $[[t] := <[attr]-lookup(|ctx)> [x]])
       
   formula-to-stratego :
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
       (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
-                              
+                   
+  formula-to-stratego :
+    Label(l, HasType(DefOf(trm), Var(t))) -> 
+      (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
+            
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
-      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm1], [<term-to-stratego>trm2])])
+      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm2], [<term-to-stratego>trm1])])
  
   formula-to-stratego :
     Label(l, Eq(trm1, trm2)) -> 
       (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
 
   formula-to-stratego :
-    Match(x, pat) -> (<Hd> ys, strat)
+    Label(l, Match(pat, Var(x))) -> (l, strat)
+    where
+      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]]
+
+  formula-to-stratego :
+    Match(VarRef(x), pat) -> (<Hd> ys, strat)
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
       
   formula-to-stratego :
-    Label(l, Match(x, pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])])
+    Label(l, Match(VarRef(x), pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [x])])
     where
       [] := <pattern-vars> pat;
       rl := <newname> "match";
@@ -177,23 +245,16 @@ rules // formula
       (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
             
    mk-projection(|x, pat) :
-     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
+     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [x])]
      where rl := <newname> "proj"
          ; r := $[
              task-rewrite :
                ("[rl]", [<term-to-stratego>pat]) -> [y]
            ]
          ; rules( Projections :+ _ -> r )
-           
-	formula-to-stratego :
-		Label(l, FuncAppl(n, trm, Var(x))) ->
-			(l, $[[x] := <type-func-[n](|ctx)> [<term-to-stratego> trm]])
 
 rules // term
   
-  term-to-stratego :
-    Wld() -> "_"
-    
   term-to-stratego :
     Var(x) -> x
     
@@ -218,9 +279,6 @@ rules // term
   term-to-stratego :
     Char(s) -> s
         
-  term-to-stratego :
-    As(v, p) -> $[[<term-to-stratego>v]@[<term-to-stratego>p]]
-    
   term-to-stratego :
     Op(cns, t*) -> $[[cns]([<map(term-to-stratego); separate-by(|", ")> t*])]
     
