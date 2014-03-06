@@ -50,3 +50,5 @@ rules
   label-formula :
     form@Match(Combine(_,_), Var(x)) -> Label(x, form)
     
+  label-formula : 
+  	form@FuncAppl(n, trm, Var(x)) -> Label(x, form)
