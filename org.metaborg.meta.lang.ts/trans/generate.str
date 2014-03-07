@@ -16,19 +16,23 @@ rules
       [import]
       [import*]
       rules // functions
-      	[func*]
-      	
+        [func*]
+
+      rules // relations
+        [rel*]
+
       rules // rules
         [rule*]
-        
+
       rules // projections
         [projection*]
     ]
     where func*       := <collect(function-to-stratego)> section*
+    		; rel*        := <collect(relation-to-stratego)> section*
     	  ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*
-        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] 
+        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => []
           then
             import := 
               $[imports
@@ -90,15 +94,6 @@ rules // conditional rule
     where (_, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
 
-  rule-to-stratego :
-    TypeRule(SubTypePat(pat1, op, pat2), form) -> $[
-      create-subtype-task(|ctx) :
-        ("[op]", [<term-to-stratego>pat1], [<term-to-stratego>pat2]) -> [dep]
-        where [s]
-    ]
-    where (dep, s) := <formula-to-stratego> form
-        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-
 rules // functions
 	
 	function-to-stratego :
@@ -115,6 +110,51 @@ rules // functions
 			type-func-[n](|ctx) : 
 				[<term-to-stratego> pat] -> [<term-to-stratego> trm]
 		]
+                    
+	formula-to-stratego :
+		Label(l, FuncAppl(n, trm, Var(x))) ->
+			(l, $[[x] := <type-func-[n](|ctx)> [<term-to-stratego> trm]])
+
+rules // relations
+
+	relation-to-stratego :
+		RelationDef(prop*, rel) -> <map(relation-prop-to-stratego(|rel)); concat-strings> prop*
+		
+	relation-prop-to-stratego(|rel) :
+    Reflexive() -> $[
+      relation-is-reflexive = ?"[rel]"
+    ]
+	relation-prop-to-stratego(|rel) :
+    Transitive() -> $[
+      relation-is-transitive = ?"[rel]"
+    ]
+	relation-prop-to-stratego(|rel) :
+    Symmetric() -> $[
+      relation-is-symmetric = ?"[rel]"
+    ]
+	
+	relation-to-stratego :
+    RelationUnCond(trm1, rel, trm2) -> $[
+      relation-tuple(store): ([<term-to-stratego>trm1], "[rel]") -> <store> [<term-to-stratego>trm2]
+      relation-match-tuple = ?([<term-to-stratego>trm1], [<term-to-stratego>trm2])
+    ]
+    
+  relation-to-stratego :
+  	Relation(trm1, rel, trm2, form) -> ${
+      type-relation-match(|ctx) : 
+        ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2}) -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm2}
+        where {s}
+  	}
+    where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+          
+  formula-to-stratego :
+    Label(l, RelationMatch(trm1, rel, trm2)) ->
+      (l, ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})})
+      
+  formula-to-stratego :
+    Label(l, RelationStore(trm1, rel, trm2)) ->
+      (l, $[[l] := <new-rel-tuple(|ctx, "[rel]", [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
                     
 rules // formula
       
@@ -150,10 +190,6 @@ rules // formula
   formula-to-stratego :
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
       (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
-
-  formula-to-stratego :
-    Label(l, SubType(trm1, op, trm2)) ->
-      (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm1], [<term-to-stratego>trm2])])
  
   formula-to-stratego :
     Label(l, Eq(trm1, trm2)) -> 
@@ -188,7 +224,6 @@ rules // formula
   formula-to-stratego :
     Label(l, Match(Choice(trm1, trm2), Var(x))) -> 
       (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
-
             
    mk-projection(|x, pat) :
      y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
@@ -198,10 +233,6 @@ rules // formula
                ("[rl]", [<term-to-stratego>pat]) -> [y]
            ]
          ; rules( Projections :+ _ -> r )
-           
-	formula-to-stratego :
-		Label(l, FuncAppl(n, trm, Var(x))) ->
-			(l, $[[x] := <type-func-[n](|ctx)> [<term-to-stratego> trm]])
 
 rules // term
   

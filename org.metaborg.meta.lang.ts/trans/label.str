@@ -11,7 +11,7 @@ rules
 rules
 
   label-formulas =
-    alltd(TypeRule(id, label-formula) + TypeFunction(id, id, id, label-formula))
+    alltd(TypeRule(id, label-formula) + TypeFunction(id, id, id, label-formula) + Relation(id, id, id, label-formula))
     
   label-formula :
     True() -> True()
@@ -38,9 +38,6 @@ rules
         
   label-formula :
     form@HasType(trm, Var(t)) -> Label(t, form)
-    
-  label-formula :
-    form@SubType(trm1, op, trm2) -> Label(<newname> "subtype", form)
   
   label-formula :
     form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
@@ -64,3 +61,10 @@ rules
         
   label-formula : 
   	form@FuncAppl(n, trm, Var(x)) -> Label(x, form)
+
+	label-formula : 
+		form@RelationMatch(trm1, rel, trm2) -> Label(<newname> "relmatch", form)
+		
+	label-formula : 
+		form@RelationStore(trm1, rel, trm2) -> Label(<newname> "relstore", form)
+				
