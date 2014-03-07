@@ -1,0 +1,28 @@
+module Relations
+
+imports
+
+	common/Identifiers
+	terms/Terms
+	TypeSystemLanguage
+
+templates
+
+	ModuleSection.Relations = <
+		relations
+		
+		<Relation*; separator="\n\n">
+	>
+	
+	Relation.RelationUnCond = [
+		[Term] <[Id]: [Term]
+	]
+	
+	Relation.Relation = [
+		[Term] <[Id]: [Term]
+		where [Formula]
+	]
+	
+	Prop.RelationMatch  = [[Term] <[Id]: [Term]]
+	Prop.RelationLookup = [[Term] <[Id]? [Pattern]]
+	
