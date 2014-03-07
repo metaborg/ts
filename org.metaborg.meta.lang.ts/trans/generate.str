@@ -15,6 +15,10 @@ rules
     
       [import]
       [import*]
+      signature constructors
+      	
+        [sig*]
+        
       rules // functions
         [func*]
 
@@ -27,7 +31,8 @@ rules
       rules // projections
         [projection*]
     ]
-    where func*       := <collect(function-to-stratego)> section*
+    where sig*        := <collect(signature-to-stratego)> section*
+    	  ; func*       := <collect(function-to-stratego)> section*
     		; rel*        := <collect(relation-to-stratego)> section*
     	  ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
@@ -72,27 +77,18 @@ rules
 		
   pattern-vars =
     collect(?Var(<id>))
-			     
-rules // conditional rule
 
-  rule-to-stratego :
-    TypeRule(HasPat(pat, kind, trm), form) -> ${
-      create-{kind}-task(|ctx) :
-        {<term-to-stratego>pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm}
-        where {s}
-    } 
-    where (_, s) := <formula-to-stratego> form
-        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-          
-  // todo: target for WF rules
-  rule-to-stratego :
-    TypeRule(IsWF(pat), form) -> $[
-      nabl-constraint(|ctx) :
-        [<term-to-stratego>pat] -> <fail>
-        where [s]
-    ]
-    where (_, s) := <formula-to-stratego> form
-        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+rules // signatures
+	
+	signature-to-stratego :
+		SignatureRule(n, t) -> $[[n] : [<signature-type-to-stratego> t]
+		]
+		
+	signature-type-to-stratego :
+		SigType(sort*, t) -> $[[<separate-by(|" * "); concat-strings> sort*] -> [t]]
+		
+	signature-type-to-stratego :
+		SigInj(t) -> $[[t]]
 
 rules // functions
 	
@@ -155,7 +151,28 @@ rules // relations
   formula-to-stratego :
     Label(l, RelationStore(trm1, rel, trm2)) ->
       (l, $[[l] := <new-rel-tuple(|ctx, "[rel]", [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
-                    
+ 
+rules // conditional rule
+
+  rule-to-stratego :
+    TypeRule(HasPat(pat, kind, trm), form) -> ${
+      create-{kind}-task(|ctx) :
+        {<term-to-stratego>pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm}
+        where {s}
+    } 
+    where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+          
+  // todo: target for WF rules
+  rule-to-stratego :
+    TypeRule(IsWF(pat), form) -> $[
+      nabl-constraint(|ctx) :
+        [<term-to-stratego>pat] -> <fail>
+        where [s]
+    ]
+    where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+  
 rules // formula
       
   formula-to-stratego :
