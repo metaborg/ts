@@ -31,15 +31,18 @@ rules
 
 rules
   
-  module-to-coq = Sent(IND_WT_INFER(collect-all(type-rule-to-coq)))
+  module-to-coq:
+  	Module(name, rule*) -> Sent([IND_WT_INFER(definition)])
+  		where definition := <filter(?TypeRules(<id>)); concat; filter(type-rule-to-coq)> rule*
   
   // type-rule-to-coq:
   //   TypeRule(rule, cond) -> <fail>
     
   type-rule-to-coq:
-    TypeRuleUnCond(rule@HasTypePat((name', bind'*), e2)) -> WT_INFER_DEF(name, bind*, type)
+    TypeRule(rule, True()) -> WT_INFER_DEF(name, bind*, type)
     where
-      name  := $[[name']C_wt]
+      HasTypePat(Op(name', bind'*), _) := rule
+    ; name  := $[[name']C_wt]
     ; bind* := <concat> [<map(?Var(x) => Bind(x))> bind'*, [Bind("k")]]
     ; type  := <has-type-pat-to-coq> rule
 
@@ -72,7 +75,7 @@ overlays
 		      , Type(
 		          Product(Ref("term"), Product(Ref("term"), Sort(Prop())))
 		        )
-		      , ListDeclBar([ terms ])
+		      , ListDeclBar(terms)
 		      )
 		    ]
 		  )

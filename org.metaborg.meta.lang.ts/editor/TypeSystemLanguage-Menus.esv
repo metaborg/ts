@@ -40,5 +40,5 @@ menus
     action  : "Desugar AST"         = desugar-ast-service (openeditor) (realtime)                        
     action  : "Desugar & Label AST" = desugar-label-ast-service (openeditor) (realtime)  
     
-    //action: "Convert to Coq"       = generate-coq-semantics (openeditor) (realtime)
+    action: "Convert to Coq"       = generate-coq (openeditor)
                    
