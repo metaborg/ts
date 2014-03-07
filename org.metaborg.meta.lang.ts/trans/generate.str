@@ -4,6 +4,7 @@ imports
 	
 	include/TypeSystemLanguage
 	pp
+	desugar
   
 rules 
  
@@ -37,37 +38,6 @@ rules
                 lib/runtime/properties/-
                ]
           end
-   
-rules // desugaring
-  
-  desugar-all = 
-    innermost(desugar)
-    ; label-formulas
-    
-  desugar :
-    And(x, And(y, z)) -> And(And(x, y), z) 
-    
-  desugar :
-    And(True(), p) -> p
-    
-  desugar :
-    And(p, True()) -> p 
-  
-  desugar :
-    TypeRuleUnCond(prop) -> TypeRule(prop, True())
-      
-  desugar :
-    HasType(trm, pat) -> And(HasType(trm, Var(t)), Match(VarRef(t), pat))
-    where <not(?Var(_))> pat; t := <newname> "t"
-    
-  desugar :
-    ListVar(x) -> Var(<unstar>x)
-    
-  desugar :
-    ListVarRef(x) -> VarRef(<unstar>x) 
-    
-  unstar = 
-    explode-string; map(try(\ 42 -> 95 \)); implode-string
     
 rules
 
@@ -130,14 +100,14 @@ rules
 			     
 rules // conditional rule
   
-  rule-to-stratego :
-    TypeRule(HasTypePat(pat, trm), form) -> $[
-      create-type-task(|ctx) :
-        [<term-to-stratego>pat] -> <type-is(|ctx, $[$[deps]$]$)> [<term-to-stratego>trm]
-        where [s]
-    ] 
-    where (_, s) := <formula-to-stratego> form
-        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+  // rule-to-stratego :
+  //   TypeRule(HasTypePat(pat, trm), form) -> $[
+  //     create-type-task(|ctx) :
+  //       [<term-to-stratego>pat] -> <type-is(|ctx, $[$[deps]$]$)> [<term-to-stratego>trm]
+  //       where [s]
+  //   ] 
+  //   where (_, s) := <formula-to-stratego> form
+  //       ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
 
   rule-to-stratego :
     TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
@@ -194,9 +164,9 @@ rules // formula
             <task-create-error-on-failure(|ctx, [t], [<term-to-stratego>msg])> [<term-to-stratego>target]])
     where (t, s) := <formula-to-stratego> form
             
-  formula-to-stratego :
-    Label(l, HasType(VarRef(x), Var(t))) -> 
-      (t, $[[t] := <type-task(|ctx)> [x]])
+  // formula-to-stratego :
+  //   Label(l, HasType(VarRef(x), Var(t))) -> 
+  //     (t, $[[t] := <type-task(|ctx)> [x]])
 
   formula-to-stratego :
     Label(l, Has(VarRef(x), attr, Var(t))) -> 
@@ -206,9 +176,9 @@ rules // formula
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
       (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
                    
-  formula-to-stratego :
-    Label(l, HasType(DefOf(trm), Var(t))) -> 
-      (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
+  // formula-to-stratego :
+  //   Label(l, HasType(DefOf(trm), Var(t))) -> 
+  //     (t, $[[t] := <type-lookup(|ctx)> [<term-to-stratego>trm]])
             
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
@@ -221,7 +191,7 @@ rules // formula
   formula-to-stratego :
     Label(l, Match(pat, Var(x))) -> (l, strat)
     where
-      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]]
+      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]] 
 
   formula-to-stratego :
     Match(VarRef(x), pat) -> (<Hd> ys, strat)
