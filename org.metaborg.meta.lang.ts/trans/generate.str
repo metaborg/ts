@@ -28,7 +28,7 @@ rules
         [projection*]
     ]
     where func*       := <collect(function-to-stratego)> section*
-    		; rel*  := <collect(relation-to-stratego)> section*
+    		; rel*        := <collect(relation-to-stratego)> section*
     	  ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*

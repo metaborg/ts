@@ -21,11 +21,11 @@ templates
 	RelationProperty.Symmetric  = <symmetric>
 	
 	Relation.RelationUnCond = [
-		[Term] <[Id]: [Term]
+		[Pattern] <[Id]: [Pattern]
 	]
 
 	Relation.Relation = [
-		[Term] <[Id]: [Term]
+		[Pattern] <[Id]: [Pattern]
 		where [Formula]
 	]
 	
