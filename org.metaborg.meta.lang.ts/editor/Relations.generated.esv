@@ -3,20 +3,20 @@ module Relations.generated
 
 completions
   completion template ModuleSection : "relations " =
-    "relations\n\n" (cursor) (blank)  
+    "relations\n\n" (cursor) (blank)       
   completion template Relation : "define Id" =
-    "define " <:RelationProperty> " " <Id:Id>  
+    "define " <:RelationProperty> " " <Id:Id>    
   completion template RelationProperty : "reflexive" =
-    "reflexive"              
+    "reflexive"                          
   completion template RelationProperty : "transitive" =
-    "transitive"            
+    "transitive"                        
   completion template RelationProperty : "symmetric" =
-    "symmetric"              
-  completion template Relation : "Term <Id: Term" =
-    <Term:Term> " <" <Id:Id> ": " <Term:Term> (blank)  
-  completion template Relation : "Term <Id: Term where Formula" =
-    <Term:Term> " <" <Id:Id> ": " <Term:Term> "\nwhere " <Formula:Formula> (blank)  
+    "symmetric"                          
+  completion template Relation : "Pattern <Id: Pattern" =
+    <Pattern:Pattern> " <" <Id:Id> ": " <Pattern:Pattern> (blank)  
+  completion template Relation : "Pattern <Id: Pattern where Formula" =
+    <Pattern:Pattern> " <" <Id:Id> ": " <Pattern:Pattern> "\nwhere " <Formula:Formula> (blank)  
   completion template Prop : "store Term <Id: Term" =
     "store " <Term:Term> " <" <Id:Id> ": " <Term:Term>  
   completion template Prop : "Term <Id: Term" =
-    <Term:Term> " <" <Id:Id> ": " <Term:Term>  
+    <Term:Term> " <" <Id:Id> ": " <Term:Term>   

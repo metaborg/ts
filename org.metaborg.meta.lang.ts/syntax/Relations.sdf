@@ -3,15 +3,15 @@ imports common/Identifiers terms/Terms TypeSystemLanguage
 
 exports
   context-free syntax
-    "relations" Relation*                -> ModuleSection    {cons("Relations")}
-    "define" {RelationProperty ","}* Id  -> Relation         {cons("RelationDef")}
-    "reflexive"                          -> RelationProperty {cons("Reflexive")}
-    "transitive"                         -> RelationProperty {cons("Transitive")}
-    "symmetric"                          -> RelationProperty {cons("Symmetric")}
-    Term "<" Id ":" Term                 -> Relation         {cons("RelationUnCond")}
-    Term "<" Id ":" Term "where" Formula -> Relation         {cons("Relation")}
-    "store" Term "<" Id ":" Term         -> Prop             {cons("RelationStore")}
-    Term "<" Id ":" Term                 -> Prop             {cons("RelationMatch")}
+    "relations" Relation*                      -> ModuleSection    {cons("Relations")}
+    "define" {RelationProperty ","}* Id        -> Relation         {cons("RelationDef")}
+    "reflexive"                                -> RelationProperty {cons("Reflexive")}
+    "transitive"                               -> RelationProperty {cons("Transitive")}
+    "symmetric"                                -> RelationProperty {cons("Symmetric")}
+    Pattern "<" Id ":" Pattern                 -> Relation         {cons("RelationUnCond")}
+    Pattern "<" Id ":" Pattern "where" Formula -> Relation         {cons("Relation")}
+    "store" Term "<" Id ":" Term               -> Prop             {cons("RelationStore")}
+    Term "<" Id ":" Term                       -> Prop             {cons("RelationMatch")}
 
   context-free syntax
     CONTENTCOMPLETE -> ModuleSection    {cons("COMPLETION-ModuleSection")}
