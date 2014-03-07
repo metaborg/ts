@@ -19,7 +19,10 @@ rules
 
   nabl-scoping-site =
     ?TypeRule(_, _)
-    ; nabl-scope(|[NablNsVariable()])
+    ; origin-track-forced(
+        nabl-scope(|[NablNsVariable()])
+      |
+      )
 
   nabl-get-scope =
     ?TypeRule(_, _)
@@ -50,11 +53,11 @@ rules
           , []
           )
         )
+        ; match(child-uris__|c-uri1__)
+        ; match(sibl-uris__|s-uri1__)
+        ; match(implicits__|[])
       |
       )
-    ; match(child-uris__|c-uri1__)
-    ; match(sibl-uris__|s-uri1__)
-    ; match(implicits__|[])
 
   nabl-get-name :
     ListVar(x) -> x
@@ -81,11 +84,11 @@ rules
           , []
           )
         )
+        ; match(child-uris__|c-uri1__)
+        ; match(sibl-uris__|s-uri1__)
+        ; match(implicits__|[])
       |
       )
-    ; match(child-uris__|c-uri1__)
-    ; match(sibl-uris__|s-uri1__)
-    ; match(implicits__|[])
 
   nabl-get-name :
     VarRef(x) -> x

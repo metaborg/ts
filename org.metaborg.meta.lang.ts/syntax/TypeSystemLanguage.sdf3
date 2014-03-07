@@ -67,7 +67,7 @@ context-free priorities
    
 lexical syntax
 
-  SubTypeOp = "<" Id? ":"
+  SubTypeOp = "<" Id? ":" 
    
 templates // propositions
   
