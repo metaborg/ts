@@ -11,6 +11,66 @@ imports
 rules
 
   nabl-get-name :
+    Module(x, _) -> x
+
+  nabl-name-apply(s) =
+    Module(s, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?Module(x, _)
+    ; origin-track-forced(
+        Module(
+          nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsModule()
+          , NonUnique()
+          , Current()
+          , []
+          , []
+          )
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-name :
+    Import(x) -> x
+
+  nabl-name-apply(s) =
+    Import(s)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?Import(x)
+    ; origin-track-forced(
+        Import(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsModule()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        )
+      |
+      )
+
+  nabl-get-name :
     Var(x) -> x
 
   nabl-name-apply(s) =
@@ -430,6 +490,7 @@ imports
 
 signature
   constructors
+    NablNsModule       : Namespace
     NablNsVariable     : Namespace
     NablNsListVariable : Namespace
     NablNsFunction     : Namespace

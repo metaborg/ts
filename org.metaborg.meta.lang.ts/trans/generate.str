@@ -66,15 +66,15 @@ rules
     Import(t) -> 
     $[[t]
     ]
-    where task := <nabl-collect-use-task; debug(!"1: ")> t
-        ; <task-has-failed; debug(!"2: ")> task
+    where task := <nabl-collect-use-task> t
+        ; <task-has-failed> task
     
   import-to-stratego:
     Import(t) -> 
     $[[t].generated
     ]
-    where task := <nabl-collect-use-task; debug(!"3: ")> t
-        ; <not(task-has-failed); debug(!"4: ")> task
+    where task := <nabl-collect-use-task> t
+        ; <not(task-has-failed)> task
     
   import-to-stratego:
     ImportWildcard(t) -> 

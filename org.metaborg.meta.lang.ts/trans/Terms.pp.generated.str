@@ -4,107 +4,107 @@ strategies
   prettyprint-Pattern :
     a -> [ H(
              [SOpt(HS(), "0")]
-           , [a325]
+           , [a461]
            )
          ]
-    where a325 := <pp-one-Z(prettyprint-Var)> a
+    where a461 := <pp-one-Z(prettyprint-Var)> a
 
   prettyprint-Pattern :
     Int(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a326]
+                , [a462]
                 )
               ]
-    where a326 := <pp-one-Z(prettyprint-Int)> a
+    where a462 := <pp-one-Z(prettyprint-Int)> a
 
   prettyprint-Pattern :
     Real(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [a327]
+                 , [a463]
                  )
                ]
-    where a327 := <pp-one-Z(prettyprint-Real)> a
+    where a463 := <pp-one-Z(prettyprint-Real)> a
 
   prettyprint-Pattern :
     Str(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a328]
+                , [a464]
                 )
               ]
-    where a328 := <pp-one-Z(prettyprint-String)> a
+    where a464 := <pp-one-Z(prettyprint-String)> a
 
   prettyprint-Pattern :
     Op(a, b) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [ a329
+                  , [ a465
                     , S("(")
-                    , b162
+                    , b228
                     , S(")")
                     ]
                   )
                 ]
-    where a329 := <pp-one-Z(prettyprint-Id)> a
-    where b162 := <pp-H-list(prettyprint-Pattern|", ")> b
+    where a465 := <pp-one-Z(prettyprint-Id)> a
+    where b228 := <pp-H-list(prettyprint-Pattern|", ")> b
 
   prettyprint-Pattern :
     OpQ(a, b) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [ a330
+                   , [ a466
                      , S("(")
-                     , b163
+                     , b229
                      , S(")")
                      ]
                    )
                  ]
-    where a330 := <pp-one-Z(prettyprint-String)> a
-    where b163 := <pp-H-list(prettyprint-Pattern|", ")> b
+    where a466 := <pp-one-Z(prettyprint-String)> a
+    where b229 := <pp-H-list(prettyprint-Pattern|", ")> b
 
   prettyprint-Pattern :
     Char(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [a331]
+                 , [a467]
                  )
                ]
-    where a331 := <pp-one-Z(prettyprint-Char)> a
+    where a467 := <pp-one-Z(prettyprint-Char)> a
 
   prettyprint-Pattern :
     Tuple(a) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [S("("), a332, S(")")]
+                  , [S("("), a468, S(")")]
                   )
                 ]
-    where a332 := <pp-H-list(prettyprint-Pattern|", ")> a
+    where a468 := <pp-H-list(prettyprint-Pattern|", ")> a
 
   prettyprint-Pattern :
     List(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [S("["), a333, S("]")]
+                 , [S("["), a469, S("]")]
                  )
                ]
-    where a333 := <pp-H-list(prettyprint-Pattern|", ")> a
+    where a469 := <pp-H-list(prettyprint-Pattern|", ")> a
 
   prettyprint-Pattern :
     ListTail(a, b) -> [ H(
                           [SOpt(HS(), "0")]
                         , [ S("[")
-                          , a334
+                          , a470
                           , S(" | ")
-                          , b164
+                          , b230
                           , S("]")
                           ]
                         )
                       ]
-    where a334 := <pp-H-list(prettyprint-Pattern|", ")> a
-    where b164 := <pp-one-Z(prettyprint-Pattern)> b
+    where a470 := <pp-H-list(prettyprint-Pattern|", ")> a
+    where b230 := <pp-one-Z(prettyprint-Pattern)> b
 
   prettyprint-Pattern :
     As(a, b) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [a335, S("@"), b165]
+                  , [a471, S("@"), b231]
                   )
                 ]
-    where a335 := <pp-one-Z(prettyprint-Var)> a
-    where b165 := <pp-one-Z(prettyprint-Pattern)> b
+    where a471 := <pp-one-Z(prettyprint-Var)> a
+    where b231 := <pp-one-Z(prettyprint-Pattern)> b
 
   prettyprint-example =
     prettyprint-Pattern
@@ -114,106 +114,106 @@ strategies
   prettyprint-Term :
     a -> [ H(
              [SOpt(HS(), "0")]
-           , [a336]
+           , [a472]
            )
          ]
-    where a336 := <pp-one-Z(prettyprint-VarRef)> a
+    where a472 := <pp-one-Z(prettyprint-VarRef)> a
 
   prettyprint-Term :
     Int(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a337]
+                , [a473]
                 )
               ]
-    where a337 := <pp-one-Z(prettyprint-Int)> a
+    where a473 := <pp-one-Z(prettyprint-Int)> a
 
   prettyprint-Term :
     Real(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [a338]
+                 , [a474]
                  )
                ]
-    where a338 := <pp-one-Z(prettyprint-Real)> a
+    where a474 := <pp-one-Z(prettyprint-Real)> a
 
   prettyprint-Term :
     Str(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a339]
+                , [a475]
                 )
               ]
-    where a339 := <pp-one-Z(prettyprint-String)> a
+    where a475 := <pp-one-Z(prettyprint-String)> a
 
   prettyprint-Term :
     Op(a, b) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [ a340
+                  , [ a476
                     , S("(")
-                    , b166
+                    , b232
                     , S(")")
                     ]
                   )
                 ]
-    where a340 := <pp-one-Z(prettyprint-Id)> a
-    where b166 := <pp-H-list(prettyprint-Term|", ")> b
+    where a476 := <pp-one-Z(prettyprint-Id)> a
+    where b232 := <pp-H-list(prettyprint-Term|", ")> b
 
   prettyprint-Term :
     OpQ(a, b) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [ a341
+                   , [ a477
                      , S("(")
-                     , b167
+                     , b233
                      , S(")")
                      ]
                    )
                  ]
-    where a341 := <pp-one-Z(prettyprint-String)> a
-    where b167 := <pp-H-list(prettyprint-Term|", ")> b
+    where a477 := <pp-one-Z(prettyprint-String)> a
+    where b233 := <pp-H-list(prettyprint-Term|", ")> b
 
   prettyprint-Term :
     Char(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [a342]
+                 , [a478]
                  )
                ]
-    where a342 := <pp-one-Z(prettyprint-Char)> a
+    where a478 := <pp-one-Z(prettyprint-Char)> a
 
   prettyprint-Term :
     Tuple(a) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [S("("), a343, S(")")]
+                  , [S("("), a479, S(")")]
                   )
                 ]
-    where a343 := <pp-H-list(prettyprint-Term|", ")> a
+    where a479 := <pp-H-list(prettyprint-Term|", ")> a
 
   prettyprint-Term :
     List(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [S("["), a344, S("]")]
+                 , [S("["), a480, S("]")]
                  )
                ]
-    where a344 := <pp-H-list(prettyprint-Term|", ")> a
+    where a480 := <pp-H-list(prettyprint-Term|", ")> a
 
   prettyprint-Term :
     ListTail(a, b) -> [ H(
                           [SOpt(HS(), "0")]
                         , [ S("[")
-                          , a345
+                          , a481
                           , S(" | ")
-                          , b168
+                          , b234
                           , S("]")
                           ]
                         )
                       ]
-    where a345 := <pp-H-list(prettyprint-Term|", ")> a
-    where b168 := <pp-one-Z(prettyprint-Term)> b
+    where a481 := <pp-H-list(prettyprint-Term|", ")> a
+    where b234 := <pp-one-Z(prettyprint-Term)> b
 
   prettyprint-Term :
     StrInterp(a) -> [ H(
                         [SOpt(HS(), "0")]
-                      , [a346]
+                      , [a482]
                       )
                     ]
-    where a346 := <pp-one-Z(prettyprint-PPTerm)> a
+    where a482 := <pp-one-Z(prettyprint-PPTerm)> a
 
   prettyprint-example =
     prettyprint-Term
