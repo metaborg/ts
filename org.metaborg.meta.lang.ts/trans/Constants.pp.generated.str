@@ -13,12 +13,6 @@ strategies
   prettyprint-StrChar =
     ![S(<is-string>)]
 
-  prettyprint-IString =
-    ![S(<is-string>)]
-
-  prettyprint-IStrChar =
-    ![S(<is-string>)]
-
   prettyprint-example =
     prettyprint-Int
 
@@ -30,12 +24,6 @@ strategies
 
   prettyprint-example =
     prettyprint-StrChar
-
-  prettyprint-example =
-    prettyprint-IString
-
-  prettyprint-example =
-    prettyprint-IStrChar
 
 
 strategies

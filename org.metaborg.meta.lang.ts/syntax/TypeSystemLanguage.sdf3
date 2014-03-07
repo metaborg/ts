@@ -76,7 +76,7 @@ templates // propositions
   Prop.False        = <false>
   Prop.HasType      = <<Term> : <Pattern>>
   Prop.Has          = <<Term> has <Id> <Pattern>>  
-  Prop.Eq           = [[Term] == [Term]]
+  Prop.Eq           = [[Term] == [Term]] 
   Prop.Match        = [[Term] => [Pattern]]
   
 templates // proposition patterns
@@ -89,7 +89,8 @@ templates // term operators
 
   Term.DefOf = <definition of <Term>>
   
-  Term.Combine = <<Term> or <Term>>
+  Term.Union = <<Term> union <Term>>
+  Term.Choice  = [[Term] or [Term]]
 
 templates // keywords
 

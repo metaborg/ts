@@ -64,10 +64,10 @@ rules // propositions
     Has(trm, kind, pat) -> And(Has(trm, kind, Var(x)), Match(VarRef(x), pat))
     where <not(?Var(_))> pat; x := <newname> "x"
     
-  desugar :
-    TypeRule(HasPat(pat, kind, trm), form) -> 
-    TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
-    where <not(?VarRef(_))> trm; x := <newname> "x"
+  // desugar :
+  //   TypeRule(HasPat(pat, kind, trm), form) -> 
+  //   TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
+  //   where <not(?VarRef(_))> trm; x := <newname> "x"
 
 rules // unstar list variables
       
@@ -79,5 +79,27 @@ rules // unstar list variables
     
   unstar = 
     explode-string; map(try(\ 42 -> 95 \)); implode-string
+
+rules // bindings in multiple branches of an Or
+  
+  desugar :
+    Or(form1, form2) -> And(Or(form1', form2'), form)
+    where v* := <isect> (<form-vars> form1, <form-vars> form2) 
+        ; not([])
+        ; {| RenameLeft, RenameRight
+           : form := <foldr(!True(), \(v, f) -> And(<rename-var>v, f)\)> v* 
+           ; form1' := <alltd(RenameLeft)> form1
+           ; form2' := <alltd(RenameRight)> form2
+           |}
+             
+  rename-var :
+    Var(x) -> Match(Choice(VarRef(z1), VarRef(z2)), Var(x))
+    where z1 := <newname> x
+        ; z2 := <newname> x
+        ; rules( 
+            RenameLeft  : Var(x) -> Var(z1) 
+            RenameRight : Var(x) -> Var(z2) 
+          )
+
    
     

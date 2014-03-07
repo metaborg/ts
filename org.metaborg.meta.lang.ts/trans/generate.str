@@ -27,13 +27,14 @@ rules
       rules // projections
         [projection*]
     ]
-    where func* := <collect(function-to-stratego)> section*
+    where func*       := <collect(function-to-stratego)> section*
     		; rel*  := <collect(relation-to-stratego)> section*
-    	  ; rule* := <collect(rule-to-stratego)> section*
+    	  ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*
-        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => [] then
-        import := 
+        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => []
+          then
+            import := 
               $[imports
               	  
                   lib/runtime/nabl/-
@@ -42,9 +43,9 @@ rules
                   lib/runtime/properties/-
                   lib/runtime/relations/-
                ]
-      else
-        import := ""
-      end 
+         else
+           import := ""
+         end 
  
 rules
   
@@ -74,14 +75,6 @@ rules
 			     
 rules // conditional rule
 
-  // rule-to-stratego :
-  //   TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
-  //     create-[op]-task(|ctx) :
-  //       [<term-to-stratego>pat] -> [l]
-  //       where [s]
-  //   ]
-  //   where (l, s) := <formula-to-stratego> form
-
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, trm), form) -> ${
       create-{kind}-task(|ctx) :
@@ -103,21 +96,21 @@ rules // conditional rule
 
 rules // functions
 	
-  function-to-stratego :
-    TypeFunction(n, pat, trm, form) -> ${
-      type-func-{n}(|ctx) : 
-        {<term-to-stratego> pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego> trm}
-        where {s}
-    }
+	function-to-stratego :
+		TypeFunction(n, pat, trm, form) -> ${
+			type-func-{n}(|ctx) : 
+				{<term-to-stratego> pat} -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego> trm}
+				where {s}
+		}
 		where (_, s) := <formula-to-stratego> form
 		    ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
 		
-  function-to-stratego :
-    TypeFunctionUnCond(n, pat, trm) -> $[
-      type-func-[n](|ctx) : 
-        [<term-to-stratego> pat] -> [<term-to-stratego> trm]
-    ]
-		
+	function-to-stratego :
+		TypeFunctionUnCond(n, pat, trm) -> $[
+			type-func-[n](|ctx) : 
+				[<term-to-stratego> pat] -> [<term-to-stratego> trm]
+		]
+                    
 	formula-to-stratego :
 		Label(l, FuncAppl(n, trm, Var(x))) ->
 			(l, $[[x] := <type-func-[n](|ctx)> [<term-to-stratego> trm]])
@@ -209,9 +202,6 @@ rules // formula
 
   formula-to-stratego :
     Match(VarRef(x), pat) -> (<Hd> ys, strat)
-// =======
-//     Match(x, pat) -> (<Hd> ys, strat)
-// >>>>>>> parent of f2beb87... support e => x match clauses
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
@@ -228,8 +218,12 @@ rules // formula
       rules( Projections :+ _ -> r)
       
   formula-to-stratego :
-    Label(l, Match(Combine(trm1, trm2), Var(x))) -> 
+    Label(l, Match(Union(trm1, trm2), Var(x))) -> 
       (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+
+  formula-to-stratego :
+    Label(l, Match(Choice(trm1, trm2), Var(x))) -> 
+      (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
             
    mk-projection(|x, pat) :
      y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]

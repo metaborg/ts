@@ -1,15 +1,13 @@
 module terms/Constants
 exports
-  sorts Int Real String StrChar IString IStrChar
+  sorts Int Real String StrChar
 
   lexical syntax
-    [\-]? [0-9]+             -> Int      
-    [\-]? [0-9]+ [\.] [0-9]+ -> Real     
-    "\"" StrChar* "\""       -> String   
-    ~[\"\\]                  -> StrChar  
-    [\\] [\"tnr\\]           -> StrChar  
-    IStrChar+                -> IString  
-    ~[\"\\\[\]]              -> IStrChar 
+    [\-]? [0-9]+             -> Int     
+    [\-]? [0-9]+ [\.] [0-9]+ -> Real    
+    "\"" StrChar* "\""       -> String  
+    ~[\"\\]                  -> StrChar 
+    [\\] [\"tnr\\]           -> StrChar 
 
   sorts Char CharChar
 
