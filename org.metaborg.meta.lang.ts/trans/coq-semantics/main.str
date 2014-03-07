@@ -1,0 +1,113 @@
+module coq-semantics/main
+
+imports
+  libstratego-gpp
+  coq-semantics/Coq
+  coq-semantics/Vernacular.pp.generated
+  coq-semantics/Gallina.pp.generated
+  coq-semantics/Lexical.pp.generated
+  coq-semantics/Qid.pp.generated
+  coq-semantics/Coq-parenthesize
+  lib/runtime/index/-
+  lib/runtime/nabl/-
+  lib/runtime/properties/-
+  lib/runtime/task/-
+  names
+  lib/editor-common.generated
+  include/TypeSystemLanguage
+
+rules
+  
+  generate-coq:
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      task-setup(|project-path)
+    ; filename := <guarantee-extension(|"v")> path
+    ; coq-file := <strip-annos; module-to-coq> ast
+    with
+       result := <parenthesize-Coq; prettyprint-CoqFile; box2text-string(|100)> coq-file
+    <+ <bottomup(try(not(is-string) ; not(is-list) ; not(prettyprint-example) ; debug(!"cannot pp ")))> coq-file
+    ;  result := ""
+
+rules
+  
+  module-to-coq = Sent(IND_WT_INFER(collect-all(type-rule-to-coq)))
+  
+  // type-rule-to-coq:
+  //   TypeRule(rule, cond) -> <fail>
+    
+  type-rule-to-coq:
+    TypeRuleUnCond(rule@HasTypePat((name', bind'*), e2)) -> WT_INFER_DEF(name, bind*, type)
+    where
+      name  := $[[name']C_wt]
+    ; bind* := <concat> [<map(?Var(x) => Bind(x))> bind'*, [Bind("k")]]
+    ; type  := <has-type-pat-to-coq> rule
+
+  has-type-pat-to-coq:
+    HasTypePat(e1, e2) -> WT_INFER_APP_TYPE(e1', e2')
+    where
+      e1' := <pattern-to-coq> e1
+    ; e2' := <term-to-coq> e2
+  
+  pattern-to-coq:
+    Op(name', bind*) -> CO_APP(name, param, Ref("k"))
+    where
+      name  := $[[name']C]
+    ; param := <foldr(!Ref("nil"), fold-parameter)> bind*
+  
+  term-to-coq:
+    VarRef(x) -> Ref(x)
+  
+  fold-parameter:
+    (Var(x), y) -> CONS(Ref(x), y)
+    
+overlays
+
+  IND_WT_INFER(terms) =
+		Inductive(
+		  Ind(
+		    [ Induc(
+		        "well_formed_infer"
+		      , [Binds(["C"], Ref("Context"))]
+		      , Type(
+		          Product(Ref("term"), Product(Ref("term"), Sort(Prop())))
+		        )
+		      , ListDeclBar([ terms ])
+		      )
+		    ]
+		  )
+		)
+
+  WT_INFER_DEF(name, binds, type) =
+		ConsDecl(
+		  name
+		, binds
+		, type
+    )
+  
+  WT_INFER_APP_TYPE(e1, e2) =
+		Type(
+		  APPLY2(
+		    Apply(Ref("well_typed_infer"), Ref("C"))
+		    , e1
+		    , e2
+		  )
+		)
+		
+  CO_APP(name, param, key) =
+    APPLY2(
+      Apply(Ref("Co"), name)
+    , param
+    , key
+	  )
+	  
+	CONS(hd, tl) = APPLY2(Ref("cons"), hd, tl)
+	
+	APPLY2(constr, fst, snd) =
+	  Apply(
+	    Apply(
+	      constr
+	    , fst
+	    )
+	  , snd
+	  )

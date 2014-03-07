@@ -21,6 +21,7 @@ imports
   pp
   TypeSystemLanguage.pp.generated
   include/TypeSystemLanguage-parenthesize
+  coq-semantics/main
 
 rules // Analysis
 	
