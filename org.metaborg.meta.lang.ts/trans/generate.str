@@ -235,13 +235,12 @@ rules // term
     
   term-to-stratego :
     ListTail(t*, t) -> $<[<<map(term-to-stratego); separate-by(|", ")> t*> | <<term-to-stratego>t>]>
-  
-  // term-to-stratego :
-  //   DefOf(ns, trm) -> $[<type-lookup(|ctx)> [<term-to-stratego> trm]]
-
-
-            
-
-        
-
     
+  term-to-stratego : 
+  	StrInterp(StringQuotation1(_, part*)) -> $<[<<map(strinterp-part-to-stratego); separate-by(|", ")> part*>]>
+  	
+	strinterp-part-to-stratego : 
+		QStr(s) -> $["[s]"]
+		
+	strinterp-part-to-stratego : 
+		StringEscape1(_, VarRef(x)) -> $[[x]] 

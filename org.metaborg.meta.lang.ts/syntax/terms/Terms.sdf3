@@ -4,6 +4,7 @@ module terms/Terms
 	  terms/Constants
 	  common/Identifiers 
 	  terms/Vars
+  	terms/StringQuotations
 
   sorts Pattern // term binding variables  
   templates 
@@ -31,9 +32,4 @@ module terms/Terms
     Term.Tuple     = <(<Term*; separator=", ">)>
     Term.List      = <[<Term*; separator=", ">]>
     Term.ListTail  = <[<Term*; separator=", "> | <Term>]>
-		// Term.StrInterp = <$[<InterpPart*>]>
-		
-	// sorts InterpPart // Simple string interpolation
-	// templates
-	// 	InterpPart.InterpStr = <<IString>>
-	// 	InterpPart.InterpRef = <[<VarRef>]>
+		Term.StrInterp = <<PPTerm>>
