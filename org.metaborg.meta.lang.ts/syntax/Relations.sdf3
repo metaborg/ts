@@ -14,15 +14,17 @@ templates
 		<Relation*; separator="\n\n">
 	>
 	
-	Relation.RelationUnCond = [
+	Relation.RelationDef = <define <RelationProperty*; separator=", "> <Id>>
+	
+	RelationProperty.Reflexive  = <reflexive>
+	RelationProperty.Transitive = <transitive>
+	RelationProperty.Symmetric  = <symmetric>
+	
+	Relation.RelationStatic = [
 		[Term] <[Id]: [Term]
 	]
 	
-	Relation.Relation = [
-		[Term] <[Id]: [Term]
-		where [Formula]
-	]
-	
+  Prop.RelationStore = [store [Term] <[Id]: [Term]]
 	Prop.RelationMatch  = [[Term] <[Id]: [Term]]
-	Prop.RelationLookup = [[Term] <[Id]? [Pattern]]
+	// Prop.RelationLookup = [[Term] <[Id]? [Pattern]]
 	
