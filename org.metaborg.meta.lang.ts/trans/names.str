@@ -10,13 +10,65 @@ imports
 
 rules
 
-  nabl-scoping-site =
-    ?TypeRule(_, _)
-    ; nabl-scope(|[NablNsVariable()])
+  nabl-get-name :
+    Module(x, _) -> x
 
-  nabl-get-scope =
-    ?TypeRule(_, _)
-    ; ![NablNsVariable()]
+  nabl-name-apply(s) =
+    Module(s, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?Module(x, _)
+    ; origin-track-forced(
+        Module(
+          nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsModule()
+          , NonUnique()
+          , Current()
+          , []
+          , []
+          )
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-name :
+    Import(x) -> x
+
+  nabl-name-apply(s) =
+    Import(s)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?Import(x)
+    ; origin-track-forced(
+        Import(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsModule()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        )
+      |
+      )
 
   nabl-get-name :
     Var(x) -> x
@@ -136,6 +188,301 @@ rules
       |
       )
 
+  nabl-scoping-site =
+    ?TypeRuleUnCond(_)
+    ; nabl-scope(
+      | [NablNsVariable(), NablNsListVariable()]
+      )
+
+  nabl-get-scope =
+    ?TypeRuleUnCond(_)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-scoping-site =
+    ?TypeRule(_, _)
+    ; nabl-scope(
+      | [NablNsVariable(), NablNsListVariable()]
+      )
+
+  nabl-get-scope =
+    ?TypeRule(_, _)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-get-scope =
+    ?TypeFunctionUnCond(x, _, _)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-get-name :
+    TypeFunctionUnCond(x, _, _) -> x
+
+  nabl-name-apply(s) =
+    TypeFunctionUnCond(s, id, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?TypeFunctionUnCond(x, _, _)
+    ; origin-track-forced(
+        TypeFunctionUnCond(
+          nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsFunction()
+          , NonUnique()
+          , Current()
+          , [NablNsVariable(), NablNsListVariable()]
+          , []
+          )
+        , id
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-scope =
+    ?TypeFunction(x, _, _, _)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-get-name :
+    TypeFunction(x, _, _, _) -> x
+
+  nabl-name-apply(s) =
+    TypeFunction(s, id, id, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?TypeFunction(x, _, _, _)
+    ; origin-track-forced(
+        TypeFunction(
+          nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsFunction()
+          , NonUnique()
+          , Current()
+          , [NablNsVariable(), NablNsListVariable()]
+          , []
+          )
+        , id
+        , id
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-name :
+    FuncAppl(x, _, _) -> x
+
+  nabl-name-apply(s) =
+    FuncAppl(s, id, id)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?FuncAppl(x, _, _)
+    ; origin-track-forced(
+        FuncAppl(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsFunction()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        , id
+        , id
+        )
+      |
+      )
+
+  nabl-get-name :
+    RelationDef(_, x) -> x
+
+  nabl-name-apply(s) =
+    RelationDef(id, s)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?RelationDef(_, x)
+    ; origin-track-forced(
+        RelationDef(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsRelation()
+          , NonUnique()
+          , Current()
+          , []
+          , []
+          )
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-scope =
+    ?RelationUnCond(_, x, _)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-get-name :
+    RelationUnCond(_, x, _) -> x
+
+  nabl-name-apply(s) =
+    RelationUnCond(id, s, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?RelationUnCond(_, x, _)
+    ; origin-track-forced(
+        RelationUnCond(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsRelation()
+          , NonUnique()
+          , Current()
+          , [NablNsVariable(), NablNsListVariable()]
+          , []
+          )
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-scope =
+    ?Relation(_, x, _, _)
+    ; ![NablNsVariable(), NablNsListVariable()]
+
+  nabl-get-name :
+    Relation(_, x, _, _) -> x
+
+  nabl-name-apply(s) =
+    Relation(id, s, id, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?Relation(_, x, _, _)
+    ; origin-track-forced(
+        Relation(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsRelation()
+          , NonUnique()
+          , Current()
+          , [NablNsVariable(), NablNsListVariable()]
+          , []
+          )
+        , id
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-name :
+    RelationStore(_, x, _) -> x
+
+  nabl-name-apply(s) =
+    RelationStore(id, s, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?RelationStore(_, x, _)
+    ; origin-track-forced(
+        RelationStore(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsRelation()
+          , NonUnique()
+          , Current()
+          , []
+          , []
+          )
+        , id
+        )
+      |
+      )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
+
+  nabl-get-name :
+    RelationMatch(_, x, _) -> x
+
+  nabl-name-apply(s) =
+    RelationMatch(id, s, id)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?RelationMatch(_, x, _)
+    ; origin-track-forced(
+        RelationMatch(
+          id
+        , nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsRelation()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        , id
+        )
+      |
+      )
+
 
 imports
   include/TypeSystemLanguage
@@ -143,5 +490,8 @@ imports
 
 signature
   constructors
+    NablNsModule       : Namespace
     NablNsVariable     : Namespace
     NablNsListVariable : Namespace
+    NablNsFunction     : Namespace
+    NablNsRelation     : Namespace

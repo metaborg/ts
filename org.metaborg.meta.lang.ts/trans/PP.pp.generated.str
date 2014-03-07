@@ -4,34 +4,34 @@ strategies
   prettyprint-PropPattern :
     HasTypePat(a, b) -> [ H(
                             [SOpt(HS(), "0")]
-                          , [a692, S(" : "), b333]
+                          , [a424, S(" : "), b203]
                           )
                         ]
-    where a692 := <pp-one-Z(prettyprint-Pattern)> a
-    where b333 := <pp-one-Z(prettyprint-Term)> b
+    where a424 := <pp-one-Z(prettyprint-Pattern)> a
+    where b203 := <pp-one-Z(prettyprint-Term)> b
 
   prettyprint-PropPattern :
     HasPat(a, b, c) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [ a693
+                         , [ a425
                            , S(" has ")
-                           , b334
+                           , b204
                            , S(" ")
-                           , c96
+                           , c0
                            ]
                          )
                        ]
-    where a693 := <pp-one-Z(prettyprint-Pattern)> a
-    where b334 := <pp-one-Z(prettyprint-Id)> b
-    where c96 := <pp-one-Z(prettyprint-Term)> c
+    where a425 := <pp-one-Z(prettyprint-Pattern)> a
+    where b204 := <pp-one-Z(prettyprint-Id)> b
+    where c0 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-PropPattern :
     IsWF(a) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [a694, S(" :-")]
+                 , [a426, S(" :-")]
                  )
                ]
-    where a694 := <pp-one-Z(prettyprint-Pattern)> a
+    where a426 := <pp-one-Z(prettyprint-Pattern)> a
 
   prettyprint-example =
     prettyprint-PropPattern

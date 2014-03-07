@@ -5,8 +5,8 @@ exports
   context-free syntax
     "signatures" SignatureRule* -> ModuleSection {cons("Signatures")}
     Id ":" SignatureType        -> SignatureRule {cons("SignatureRule")}
-    {Id "*"}* "->" Id           -> SignatureType {cons("Type")}
-    Id                          -> SignatureType {cons("Inj")}
+    {Id "*"}* "->" Id           -> SignatureType {cons("SigType")}
+    Id                          -> SignatureType {cons("SigInj")}
 
   context-free syntax
     CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}

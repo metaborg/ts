@@ -4,7 +4,21 @@ imports
 	
 	include/TypeSystemLanguage
 	
-namespaces Variable ListVariable Function Relation
+namespaces
+
+  Module
+  Variable
+  ListVariable
+  Function
+  Relation
+
+binding rules // Module
+
+	Module(x, _) :
+		defines non-unique Module x
+		
+	Import(x) :
+		refers to Module x
 	
 binding rules // Variables
 

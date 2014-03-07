@@ -11,5 +11,5 @@ templates
 		  <SignatureRule*; separator="\n">>
 	
 	SignatureRule.SignatureRule = <<Id> : <SignatureType>>
-	SignatureType.Type = [[Id*; separator=" * "] -> [Id]]
-	SignatureType.Inj  = <<Id>>
+	SignatureType.SigType = [[Id*; separator=" * "] -> [Id]]
+	SignatureType.SigInj  = <<Id>>

@@ -32,4 +32,3 @@ templates
   Prop.RelationStore = [store [Term] <[Id]: [Term]]
 	Prop.RelationMatch  = [[Term] <[Id]: [Term]]
 	// Prop.RelationLookup = [[Term] <[Id]? [Pattern]]
-	
