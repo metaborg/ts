@@ -40,13 +40,16 @@ rules
     form@Eq(trm1, trm2) -> Label(<newname> "eq", form)
     
   label-formula :
-    form@Match(_, pat) -> form'
-    where if <collect-all(?Var(_))> pat => [] then
-            form' := Label(<newname> "match", form)
-          else
-            form' := form
-          end
+    form@Match(_, pat) -> Label(<newname> "match", form)
+    where <collect-all(?Var(_))> pat => [] 
 
+  label-formula :
+    form@Match(pat, Var(x)) -> Label(x, form)
+    
+  label-formula :
+    form@Match(_, pat) -> form
+    where <not(?Var(_))> pat; <collect-all(?Var(_))> pat => [_|_]
+    
   label-formula :
     form@Match(Combine(_,_), Var(x)) -> Label(x, form)
     
