@@ -88,7 +88,7 @@ rules // code generation
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"generated.str")> path;
-      result   := <to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
+      result   := <label-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
 
   // When given a tuple (path, string) this writes string into path.
   write-string-to-file =
@@ -113,6 +113,18 @@ rules // code generation
     with
       filename := <guarantee-extension(|"desugared.ts")> path;
       result   := <desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+
+  desugar-ast-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts.aterm")> path;
+      result   := <desugar-all; strip-annos> selected
+
+  desugar-label-ast-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts.aterm")> path;
+      result   := <desugar-all; label-formulas; strip-annos> selected
 
 
   // Formats the program using a pretty printer   
