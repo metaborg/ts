@@ -4,8 +4,11 @@ imports common/Identifiers
 exports
   context-free syntax
     "signatures" SignatureRule* -> ModuleSection {cons("Signatures")}
-    Id ":" {Id "*"}*            -> SignatureRule {cons("SignatureRule")}
+    Id ":" SignatureType        -> SignatureRule {cons("SignatureRule")}
+    {Id "*"}* "->" Id           -> SignatureType {cons("Type")}
+    Id                          -> SignatureType {cons("Inj")}
 
   context-free syntax
     CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}
     CONTENTCOMPLETE -> SignatureRule {cons("COMPLETION-SignatureRule")}
+    CONTENTCOMPLETE -> SignatureType {cons("COMPLETION-SignatureType")}

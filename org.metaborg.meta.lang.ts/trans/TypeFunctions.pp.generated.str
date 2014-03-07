@@ -12,38 +12,38 @@ strategies
                           )
                         , H(
                             [SOpt(HS(), "0")]
-                          , [a98]
+                          , [a26]
                           )
                         ]
-    where a98 := <pp-V-list(prettyprint-TypeFunction|"1")> a
+    where a26 := <pp-V-list(prettyprint-TypeFunction|"1")> a
 
   prettyprint-TypeFunction :
     TypeFunctionUnCond(a, b, c) -> [ H(
                                        [SOpt(HS(), "0")]
-                                     , [a99, S(" :")]
+                                     , [a27, S(" :")]
                                      )
-                                   , b52
+                                   , b5
                                    ]
-    where a99 := <pp-one-Z(prettyprint-Id)> a
-    where b52 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
-                                   , S(" -> ")
-                                   , <pp-one-Z(prettyprint-Term)> c
-                                   ]
+    where a27 := <pp-one-Z(prettyprint-Id)> a
+    where b5 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
+                                  , S(" -> ")
+                                  , <pp-one-Z(prettyprint-Term)> c
+                                  ]
 
   prettyprint-TypeFunction :
     TypeFunction(a, b, c, d) -> [ H(
                                     [SOpt(HS(), "0")]
-                                  , [a100, S(" :")]
+                                  , [a28, S(" :")]
                                   )
-                                , b53
-                                , d2
+                                , b6
+                                , d0
                                 ]
-    where a100 := <pp-one-Z(prettyprint-Id)> a
-    where b53 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
-                                   , S(" -> ")
-                                   , <pp-one-Z(prettyprint-Term)> c
-                                   ]
-    where d2 := <pp-indent(|"2")> [ S("where ")
+    where a28 := <pp-one-Z(prettyprint-Id)> a
+    where b6 := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> b
+                                  , S(" -> ")
+                                  , <pp-one-Z(prettyprint-Term)> c
+                                  ]
+    where d0 := <pp-indent(|"2")> [ S("where ")
                                   , <pp-one-Z(prettyprint-Formula)> d
                                   ]
 
@@ -51,17 +51,17 @@ strategies
     FuncAppl(a, b, c) -> [ H(
                              [SOpt(HS(), "0")]
                            , [ S("<")
-                             , a101
+                             , a29
                              , S("> ")
-                             , b54
+                             , b7
                              , S(" => ")
-                             , c16
+                             , c5
                              ]
                            )
                          ]
-    where a101 := <pp-one-Z(prettyprint-Id)> a
-    where b54 := <pp-one-Z(prettyprint-Term)> b
-    where c16 := <pp-one-Z(prettyprint-Pattern)> c
+    where a29 := <pp-one-Z(prettyprint-Id)> a
+    where b7 := <pp-one-Z(prettyprint-Term)> b
+    where c5 := <pp-one-Z(prettyprint-Pattern)> c
 
   prettyprint-example =
     prettyprint-ModuleSection

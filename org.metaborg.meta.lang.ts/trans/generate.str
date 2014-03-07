@@ -4,6 +4,8 @@ imports
 	
 	include/TypeSystemLanguage
 	pp
+	desugar
+	label
   
 rules 
  
@@ -62,11 +64,20 @@ rules
 	
 	task-dependencies =
 		collect(?Label(<![<id>]>, _) <+ ?Match(_, <pattern-vars>)); concat; make-set
+		
   pattern-vars =
     collect(?Var(<id>))
 			     
 rules // conditional rule
-  
+
+  // rule-to-stratego :
+  //   TypeRule(HasPat(pat, op, VarRef(x)), form) -> $[
+  //     create-[op]-task(|ctx) :
+  //       [<term-to-stratego>pat] -> [l]
+  //       where [s]
+  //   ]
+  //   where (l, s) := <formula-to-stratego> form
+
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, trm), form) -> ${
       create-{kind}-task(|ctx) :
@@ -146,7 +157,7 @@ rules // formula
   formula-to-stratego :
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
       (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
-                              
+
   formula-to-stratego :
     Label(l, SubType(trm1, op, trm2)) ->
       (l, $[[l] := <create-subtype-task(|ctx)>("[op]", [<term-to-stratego>trm1], [<term-to-stratego>trm2])])
@@ -156,7 +167,15 @@ rules // formula
       (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
 
   formula-to-stratego :
-    Match(x, pat) -> (<Hd> ys, strat)
+    Label(l, Match(pat, Var(x))) -> (l, strat)
+    where
+      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]] 
+
+  formula-to-stratego :
+    Match(VarRef(x), pat) -> (<Hd> ys, strat)
+// =======
+//     Match(x, pat) -> (<Hd> ys, strat)
+// >>>>>>> parent of f2beb87... support e => x match clauses
     where
       ys := <pattern-vars> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys

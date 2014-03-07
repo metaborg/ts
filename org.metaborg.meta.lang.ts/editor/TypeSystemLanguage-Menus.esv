@@ -1,18 +1,44 @@
 module TypeSystemLanguage-Menus
-
+                     
 menus
-
-  menu: "TypeSystem"
-
-  action  : "Generate Stratego"                 = generate-stratego (openeditor) (realtime)                 
-  action  : "Desugar"                           = desugar-service (openeditor) (realtime)                     
- 
-  separator
   
-  action  : "Show abstract syntax"              = debug-show-aterm (openeditor) (realtime) (meta) (source)  
-  action  : "Show analyzed syntax"              = debug-show-analyzed (openeditor) (realtime) (meta)        
-  action  : "Show index (current)"              = debug-show-index-current (openeditor) (meta)              
-  action  : "Show index (all)"                  = debug-show-index-all (openeditor) (meta)                  
-  action  : "Show tasks (selection)"            = debug-show-tasks-selection (openeditor) (meta)            
-  action  : "Reset and reanalyze"               = debug-reanalyze (meta)                                    
-                         
+  menu: "Syntax"
+            
+    // format
+    
+    action: "Format"               = format-service (openeditor) (realtime) (meta) (source)
+    action: "Show abstract syntax" = debug-show-aterm (openeditor) (realtime) (meta) (source)
+    action: "Show analyzed syntax" = debug-show-analyzed (openeditor) (meta)
+    
+  menu: "Analysis"
+  
+    separator
+    
+    submenu: "Show index"
+      action: "Project"            = debug-index-project (openeditor) (meta)
+      action: "Partition"          = debug-index-partition (openeditor) (meta)
+    end
+    
+    submenu: "Show tasks"
+      action: "Project"            = debug-task-project (openeditor) (meta)
+      action: "Partition"          = debug-task-partition (openeditor) (meta)
+      action: "Selection"          = debug-task-selection (openeditor) (meta)
+    end
+    
+    submenu: "Show analysis"
+      action: "Project"            = debug-project (openeditor) (meta)
+      action: "Partition"          = debug-partition (openeditor) (meta)
+    end
+    
+    action: "Reset and reanalyze"  = debug-reanalyze (meta) 
+    
+  menu: "Semantics"
+  
+    action  : "Generate Stratego"   = generate-stratego (openeditor) (realtime)                      
+    action  : "Desugar"             = desugar-service (openeditor) (realtime)                            
+    action  : "Desugar & Label"     = desugar-label-service (openeditor) (realtime)                   
+    action  : "Desugar AST"         = desugar-ast-service (openeditor) (realtime)                        
+    action  : "Desugar & Label AST" = desugar-label-ast-service (openeditor) (realtime)  
+    
+    //action: "Convert to Coq"       = generate-coq-semantics (openeditor) (realtime)
+                   
