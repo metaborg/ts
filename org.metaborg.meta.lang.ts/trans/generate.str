@@ -141,14 +141,23 @@ rules // relations
     ]
 	
 	relation-to-stratego :
-    RelationStatic(trm1, rel, trm2) -> $[
+    RelationUnCond(trm1, rel, trm2) -> $[
       relation-tuple(store): ([<term-to-stratego>trm1], "[rel]") -> <store> [<term-to-stratego>trm2]
       relation-match-tuple = ?([<term-to-stratego>trm1], [<term-to-stratego>trm2])
     ]
-	
+    
+  relation-to-stratego :
+  	Relation(trm1, rel, trm2, form) -> ${
+      type-relation-match(|ctx) : 
+        ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2}) -> <task-create-id(|ctx, [{deps}])> {<term-to-stratego>trm2}
+        where {s}
+  	}
+    where (_, s) := <formula-to-stratego> form
+        ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
+          
   formula-to-stratego :
     Label(l, RelationMatch(trm1, rel, trm2)) ->
-      (l, $[[l] := <relation-create-match(|ctx, "[rel]", [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
+      (l, ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})})
       
   formula-to-stratego :
     Label(l, RelationStore(trm1, rel, trm2)) ->
