@@ -41,21 +41,21 @@ rules
   type-rule-to-coq:
     TypeRule(rule, True()) -> WT_INFER_DEF(name, bind*, type)
     where
-      HasTypePat(Op(name', bind'*), _) := rule
-    ; name  := $[[name']C_wt]
-    ; bind* := <concat> [<map(?Var(x) => Bind(x))> bind'*, [Bind("k")]]
-    ; type  := <has-type-pat-to-coq> rule
-
-  has-type-pat-to-coq:
-    HasTypePat(e1, e2) -> WT_INFER_APP_TYPE(e1', e2')
-    where
-      e1' := <pattern-to-coq> e1
-    ; e2' := <term-to-coq> e2
+      (name, bind*, type) := <pat-to-coq> rule
   
+  pat-to-coq:
+    HasPat(pat@Op(name', bind'*), "type", ty) -> (name, bind*, type)
+    where
+      name  := $[[name']C_wt]
+    ; bind* := <concat> [<map(\ Var(x) -> Bind(x) \)> bind'*, [Bind("k")]]
+    ; pat' := <pattern-to-coq> pat
+    ; ty' := <term-to-coq> ty
+    ; type  := WT_INFER_APP_TYPE(pat', ty')
+
   pattern-to-coq:
     Op(name', bind*) -> CO_APP(name, param, Ref("k"))
     where
-      name  := $[[name']C]
+      name  := Ref($[[name']C])
     ; param := <foldr(!Ref("nil"), fold-parameter)> bind*
   
   term-to-coq:
