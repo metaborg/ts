@@ -2,12 +2,7 @@ module coq-semantics/main
 
 imports
   libstratego-gpp
-  coq-semantics/Coq
-  coq-semantics/Vernacular.pp.generated
-  coq-semantics/Gallina.pp.generated
-  coq-semantics/Lexical.pp.generated
-  coq-semantics/Qid.pp.generated
-  coq-semantics/Coq-parenthesize
+  coq-semantics/-
   lib/runtime/index/-
   lib/runtime/nabl/-
   lib/runtime/properties/-
@@ -32,19 +27,25 @@ rules
 rules
   
   module-to-coq:
-  	Module(name, rule*) -> Sent([IND_WT_INFER(definition)])
-  		where definition := <filter(?TypeRules(<id>)); concat; filter(type-rule-to-coq)> rule*
-    
+  	Module(name, rule*) -> Sent([IND_WT_INFER(final-def*)])
+  		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rule-to-coq)> rule*
+  		    ; final-def*  :=[definition*, TYPE_EQUALITY()] 
+
+rules // Type rules
   type-rule-to-coq:
     TypeRule(rule, cond) -> WT_INFER_DEF(name, bind*, type)
-    where debug(!"We still need ")
     where
-      (cond'*, bound*, i) := <cond-to-coq(|0)> cond
-    ; (name, bind*, final-type) := <pat-to-coq(|bound*, i)> rule
-    ; type := <foldr(!final-type, fold-type)> cond'*
+      (cond'*, bound*, i)       := <prop-to-coq(|0)> cond
+    ; (name, bind*, final-type) := <prop-pat-to-coq(|bound*, i)> rule
+    ; type                      := <foldr(!final-type, fold-type)> cond'*
   
-  pat-to-coq(|bound*, i):
-    HasPat(pat@Op(name', bind'*), "type", ty) -> (name, bind*, type)
+  type-rule-to-coq:
+  	TypeRuleUnCond(rule) -> <type-rule-to-coq> TypeRule(rule, True())
+
+rules // PropPattern
+  
+  prop-pat-to-coq(|bound*, i):
+    HasTypePat([pat@Op(name', bind'*)], ty) -> (name, bind*, type)
     where
       name                := $[[name']C_wt]
     ; (pat', b-pat*, i')  := <term-to-coq(|i)> pat
@@ -52,26 +53,13 @@ rules
     ; bind*               := [bound*, b-pat*, b-ty*]
     ; type                := WT_INFER_APP_TYPE(pat', ty')
       
-  cond-to-coq(|i):
-    True() -> ([], [], i)
-
-  term-to-coq(|i):
-    Op(name', bind*) -> (CO_APP(name, param, Ref(k)), bound*, <inc> i)
-    where
-      name  := Ref($[[name']C])
-    ; param := <foldr(!Ref("nil"), fold-parameter)> bind*
-    ; k     := $[k[i]]
-    ; bind'* := <map(?Var(<id>); !Bind(<id>))> bind*
-    ; bound* := [bind'*, Bind(k)]
+  prop-pat-to-coq(|bound*, i):
+    HasPat(pat*, "type", ty) -> <prop-pat-to-coq(|bound*, i)> HasTypePat(pat*, ty)
     
-  
-  term-to-coq(|i):
-    VarRef(x) -> (Ref(x), [], i)
+  prop-pat-to-coq(|bound*, i):
+    IsWF(_) -> <debug(!":- rules not supported: "); fail>
 
 rules // Fold rules
-
-  fold-parameter:
-    (Var(x), y) -> CONS(Ref(x), y)
   
   fold-type: // Composes parts of a type
     (x, y) -> Product(x, y)
@@ -82,7 +70,7 @@ overlays
 		Inductive(
 		  Ind(
 		    [ Induc(
-		        "well_formed_infer"
+		        "has_type"
 		      , [Binds(["C"], Ref("Context"))]
 		      , Type(
 		          Product(Ref("term"), Product(Ref("term"), Sort(Prop())))
@@ -102,16 +90,9 @@ overlays
   
   WT_INFER_APP_TYPE(e1, e2) =
 	  APPLY2(
-	    Apply(Ref("well_typed_infer"), Ref("C"))
+	    Apply(Ref("has_type"), Ref("C"))
 	    , e1
 	    , e2
-	  )
-		
-  CO_APP(name, param, key) =
-    APPLY2(
-      Apply(Ref("Co"), name)
-    , param
-    , key
 	  )
 	  
 	CONS(hd, tl) = APPLY2(Ref("cons"), hd, tl)
@@ -124,3 +105,23 @@ overlays
 	    )
 	  , snd
 	  )
+	
+	TYPE_EQUALITY =
+	  ConsDecl(
+      "HT_eq"
+      , [ Bind("e")
+        , Bind("ty1")
+        , Bind("ty2")
+        , Binds(
+            ["hty1"]
+            , WT_INFER_APP_TYPE(Ref("e"), Ref("ty1"))
+            )
+        , Binds(
+            ["tyeq"]
+          , Apply(Apply(Ref("term_eq"), Ref("ty1")), Ref("ty2"))
+          )
+        ]
+      , Type(
+          WT_INFER_APP_TYPE(Ref("e"), Ref("ty2"))
+        )
+      )

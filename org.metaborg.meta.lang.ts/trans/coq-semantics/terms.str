@@ -1,0 +1,78 @@
+module coq-semantics/terms
+
+imports
+  include/TypeSystemLanguage
+  coq-semantics/-
+
+rules // Formulas
+  prop-to-coq(|i):
+    Else(_, _, _) -> ([], [], i)
+    
+  prop-to-coq(|i):
+    And(e1, e2) -> ([e1'*, e2'*], [b-e1*, b-e2*], ie2)
+    where
+      (e1'*, b-e1*, ie1) := <prop-to-coq(|i)> e1
+    ; (e2'*, b-e2*, ie2) := <prop-to-coq(|ie1)> e2
+  
+  prop-to-coq(|i):
+    Not(_) -> <debug(!"Not rules not supported: "); fail>
+  
+  prop-to-coq(|i):
+    Or(_,_) -> <debug(!"Or rules not supported: "); fail>
+    
+rules // Props
+
+  prop-to-coq(|i):
+    True() -> ([], [], i)
+  
+  prop-to-coq(|i):
+    HasType(e1, e2) -> ([WT_INFER_APP_TYPE(e1', e2')], [b-e1*, b-e2*], ie2)
+    where
+      (e1', b-e1*, ie1) := <term-to-coq(|i)> e1
+    ; (e2', b-e2*, ie2) := <term-to-coq(|ie1)> e2
+  
+  prop-to-coq(|i):
+    Eq(e1, e2) -> ([TY_EQ(e1', e2')], [b-e1*, b-e2*], ie2)
+    where
+      (e1', b-e1*, ie1) := <term-to-coq(|i)> e1
+    ; (e2', b-e2*, ie2) := <term-to-coq(|ie1)> e2
+
+rules // Terms
+  
+  term-to-coq(|i):
+    Op(name', bind*) -> (CO_APP(name, param, Ref(k)), bound*, <inc> i)
+    where
+      name   := Ref($[[name']C])
+    ; param  := <foldr(!Ref("nil"), fold-parameter)> bind*
+    ; k      := $[k[i]]
+    ; bind'* := <map(?Var(<id>); !Bind(<id>))> bind*
+    ; bound* := <conc> (bind'*, [Bind(k)])
+  
+  term-to-coq(|i):
+    VarRef(x) -> (Ref(x), [], i)
+
+rules // Patterns
+
+  term-to-coq(|i):
+    Var(x) -> (Ref(x), [], i)
+
+rules // Fold rules
+  
+  fold-parameter:
+    (Var(x), y) -> CONS(Ref(x), y)
+
+overlays
+  
+  CO_APP(name, param, key) =
+    APPLY2(
+      Apply(Ref("Co"), name)
+    , param
+    , key
+    )
+  
+  TY_EQ(t1, t2) =
+    APPLY2(
+      Ref("eq")
+    , t1
+    , t2
+    )
