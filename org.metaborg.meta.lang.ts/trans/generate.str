@@ -11,7 +11,7 @@ imports
   
 rules 
  
-  to-stratego(|project-path, modname) :
+  to-stratego(|project-path, modname) : 
     Module(name, section*) ->
     $[module [modname]
     
@@ -21,7 +21,7 @@ rules
       	
         [sig*]
         
-      rules // functions
+      rules // functions 
         [func*]
 
       rules // relations
@@ -229,11 +229,23 @@ rules // formula
       strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]] 
 
   formula-to-stratego :
-    Match(VarRef(x), pat) -> (<Hd> ys, strat)
+    Match(x@VarRef(_), pat) -> (<Hd> ys, strat)
     where
-      ys := <pattern-vars> pat;
+      <not(?Var(_))> pat;
+      ys := <pattern-vars; not([])> pat;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
       
+   mk-projection(|x, pat) :
+     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
+     where rl := <newname> "proj"
+         ; debug(!"mk c: ")
+         ; r := $[
+             task-rewrite :
+               ("[rl]", [<term-to-stratego>pat]) -> [y]
+           ]
+         ; rules( Projections :+ _ -> r )
+                 
+  // match against closed term (use == instead?)
   formula-to-stratego :
     Label(l, Match(x, pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])])
     where
@@ -252,15 +264,6 @@ rules // formula
   formula-to-stratego :
     Label(l, Match(Choice(trm1, trm2), Var(x))) -> 
       (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
-            
-   mk-projection(|x, pat) :
-     y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
-     where rl := <newname> "proj"
-         ; r := $[
-             task-rewrite :
-               ("[rl]", [<term-to-stratego>pat]) -> [y]
-           ]
-         ; rules( Projections :+ _ -> r )
 
 rules // term
   
