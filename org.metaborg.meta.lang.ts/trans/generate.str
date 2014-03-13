@@ -118,7 +118,7 @@ rules // functions
 				[<term-to-stratego> pat] -> [<term-to-stratego> trm]
 		]
                     
-	formula-to-stratego :
+	formula-to-stratego(|deps) :
 		Label(l, FuncAppl(n, trm, Var(x))) ->
 			(l, $[[x] := <type-func-[n](|ctx)> [<term-to-stratego> trm]])
 
@@ -155,11 +155,11 @@ rules // relations
     where (_, s) := <formula-to-stratego> form
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
           
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, RelationMatch(trm1, rel, trm2)) ->
       (l, ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})})
       
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, RelationStore(trm1, rel, trm2)) ->
       (l, $[[l] := <new-rel-tuple(|ctx, "[rel]", [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
  
@@ -185,54 +185,57 @@ rules // conditional rule
         ; deps := <task-dependencies; separate-by(|", "); concat-strings> form
   
 rules // formula
+    
+  formula-to-stratego = formula-to-stratego(|[])
       
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     True() -> ("", $[id])
     
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     And(form1, form2) -> 
       (t2, $[[s1];
              [s2]])
-    where (t1, s1) := <formula-to-stratego> form1
-        ; (t2, s2) := <formula-to-stratego> form2
+    where (t1, s1) := <formula-to-stratego(|deps)> form1
+        ; (t2, s2) := <formula-to-stratego(|[t1])> form2
 
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Or(form1, form2)) -> 
       (l, $[[s1];
             [s2];
-            [l] := <new-task(|ctx)> Choice($[$[t1],[t2]$]$)])
-    where (t1, s1) := <formula-to-stratego> form1
-        ; (t2, s2) := <formula-to-stratego> form2
+            [l] := <new-task(|ctx)> Choice($[$[t1],[t2]$]$)]) 
+    where (t1, s1) := <formula-to-stratego(|deps)> form1
+        ; (t2, s2) := <formula-to-stratego(|deps)> form2
         //; t3 := <newname> "task"
         
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Else(form, msg, target) -> 
       (t, $[[s];
             <task-create-error-on-failure(|ctx, [t], [<term-to-stratego>msg])> [<term-to-stratego>target]])
-    where (t, s) := <formula-to-stratego> form
+    where (t, s) := <formula-to-stratego(|deps)> form
             
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Has(VarRef(x), attr, Var(t))) -> 
-      (t, $[[t] := <[attr]-task(|ctx)> [x]])
+      (t, $[[t] := <[attr]-task(|ctx)> [x] [<create-dep-task(|deps)>t]])
       
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Has(DefOf(trm), op, Var(t))) -> 
-      (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm]])
+      (t, $[[t] := <[op]-lookup(|ctx)> [<term-to-stratego>trm] [<create-dep-task(|deps)>t]])
  
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Eq(trm1, trm2)) -> 
-      (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]])
+      (l, $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1] [<create-dep-task(|deps)>l]])
 
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Match(pat, Var(x))) -> (l, strat)
     where
-      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat]] 
+      strat := $[[x] := <type-is(|ctx)> [<term-to-stratego>pat] [<create-dep-task(|deps)>x]] 
 
-  formula-to-stratego :
-    Match(x@VarRef(_), pat) -> (<Hd> ys, strat)
+  formula-to-stratego(|deps) :
+    Match(x@VarRef(_), pat) -> (y, $[[strat] [<create-dep-task(|deps)>y]])
     where
       <not(?Var(_))> pat;
       ys := <pattern-vars; not([])> pat;
+      y := <Hd> ys;
       strat := <map(mk-projection(|x, pat)); separate-by(|";\n")> ys
       
    mk-projection(|x, pat) :
@@ -245,8 +248,8 @@ rules // formula
          ; rules( Projections :+ _ -> r )
                  
   // match against closed term (use == instead?)
-  formula-to-stratego :
-    Label(l, Match(x, pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])])
+  formula-to-stratego(|deps) :
+    Label(l, Match(x, pat)) -> (l, $[[l] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x]) [<create-dep-task(|deps)>l]])
     where
       [] := <pattern-vars> pat;
       rl := <newname> "match";
@@ -256,14 +259,27 @@ rules // formula
       ];
       rules( Projections :+ _ -> r)
       
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Match(Union(trm1, trm2), Var(x))) -> 
-      (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+      (l, $[[x] := <new-task(|ctx)> Combine($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$) [<create-dep-task(|deps)>x]])
 
-  formula-to-stratego :
+  formula-to-stratego(|deps) :
     Label(l, Match(Choice(trm1, trm2), Var(x))) -> 
-      (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$)])
+      (l, $[[x] := <new-task(|ctx)> Choice($[$[<term-to-stratego>trm1], [<term-to-stratego>trm2]$]$) [<create-dep-task(|deps)>x]])
 
+rules
+  
+  pp-dependency-list :
+    deps -> $<[<<separate-by(|",")> deps>]>
+    
+  create-dep-task(|deps) :
+    t -> $[; <task-create-id(|ctx, [<pp-dependency-list> deps])>[t]]
+    where <not([])> deps
+  
+  create-dep-task(|deps) :
+    t -> $[]
+    where <?[]> deps
+    
 rules // term
   
   term-to-stratego :
