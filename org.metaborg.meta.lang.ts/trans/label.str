@@ -22,7 +22,7 @@ rules
   label-formula :
     And(form1, form2) -> And(form1', form2')
     where form1' := <label-formula> form1
-        ; form2' := <label-formula> form2
+        ; form2' := <label-formula> form2 
 
   label-formula :
     Or(form1, form2) -> Label(l, Or(form1', form2'))

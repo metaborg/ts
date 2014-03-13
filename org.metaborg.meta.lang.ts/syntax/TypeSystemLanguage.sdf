@@ -1,6 +1,6 @@
 module TypeSystemLanguage
-imports common/Identifiers common/Layout terms/Terms Module Signatures
-        TypeFunctions Relations PP
+imports common/Identifiers common/Layout terms/Terms terms/Vars Module
+        Signatures TypeFunctions Relations PP
 
 exports
   context-free start-symbols
@@ -16,16 +16,22 @@ exports
     CONTENTCOMPLETE -> TypeRule      {cons("COMPLETION-TypeRule")}
 
   context-free syntax
-    Prop                                  -> Formula 
-    Formula "else" "error" Term "on" Term -> Formula {cons("Else"), left}
-    "not" Formula                         -> Formula {cons("Not")}
-    Formula "or" Formula                  -> Formula {cons("Or"), assoc}
-    Formula "and" Formula                 -> Formula {cons("And"), assoc}
-    LId "::" Formula                      -> Formula {cons("Label")}
-    "(" Formula ")"                       -> Formula {bracket}
+    Prop                                   -> Formula     
+    Formula "else" "error" Term "on" Term  -> Formula     {cons("Else"), left}
+    "not" Formula                          -> Formula     {cons("Not")}
+    Formula "or" Formula                   -> Formula     {cons("Or"), assoc}
+    Formula "and" Formula                  -> Formula     {cons("And"), assoc}
+    LId "::" Formula                       -> Formula     {cons("Label")}
+    "(" Formula ")"                        -> Formula     {bracket}
+    "[" Instruction* "]"                   -> Formula     {cons("Is")}
+    Formula ";"                            -> Instruction {cons("I")}
+    Formula "provided" VarRef ";"          -> Instruction {cons("Id")}
+    Var ":=" Formula ";"                   -> Instruction {cons("Ia")}
+    Var ":=" Formula "provided" VarRef ";" -> Instruction {cons("Iad")}
 
   context-free syntax
-    CONTENTCOMPLETE -> Formula {cons("COMPLETION-Formula")}
+    CONTENTCOMPLETE -> Formula     {cons("COMPLETION-Formula")}
+    CONTENTCOMPLETE -> Instruction {cons("COMPLETION-Instruction")}
 
   context-free priorities
     LId "::" Formula -> Formula >
@@ -44,6 +50,7 @@ exports
     Term "has" Id Pattern -> Prop {cons("Has")}
     Term "==" Term        -> Prop {cons("Eq")}
     Term "=>" Pattern     -> Prop {cons("Match")}
+    "succeeds" VarRef     -> Prop {cons("Succeeds")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}

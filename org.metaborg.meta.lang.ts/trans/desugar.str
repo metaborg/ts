@@ -38,7 +38,7 @@ rules // rule splitting
 rules // normalization 	
   	
   desugar :
-    And(x, And(y, z)) -> And(And(x, y), z) 
+    And(And(x, y), z) -> And(x, And(y, z))
     
   desugar :
     And(True(), p) -> p
@@ -64,10 +64,10 @@ rules // propositions
     Has(trm, kind, pat) -> And(Has(trm, kind, Var(x)), Match(VarRef(x), pat))
     where <not(?Var(_))> pat; x := <newname> "x"
     
-  // desugar :
-  //   TypeRule(HasPat(pat, kind, trm), form) -> 
-  //   TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
-  //   where <not(?VarRef(_))> trm; x := <newname> "x"
+  desugar :
+    TypeRule(HasPat(pat, kind, trm), form) -> 
+    TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
+    where <not(?VarRef(_))> trm; x := <newname> "x"
 
 rules // unstar list variables
       

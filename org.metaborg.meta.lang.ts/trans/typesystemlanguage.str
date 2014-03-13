@@ -21,6 +21,12 @@ imports
   pp
   TypeSystemLanguage.pp.generated
   include/TypeSystemLanguage-parenthesize
+  instructions
+  
+signature
+  constructors
+    I : ID * Prop -> Instruction
+    Ip : ID * Prop * ID -> Instruction
 
 rules // Analysis
 	
@@ -114,6 +120,12 @@ rules // code generation
       filename := <guarantee-extension(|"desugared.ts")> path;
       result   := <desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
 
+  desugar-instruct-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts")> path;
+      result   := <desugar-all; instruct-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      
   desugar-ast-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
@@ -126,7 +138,12 @@ rules // code generation
       filename := <guarantee-extension(|"desugared.ts.aterm")> path;
       result   := <desugar-all; label-formulas; strip-annos> selected
 
-
+  desugar-instruct-ast-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts.aterm")> path;
+      result   := <desugar-all; instruct-formulas; strip-annos> selected
+      
   // Formats the program using a pretty printer   
   format-service:
     (selected, position, ast, path, project-path) -> (filename, result)
