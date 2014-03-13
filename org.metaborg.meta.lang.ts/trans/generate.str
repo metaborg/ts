@@ -238,7 +238,6 @@ rules // formula
    mk-projection(|x, pat) :
      y -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
      where rl := <newname> "proj"
-         ; debug(!"mk c: ")
          ; r := $[
              task-rewrite :
                ("[rl]", [<term-to-stratego>pat]) -> [y]
