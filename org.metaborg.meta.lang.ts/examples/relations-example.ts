@@ -1,4 +1,4 @@
-module relations-example
+module examples/relations-example
 	
 relations
 
