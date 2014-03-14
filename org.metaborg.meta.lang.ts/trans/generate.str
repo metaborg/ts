@@ -142,9 +142,11 @@ rules // relations
 	
 	relation-to-stratego :
     RelationUnCond(trm1, rel, trm2) -> $[
-      relation-tuple(store): ([<term-to-stratego>trm1], "[rel]") -> <store> [<term-to-stratego>trm2]
-      relation-match-tuple = ?([<term-to-stratego>trm1], [<term-to-stratego>trm2])
+      relation-store-value(store): ("[rel]", [trm1s]) -> <store> [trm2s]
+      relation-match-tuple = ?("[rel]", [trm1s], [trm2s])
     ]
+    where <term-to-stratego>trm1 => trm1s
+    	  ; <term-to-stratego>trm2 => trm2s
     
   relation-to-stratego :
   	Relation(trm1, rel, trm2, form) -> ${
