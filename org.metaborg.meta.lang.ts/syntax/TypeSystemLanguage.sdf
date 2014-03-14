@@ -50,7 +50,7 @@ exports
     Term "has" Id Pattern -> Prop {cons("Has")}
     Term "==" Term        -> Prop {cons("Eq")}
     Term "=>" Pattern     -> Prop {cons("Match")}
-    "succeeds" VarRef     -> Prop {cons("Succeeds")}
+    "return" Term         -> Prop {cons("Return")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}

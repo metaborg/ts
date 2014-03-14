@@ -89,7 +89,7 @@ templates // propositions
   Prop.Eq           = [[Term] == [Term]] 
   Prop.Match        = [[Term] => [Pattern]]
   
-  Prop.Succeeds     = [succeeds [VarRef]]
+  Prop.Return       = [return [Term]]
   
 templates // proposition patterns
    

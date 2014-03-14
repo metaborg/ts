@@ -43,8 +43,8 @@ completions
     <Term:Term> " == " <Term:Term>  
   completion template Prop : "Term => Pattern" =
     <Term:Term> " => " <Pattern:Pattern>  
-  completion template Prop : "succeeds VarRef" =
-    "succeeds " <VarRef:VarRef>  
+  completion template Prop : "return Term" =
+    "return " <Term:Term>  
 
 completions
   completion template PropPattern : "Pattern : Term" =

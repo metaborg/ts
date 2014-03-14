@@ -1,0 +1,90 @@
+module instructions
+
+imports include/TypeSystemLanguage
+
+// signature
+//   constructors
+//     I : ID * Prop -> Instruction
+//     Ip : ID * Prop * ID -> Instruction
+ 
+rules
+  
+  form-vars    = collect-all(?Var(_))
+  
+  form-varrefs = collect-all(?VarRef(_))
+
+rules
+
+  instruct-formulas =
+    alltd(
+      TypeRule(id, try(instruct-formula))
+    + TypeFunction(id, id, id, try(instruct-formula))
+    + Relation(id, id, id, try(instruct-formula))
+    )
+    
+  instruct-formula = 
+    instruct-formula(|[]); 
+    ?Label(_, <id>); 
+    alltd( \ Id(p, []) -> I(p) \ 
+        <+ \ Iad(x, p, []) -> Ia(x, p)  \
+        <+ \ Id(p, x) -> Id(p, VarRef(x)) \ 
+        <+ \ Iad(y, p, x) -> Iad(y, p, VarRef(x)) \ )
+  
+  instruct-formula(|dep) :
+    True() -> Is([])
+    
+  instruct-formula(|dep) :
+    And(form1, form2) -> Label(l2, Is([i1*, i2*]))
+    where Label(l1, Is(i1*)) := <instruct-formula(|dep)> form1
+        ; Label(l2, Is(i2*)) := <instruct-formula(|l1)> form2 
+
+  instruct-formula(|dep) :
+    Or(form1, form2) -> Label(l, Is([i1*, i2*, Ia(Var(l), Return(Choice(VarRef(l1), VarRef(l2))))]))
+    where Label(l1, Is(i1*)) := <instruct-formula(|dep)> form1
+        ; Label(l2, Is(i2*)) := <instruct-formula(|dep)> form2 
+        ; l := <newname> "or"    
+
+  instruct-formula(|dep) :
+    Else(form, msg, target) -> Label(l', Is([is*, Iad(Var(l'), Else(Return(VarRef(l)), msg, target), dep)]))
+      where Label(l, Is(is*)) := <instruct-formula(|dep)> form
+          ; l' := <newname> "else"
+
+  instruct-formula(|dep) :
+    form@Has(trm, op, Var(x)) -> Label(x, Is([Id(form, dep)]))
+  
+  instruct-formula(|dep) :
+    form@Eq(trm1, trm2) -> Label(l, Is([Iad(Var(l), form, dep)]))
+    where l := <newname> "eq"
+    
+  instruct-formula(|dep) :
+    form@Match(_, pat) -> Label(l, Is([Iad(Var(l), form, dep)]))
+    where <form-vars> pat => []
+        ; l := <newname> "match"
+
+  instruct-formula(|dep) :
+    form@Match(pat, Var(x)) -> Label(x, Is([Id(form, dep)]))
+    
+  instruct-formula(|dep) :
+    form@Match(_, pat) -> Label(l, Is([Id(form, dep)]))
+    where <not(?Var(_))> pat
+        ; <form-vars> pat => [_|_]
+        ; Var(l) := <Hd>
+        //; l := <newname> "match"
+    
+  instruct-formula(|dep) :
+    form@Match(Union(_,_), Var(x)) -> Label(x, Is([Id(form, dep)]))
+    
+  instruct-formula(|dep) :
+    form@Match(Choice(_,_), Var(x)) -> Label(x, Is([Id(form, dep)]))
+        
+  instruct-formula(|dep) : 
+  	form@FuncAppl(n, trm, Var(x)) -> Label(x, Is([Id(form, dep)]))
+
+	instruct-formula(|dep) : 
+		form@RelationMatch(trm1, rel, trm2) -> Label(l, Is([Iad(Var(l), form, dep)]))
+		where l := <newname> "relmatch"
+		
+	instruct-formula(|dep) : 
+		form@RelationStore(trm1, rel, trm2) -> Label(l, Is([Iad(Var(l), form, dep)]))
+		where l := <newname> "relstore"
+				
