@@ -16,13 +16,19 @@ exports
     CONTENTCOMPLETE -> TypeRule      {cons("COMPLETION-TypeRule")}
 
   context-free syntax
-    Prop                                   -> Formula     
-    Formula "else" "error" Term "on" Term  -> Formula     {cons("Else"), left}
-    "not" Formula                          -> Formula     {cons("Not")}
-    Formula "or" Formula                   -> Formula     {cons("Or"), assoc}
-    Formula "and" Formula                  -> Formula     {cons("And"), assoc}
-    LId "::" Formula                       -> Formula     {cons("Label")}
-    "(" Formula ")"                        -> Formula     {bracket}
+    Prop                                  -> Formula 
+    Formula "else" "error" Term "on" Term -> Formula {cons("Else"), left}
+    "not" Formula                         -> Formula {cons("Not")}
+    Formula "or" Formula                  -> Formula {cons("Or"), assoc}
+    Formula "par" Formula                 -> Formula {cons("Par"), assoc}
+    Formula "and" Formula                 -> Formula {cons("And"), assoc}
+    LId "::" Formula                      -> Formula {cons("Label")}
+    "(" Formula ")"                       -> Formula {bracket}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Formula {cons("COMPLETION-Formula")}
+
+  context-free syntax
     "[" Instruction* "]"                   -> Formula     {cons("Is")}
     Formula ";"                            -> Instruction {cons("I")}
     Formula "provided" VarRef ";"          -> Instruction {cons("Id")}
@@ -38,19 +44,22 @@ exports
     "not" Formula -> Formula >
     Formula "else" "error" Term "on" Term -> Formula >
     Formula "and" Formula -> Formula >
+    Formula "par" Formula -> Formula >
     Formula "or" Formula -> Formula
 
   lexical syntax
     "<" Id? ":" -> SubTypeOp 
 
   context-free syntax
-    "true"                -> Prop {cons("True")}
-    "false"               -> Prop {cons("False")}
-    Term ":" Pattern      -> Prop {cons("HasType")}
-    Term "has" Id Pattern -> Prop {cons("Has")}
-    Term "==" Term        -> Prop {cons("Eq")}
-    Term "=>" Pattern     -> Prop {cons("Match")}
-    "return" Term         -> Prop {cons("Return")}
+    "true"                   -> Prop {cons("True")}
+    "false"                  -> Prop {cons("False")}
+    Term ":" Pattern         -> Prop {cons("HasType")}
+    Term "has" Id Pattern    -> Prop {cons("Has")}
+    Term "==" Term           -> Prop {cons("Eq")}
+    Term "=>" Pattern        -> Prop {cons("Match")}
+    Term "bind" Var          -> Prop {cons("Bind")}
+    VarRef "project" Pattern -> Prop {cons("Project")}
+    "return" Term            -> Prop {cons("Return")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}

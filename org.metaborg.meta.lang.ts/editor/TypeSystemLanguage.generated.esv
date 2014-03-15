@@ -19,10 +19,12 @@ completions
     <LId:LId> " :: " <Formula:Formula> (blank)  
   completion template Formula : "(Formula)" =
     "(" <Formula:Formula> ")"  
+
+completions
   completion template Formula : "[]" =
-    "[" <:Instruction> "]"            
+    "[" <:Instruction> "]"        
   completion template Instruction : "Formula;" =
-    <Formula:Formula> ";"   
+    <Formula:Formula> ";"  
   completion template Instruction : "Formula provided VarRef;" =
     <Formula:Formula> " provided " <VarRef:VarRef> ";"  
   completion template Instruction : "Var := Formula;" =
@@ -43,6 +45,10 @@ completions
     <Term:Term> " == " <Term:Term>  
   completion template Prop : "Term => Pattern" =
     <Term:Term> " => " <Pattern:Pattern>  
+  completion template Prop : "Term bind Var" =
+    <Term:Term> " bind " <Var:Var>  
+  completion template Prop : "VarRef project Pattern" =
+    <VarRef:VarRef> " project " <Pattern:Pattern>  
   completion template Prop : "return Term" =
     "return " <Term:Term>  
 
