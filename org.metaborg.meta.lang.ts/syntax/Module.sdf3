@@ -27,4 +27,4 @@ lexical syntax
 
 lexical restrictions
   
-  ModuleID -/- [a-zA-Z0-9\'\.\-\_]
+  ModuleID -/- [a-zA-Z0-9\'\.\-\_\/]
