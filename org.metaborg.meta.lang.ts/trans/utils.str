@@ -1,0 +1,9 @@
+module utils
+
+imports
+  include/TypeSystemLanguage
+  
+strategies
+  
+  pattern-vars =
+    collect(?Var(<id>))
