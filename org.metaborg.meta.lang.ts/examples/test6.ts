@@ -2,7 +2,7 @@ module test6
 
 type rules
 
-  Not(e) : Bool()
+  Not(e) : Bool()  
   where e : Bool() else error "foo" on e
     //and t == Bool() 
     // desugared to rewrite, but could be type-match
@@ -14,7 +14,7 @@ type rules
   Foo(e1, e2) : t1 
   where e1 : t1
     and e2 : t2
-    and t1 <: t2 // bug in order of create-subtype-task
+    //and t1 <: t2 // bug in order of create-subtype-task
     
   Parent(p) : t
   where definition of p : t 
@@ -47,6 +47,6 @@ type rules
       
   NewObject(c):-
   where definition of c: MainType()
-   and error “cannot instantiate main class” on c
+   else error "cannot instantiate main class" on c
             
             
