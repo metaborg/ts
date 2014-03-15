@@ -50,7 +50,7 @@ templates // formulas
     <Formula> 
     or <Formula>
   > {assoc}
-   
+     
   Formula.And = <  
     <Formula> 
     and <Formula> 
@@ -62,6 +62,8 @@ templates // formulas
   
   Formula = <(<Formula>)> {bracket}
     
+templates // instructions
+
   Formula.Is = <[<Instruction*; separator="\n">]> 
      
   Instruction.I = <<Formula>;>  
@@ -74,7 +76,7 @@ templates // formulas
     
 context-free priorities
 
-   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
+   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Par > Formula.Or
    
 lexical syntax
 
@@ -88,6 +90,9 @@ templates // propositions
   Prop.Has          = <<Term> has <Id> <Pattern>>  
   Prop.Eq           = [[Term] == [Term]] 
   Prop.Match        = [[Term] => [Pattern]]
+  
+  Prop.Bind         = [[Term] bind [Var]]
+  Prop.Project      = [[VarRef] project [Pattern]] // at most one Var in Pattern
   
   Prop.Return       = [return [Term]]
   
