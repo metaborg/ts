@@ -254,7 +254,7 @@ rules // definition of
       ${{t} := <{op}-lookup(|ctx)> {<term-to-stratego>trm}}
       
   instruction-to-stratego :
-    Id(Has(DefOf(trm), op, Var(t)), d) -> 
+    Id(Has(DefOf(trm), op, Var(t)), VarRef(d)) -> 
       ${{t} := <{op}-lookup(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm}}
        
 rules // equality check
