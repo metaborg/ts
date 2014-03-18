@@ -230,12 +230,12 @@ rules // return
 rules // else error
 	       
   instruction-to-stratego :
-    Ia(Var(l), Else(Return(VarRef(t)), msg, target)) -> 
-      ${{l} := <task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg})> {<term-to-stratego>target}}
+    I(Else(Return(VarRef(t)), msg, target)) -> 
+      ${<task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg})> {<term-to-stratego>target}}
 
   instruction-to-stratego :
-    Iad(Var(l), Else(Return(VarRef(t)), msg, target), VarRef(d)) -> 
-      ${{l} := <task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg}); task-create-id(|ctx, [{d}])> {<term-to-stratego>target}}
+    Id(Else(Return(VarRef(t)), msg, target), VarRef(d)) -> 
+      ${<task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg}); task-create-id(|ctx, [{d}])> {<term-to-stratego>target}}
       
 rules // attribute of
               

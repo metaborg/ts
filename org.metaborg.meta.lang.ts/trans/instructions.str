@@ -44,9 +44,8 @@ rules
         ; l := <newname> "or"    
 
   instruct-formula(|dep) :
-    Else(form, msg, target) -> Label(l', Is([is*, Iad(Var(l'), Else(Return(VarRef(l)), msg, target), dep)]))
+    Else(form, msg, target) -> Label(l, Is([is*, I(Else(Return(VarRef(l)), msg, target))]))
       where Label(l, Is(is*)) := <instruct-formula(|dep)> form
-          ; l' := <newname> "else"
 
   instruct-formula(|dep) :
     form@Has(trm, op, Var(x)) -> Label(x, Is([Id(form, dep)]))
