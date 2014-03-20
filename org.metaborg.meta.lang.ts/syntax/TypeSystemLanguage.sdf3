@@ -78,10 +78,6 @@ context-free priorities
 
    Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Par > Formula.Or
    
-lexical syntax
-
-  SubTypeOp = "<" Id? ":" 
-   
 templates // propositions
   
   Prop.True         = <true>
