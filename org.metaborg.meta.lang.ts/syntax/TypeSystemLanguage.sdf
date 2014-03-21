@@ -20,7 +20,6 @@ exports
     Formula "else" "error" Term "on" Term -> Formula {cons("Else"), left}
     "not" Formula                         -> Formula {cons("Not")}
     Formula "or" Formula                  -> Formula {cons("Or"), assoc}
-    Formula "par" Formula                 -> Formula {cons("Par"), assoc}
     Formula "and" Formula                 -> Formula {cons("And"), assoc}
     LId "::" Formula                      -> Formula {cons("Label")}
     "(" Formula ")"                       -> Formula {bracket}
@@ -44,11 +43,7 @@ exports
     "not" Formula -> Formula >
     Formula "else" "error" Term "on" Term -> Formula >
     Formula "and" Formula -> Formula >
-    Formula "par" Formula -> Formula >
     Formula "or" Formula -> Formula
-
-  lexical syntax
-    "<" Id? ":" -> SubTypeOp 
 
   context-free syntax
     "true"                   -> Prop {cons("True")}

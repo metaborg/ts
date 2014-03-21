@@ -61,7 +61,7 @@ templates // formulas
   >
   
   Formula = <(<Formula>)> {bracket}
-    
+
 templates // instructions
 
   Formula.Is = <[<Instruction*; separator="\n">]> 
@@ -76,7 +76,7 @@ templates // instructions
     
 context-free priorities
 
-   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Par > Formula.Or
+   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
    
 templates // propositions
   
