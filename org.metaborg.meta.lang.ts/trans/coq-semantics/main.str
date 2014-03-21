@@ -61,7 +61,7 @@ rules // PropPattern
     IsWF(_) -> <debug(!":- rules not supported: "); fail>
     
   prop-pat-to-coq(|bound*, i, ty):
-    pat@(Op(name, _)) -> ($[[name]C_wt], <union> (bound*, b*), ty')
+    pat@(Op(name, _)) -> ($[[name]C_ht], <union> (bound*, b*), ty')
     where
       (pat', b*, _) := <term-to-coq(|i)> pat
     ; ty'           := WT_INFER_APP_TYPE(pat', ty)
