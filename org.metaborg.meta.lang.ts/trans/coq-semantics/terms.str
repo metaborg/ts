@@ -6,7 +6,7 @@ imports
 
 rules // Formulas
   prop-to-coq(|i):
-    Else(_, _, _) -> ([], [], i)
+    Else(e, _, _) -> <prop-to-coq(|i)> e
     
   prop-to-coq(|i):
     And(e1, e2) -> ([e1'*, e2'*], <union> (b-e1*, b-e2*), ie2)
