@@ -45,13 +45,11 @@ rules // Terms
       name   := Ref($[[name']C])
     ; param  := <foldr(!Ref("nil"), fold-parameter)> bind*
     ; k      := $[k[i]]
-    ; bind'* := <map(?Var(<id>); !Bind(<id>))> bind*
+    ; bind'* := <map((?Var(<id>) <+ ?VarRef(<id>)); !Bind(<id>))> bind*
     ; bound* := <conc> (bind'*, [Bind(k)])
   
   term-to-coq(|i):
     VarRef(x) -> (Ref(x), [Bind(x)], i)
-
-rules // Patterns
 
   term-to-coq(|i):
     Var(x) -> (Ref(x), [Bind(x)], i)
@@ -60,6 +58,9 @@ rules // Fold rules
   
   fold-parameter:
     (Var(x), y) -> CONS(Ref(x), y)
+  
+  fold-parameter:
+    (VarRef(x), y) -> CONS(Ref(x), y)
 
 overlays
   
