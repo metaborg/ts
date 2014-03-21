@@ -27,7 +27,7 @@ rules
 rules
   
   module-to-coq:
-  	Module(name, rule*) -> Sent([IND_WT_INFER(final-def*)])
+  	Module(name, rule*) -> Sent([IND_HT(final-def*)])
   		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rules-to-coq); concat> rule*
   		    ; final-def*  := [definition*, TYPE_EQUALITY()] 
 
@@ -35,14 +35,14 @@ rules // Type rules
   type-rules-to-coq:
     TypeRule(rule, cond) -> <map(type-rule-to-coq(|cond'*))> pat*
     where
-      (cond'*, bound*, i) := <prop-to-coq(|0)> cond
+      (cond'*, bound*, i) := <prop-to-coq(|(0, []))> cond
     ; pat*                := <prop-pats-to-coq(|bound*, i)> rule
   
   type-rules-to-coq:
   	TypeRuleUnCond(rule) -> <type-rules-to-coq> TypeRule(rule, True())
   	
   type-rule-to-coq(|cond*):
-    (name, bind*, final-type) -> WT_INFER_DEF(name, bind*, type)
+    (name, bind*, final-type) -> HT_DEF(name, bind*, type)
     where
       type                      := <foldr(!final-type, fold-type)> cond*
 
@@ -64,7 +64,7 @@ rules // PropPattern
     pat@(Op(name, _)) -> ($[[name]C_ht], <union> (bound*, b*), ty')
     where
       (pat', b*, _) := <term-to-coq(|i)> pat
-    ; ty'           := WT_INFER_APP_TYPE(pat', ty)
+    ; ty'           := HT_APP_TYPE(pat', ty)
 
 rules // Fold rules
   
@@ -73,7 +73,7 @@ rules // Fold rules
 
 overlays
 
-  IND_WT_INFER(terms) =
+  IND_HT(terms) =
 		Inductive(
 		  Ind(
 		    [ Induc(
@@ -88,14 +88,14 @@ overlays
 		  )
 		)
 
-  WT_INFER_DEF(name, binds, type) =
+  HT_DEF(name, binds, type) =
 		ConsDecl(
 		  name
 		, binds
 		, Type(type)
     )
   
-  WT_INFER_APP_TYPE(e1, e2) =
+  HT_APP_TYPE(e1, e2) =
 	  APPLY2(
 	    Apply(Ref("has_type"), Ref("C"))
 	    , e1
@@ -104,7 +104,8 @@ overlays
 	  
 	CONS(hd, tl) = APPLY2(Ref("cons"), hd, tl)
 	
-	APPLY2(constr, fst, snd) = Apply(Apply(constr, fst), snd)
+	APPLY2(op, e1, e2) = Apply(Apply(op, e1), e2)
+	APPLY4(op, e1, e2, e3, e4) = APPLY2(APPLY2(op, e1, e2), e3, e4)
 	
 	TYPE_EQUALITY =
 	  ConsDecl(
@@ -114,7 +115,7 @@ overlays
         , Bind("ty2")
         , Binds(
             ["hty1"]
-            , WT_INFER_APP_TYPE(Ref("e"), Ref("ty1"))
+            , HT_APP_TYPE(Ref("e"), Ref("ty1"))
             )
         , Binds(
             ["tyeq"]
@@ -122,6 +123,6 @@ overlays
           )
         ]
       , Type(
-          WT_INFER_APP_TYPE(Ref("e"), Ref("ty2"))
+          HT_APP_TYPE(Ref("e"), Ref("ty2"))
         )
       )

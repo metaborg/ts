@@ -26,10 +26,19 @@ rules // Props
     True() -> ([], [], i)
   
   prop-to-coq(|i):
-    HasType(e1, e2) -> ([WT_INFER_APP_TYPE(e1', e2')], <union> (b-e1*, b-e2*), ie2)
+    HasType(e1, e2) -> ([HT_APP_TYPE(e1', e2')], <union> (b-e1*, b-e2*), ie2)
+    where not(DefOf(_) := e1)
     where
       (e1', b-e1*, ie1) := <term-to-coq(|i)> e1
     ; (e2', b-e2*, ie2) := <term-to-coq(|ie1)> e2
+  
+  prop-to-coq(|i):
+    HasType(DefOf(VarRef(x)), e2) -> ([HT_LOOKUP("ns", k, Ref(x), e2')], bind*, i')
+    where
+      k                 := $[k[<Fst>i]]
+    ; (e2', b-e2*, ie2) := <term-to-coq(|<incI> i)> e2
+    ; i'                := <addX(|x, k)> ie2
+    ; bind*             := <union> ([Bind("ns"), Bind(k), Bind(x)], b-e2*)
   
   prop-to-coq(|i):
     Eq(e1, e2) -> ([TY_EQ(e1', e2')], <union> (b-e1*, b-e2*), ie2)
@@ -40,11 +49,11 @@ rules // Props
 rules // Terms
   
   term-to-coq(|i):
-    Op(name', bind*) -> (CO_APP(name, param, Ref(k)), bound*, <inc> i)
+    Op(name', bind*) -> (CO_APP(name, param, Ref(k)), bound*, <incI> i)
     where
       name   := Ref($[[name']C])
-    ; param  := <foldr(!Ref("nil"), fold-parameter)> bind*
-    ; k      := $[k[i]]
+    ; param  := <foldr(!Ref("nil"), fold-parameter(|i))> bind*
+    ; k      := $[k[<Fst> i]]
     ; bind'* := <map((?Var(<id>) <+ ?VarRef(<id>)); !Bind(<id>))> bind*
     ; bound* := <conc> (bind'*, [Bind(k)])
   
@@ -56,13 +65,25 @@ rules // Terms
 
 rules // Fold rules
   
-  fold-parameter:
-    (Var(x), y) -> CONS(Ref(x), y)
+  fold-parameter(|i):
+    (Var(x), y) -> CONS(r, y)
+    where
+      r := <lookup < !ID_APP(x, <id>) + !Ref(x)> (x, <Snd> i)
   
-  fold-parameter:
-    (VarRef(x), y) -> CONS(Ref(x), y)
+  fold-parameter(|i):
+    (VarRef(x), y) -> CONS(r, y)
+    where
+      r := <lookup < !ID_APP(x, <id>) + !Ref(x)> (x, <Snd> i)
+    
+rules
+  incI: (i, l) -> (<inc> i, l)
+  addX(|x, k): (i, l*) -> (i, [(x, k) | l*])
 
 overlays
+  
+  HT_LOOKUP(ns, k, e1, e2) = APPLY4(Apply(Ref("lookup"), Ref("C")), e1, Ref(ns), Ref(k), e2)
+  
+  ID_APP(x, k) = APPLY2(Ref("Id"), Ref(x), Ref(k))
   
   CO_APP(name, param, key) =
     APPLY2(
