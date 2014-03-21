@@ -28,36 +28,43 @@ rules
   
   module-to-coq:
   	Module(name, rule*) -> Sent([IND_WT_INFER(final-def*)])
-  		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rule-to-coq)> rule*
+  		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rules-to-coq); concat> rule*
   		    ; final-def*  := [definition*, TYPE_EQUALITY()] 
 
 rules // Type rules
-  type-rule-to-coq:
-    TypeRule(rule, cond) -> WT_INFER_DEF(name, bind*, type)
+  type-rules-to-coq:
+    TypeRule(rule, cond) -> <map(type-rule-to-coq(|cond'*))> pat*
     where
-      (cond'*, bound*, i)       := <prop-to-coq(|0)> cond
-    ; (name, bind*, final-type) := <prop-pat-to-coq(|bound*, i)> rule
-    ; type                      := <foldr(!final-type, fold-type)> cond'*
+      (cond'*, bound*, i) := <prop-to-coq(|0)> cond
+    ; pat*                := <prop-pats-to-coq(|bound*, i)> rule
   
-  type-rule-to-coq:
-  	TypeRuleUnCond(rule) -> <type-rule-to-coq> TypeRule(rule, True())
+  type-rules-to-coq:
+  	TypeRuleUnCond(rule) -> <type-rules-to-coq> TypeRule(rule, True())
+  	
+  type-rule-to-coq(|cond*):
+    (name, bind*, final-type) -> WT_INFER_DEF(name, bind*, type)
+    where
+      type                      := <foldr(!final-type, fold-type)> cond*
 
 rules // PropPattern
   
-  prop-pat-to-coq(|bound*, i):
-    HasTypePat([pat@Op(name', bind'*)], ty) -> (name, bind*, type)
+  prop-pats-to-coq(|bound*, i):
+    HasTypePat(pat*, ty) -> <map(prop-pat-to-coq(|bind'*, i', ty'))> pat*
     where
-      name                := $[[name']C_wt]
-    ; (pat', b-pat*, i')  := <term-to-coq(|i)> pat
-    ; (ty' , b-ty*, i'')  := <term-to-coq(|i')> ty
-    ; bind*               := <union> (bound*, <union> (b-pat*, b-ty*))
-    ; type                := WT_INFER_APP_TYPE(pat', ty')
+      (ty' , b-ty*, i') := <term-to-coq(|i)> ty
+    ; bind'*            := <union> (b-ty*, bound*)
       
-  prop-pat-to-coq(|bound*, i):
-    HasPat(pat*, "type", ty) -> <prop-pat-to-coq(|bound*, i)> HasTypePat(pat*, ty)
+  prop-pats-to-coq(|bound*, i):
+    HasPat(pat*, "type", ty) -> <prop-pats-to-coq(|bound*, i)> HasTypePat(pat*, ty)
     
-  prop-pat-to-coq(|bound*, i):
+  prop-pats-to-coq(|bound*, i):
     IsWF(_) -> <debug(!":- rules not supported: "); fail>
+    
+  prop-pat-to-coq(|bound*, i, ty):
+    pat@(Op(name, _)) -> ($[[name]C_wt], <union> (bound*, b*), ty')
+    where
+      (pat', b*, _) := <term-to-coq(|i)> pat
+    ; ty'           := WT_INFER_APP_TYPE(pat', ty)
 
 rules // Fold rules
   
@@ -97,14 +104,7 @@ overlays
 	  
 	CONS(hd, tl) = APPLY2(Ref("cons"), hd, tl)
 	
-	APPLY2(constr, fst, snd) =
-	  Apply(
-	    Apply(
-	      constr
-	    , fst
-	    )
-	  , snd
-	  )
+	APPLY2(constr, fst, snd) = Apply(Apply(constr, fst), snd)
 	
 	TYPE_EQUALITY =
 	  ConsDecl(
