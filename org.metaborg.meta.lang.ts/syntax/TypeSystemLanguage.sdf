@@ -1,6 +1,6 @@
 module TypeSystemLanguage
-imports common/Identifiers common/Layout terms/Terms Module Signatures
-        TypeFunctions Relations PP
+imports common/Identifiers common/Layout terms/Terms terms/Vars Module
+        Signatures TypeFunctions Relations PP
 
 exports
   context-free start-symbols
@@ -27,6 +27,17 @@ exports
   context-free syntax
     CONTENTCOMPLETE -> Formula {cons("COMPLETION-Formula")}
 
+  context-free syntax
+    "[" Instruction* "]"                   -> Formula     {cons("Is")}
+    Formula ";"                            -> Instruction {cons("I")}
+    Formula "provided" VarRef ";"          -> Instruction {cons("Id")}
+    Var ":=" Formula ";"                   -> Instruction {cons("Ia")}
+    Var ":=" Formula "provided" VarRef ";" -> Instruction {cons("Iad")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Formula     {cons("COMPLETION-Formula")}
+    CONTENTCOMPLETE -> Instruction {cons("COMPLETION-Instruction")}
+
   context-free priorities
     LId "::" Formula -> Formula >
     "not" Formula -> Formula >
@@ -34,16 +45,16 @@ exports
     Formula "and" Formula -> Formula >
     Formula "or" Formula -> Formula
 
-  lexical syntax
-    "<" Id? ":" -> SubTypeOp 
-
   context-free syntax
-    "true"                -> Prop {cons("True")}
-    "false"               -> Prop {cons("False")}
-    Term ":" Pattern      -> Prop {cons("HasType")}
-    Term "has" Id Pattern -> Prop {cons("Has")}
-    Term "==" Term        -> Prop {cons("Eq")}
-    Term "=>" Pattern     -> Prop {cons("Match")}
+    "true"                   -> Prop {cons("True")}
+    "false"                  -> Prop {cons("False")}
+    Term ":" Pattern         -> Prop {cons("HasType")}
+    Term "has" Id Pattern    -> Prop {cons("Has")}
+    Term "==" Term           -> Prop {cons("Eq")}
+    Term "=>" Pattern        -> Prop {cons("Match")}
+    Term "bind" Var          -> Prop {cons("Bind")}
+    VarRef "project" Pattern -> Prop {cons("Project")}
+    "return" Term            -> Prop {cons("Return")}
 
   context-free syntax
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}

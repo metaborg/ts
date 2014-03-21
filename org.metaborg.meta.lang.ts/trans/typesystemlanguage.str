@@ -16,12 +16,18 @@ imports
 	check
 	desugar
 	label
-	generate
   editor/TypeSystemLanguage-Outliner
   pp
   TypeSystemLanguage.pp.generated
   include/TypeSystemLanguage-parenthesize
-  coq-semantics/main
+  instructions
+  
+  generate-instruct // instead of generate
+  
+// signature
+//   constructors
+//     I : ID * Prop -> Instruction
+//     Ip : ID * Prop * ID -> Instruction
 
 rules // Analysis
 	
@@ -89,7 +95,7 @@ rules // code generation
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"generated.str")> path;
-      result   := <label-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
+      result   := <instruct-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
 
   // When given a tuple (path, string) this writes string into path.
   write-string-to-file =
@@ -115,6 +121,12 @@ rules // code generation
       filename := <guarantee-extension(|"desugared.ts")> path;
       result   := <desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
 
+  desugar-instruct-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts")> path;
+      result   := <desugar-all; instruct-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      
   desugar-ast-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
@@ -127,7 +139,12 @@ rules // code generation
       filename := <guarantee-extension(|"desugared.ts.aterm")> path;
       result   := <desugar-all; label-formulas; strip-annos> selected
 
-
+  desugar-instruct-ast-service :     
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"desugared.ts.aterm")> path;
+      result   := <desugar-all; instruct-formulas; strip-annos> selected
+      
   // Formats the program using a pretty printer   
   format-service:
     (selected, position, ast, path, project-path) -> (filename, result)

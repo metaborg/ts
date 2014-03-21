@@ -4,7 +4,7 @@ imports
   common/Identifiers   
   common/Layout 
   terms/Terms
-  
+  terms/Vars
   Module
   Signatures
   TypeFunctions
@@ -50,10 +50,10 @@ templates // formulas
     <Formula> 
     or <Formula>
   > {assoc}
-   
-  Formula.And = <
+     
+  Formula.And = <  
     <Formula> 
-    and <Formula>
+    and <Formula> 
   > {assoc}
   
   Formula.Label = <
@@ -61,14 +61,22 @@ templates // formulas
   >
   
   Formula = <(<Formula>)> {bracket}
+
+templates // instructions
+
+  Formula.Is = <[<Instruction*; separator="\n">]> 
+     
+  Instruction.I = <<Formula>;>  
   
+  Instruction.Id = <<Formula> provided <VarRef>;>  
+  
+  Instruction.Ia = <<Var> := <Formula>;>  
+  
+  Instruction.Iad = <<Var> := <Formula> provided <VarRef>;> 
+    
 context-free priorities
 
    Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
-   
-lexical syntax
-
-  SubTypeOp = "<" Id? ":" 
    
 templates // propositions
   
@@ -78,6 +86,11 @@ templates // propositions
   Prop.Has          = <<Term> has <Id> <Pattern>>  
   Prop.Eq           = [[Term] == [Term]] 
   Prop.Match        = [[Term] => [Pattern]]
+  
+  Prop.Bind         = [[Term] bind [Var]]
+  Prop.Project      = [[VarRef] project [Pattern]] // at most one Var in Pattern
+  
+  Prop.Return       = [return [Term]]
   
 templates // proposition patterns
    

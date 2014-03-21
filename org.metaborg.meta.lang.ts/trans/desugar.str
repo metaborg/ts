@@ -4,6 +4,7 @@ imports
   
   include/TypeSystemLanguage
 	label
+	utils
 
 strategies // desugaring
   
@@ -38,7 +39,7 @@ rules // rule splitting
 rules // normalization 	
   	
   desugar :
-    And(x, And(y, z)) -> And(And(x, y), z) 
+    And(And(x, y), z) -> And(x, And(y, z))
     
   desugar :
     And(True(), p) -> p
@@ -52,6 +53,11 @@ rules // normalization
   desugar :
     Or(False(), p) -> p
     
+rules // terms
+	
+	desugar :
+		Tuple([t]) -> t
+    
 rules // propositions
       
   desugar :
@@ -64,11 +70,17 @@ rules // propositions
     Has(trm, kind, pat) -> And(Has(trm, kind, Var(x)), Match(VarRef(x), pat))
     where <not(?Var(_))> pat; x := <newname> "x"
     
-  // desugar :
-  //   TypeRule(HasPat(pat, kind, trm), form) -> 
-  //   TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
-  //   where <not(?VarRef(_))> trm; x := <newname> "x"
+  desugar :
+    TypeRule(HasPat(pat, kind, trm), form) -> 
+    TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
+    where <not(?VarRef(_))> trm; x := <newname> "x"
 
+  desugar :
+  	Ia(Var(x), Return(trm)) -> I(Bind(trm, Var(x)))
+
+  desugar :
+  	Iad(Var(x), Return(trm), VarRef(d)) -> Id(Bind(trm, Var(x)), VarRef(d))
+  	
 rules // unstar list variables
       
   desugar :
@@ -79,6 +91,23 @@ rules // unstar list variables
     
   unstar = 
     explode-string; map(try(\ 42 -> 95 \)); implode-string
+    
+rules // split Match into more specific operations
+  
+  desugar :
+    Match(pat, Var(x)) -> Bind(pat, Var(x))
+    
+  desugar :
+    Match(trm, pat) -> Eq(trm, pat)
+    where <pattern-vars> pat => []
+    
+  desugar :
+    prop@Match(trm, pat) -> form
+    where not(<?Var(_)> pat); ys := <pattern-vars> pat; not([])
+        ; form := <foldr(!True(), !And(<Fst; mk-project(|trm, pat)>, <Snd>))> ys
+                   
+  mk-project(|trm, pat) :
+    y -> Project(trm, <alltd(\Var(x) -> Wld() where not(<eq>(x,y))\)>pat)
 
 rules // bindings in multiple branches of an Or
   

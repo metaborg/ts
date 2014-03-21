@@ -14,21 +14,26 @@ templates
 		<Relation*; separator="\n\n">
 	>
 	
-	Relation.RelationDef = <define <RelationProperty*; separator=", "> <Id>>
+	Relation.RelationDef = <define <RelationProperty*; separator=", "> <SubTypeOp>>
 	
 	RelationProperty.Reflexive  = <reflexive>
 	RelationProperty.Transitive = <transitive>
 	RelationProperty.Symmetric  = <symmetric>
 	
 	Relation.RelationUnCond = [
-		[Pattern] <[Id]: [Pattern]
+		[Pattern] [SubTypeOp] [Pattern]
 	]
 
 	Relation.Relation = [
-		[Pattern] <[Id]: [Pattern]
+		[Pattern] [SubTypeOp] [Pattern]
 		where [Formula]
 	]
 	
-  Prop.RelationStore = [store [Term] <[Id]: [Term]]
-	Prop.RelationMatch  = [[Term] <[Id]: [Term]]
+  Prop.RelationStore = [store [Term] [SubTypeOp] [Term]]
+	Prop.RelationMatch  = [[Term] [SubTypeOp] [Term]]
 	// Prop.RelationLookup = [[Term] <[Id]? [Pattern]]
+
+lexical syntax
+
+  SubTypeOp = "<" Id? ":" 
+   
