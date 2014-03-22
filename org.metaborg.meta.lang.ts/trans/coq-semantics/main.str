@@ -66,6 +66,9 @@ rules // PropPattern
       (pat', b*, _) := <term-to-coq(|i)> pat
     ; ty'           := HT_APP_TYPE(pat', ty)
 
+  prop-pat-to-coq(|bound*, i, ty):
+    As(_, op) -> <prop-pat-to-coq(|bound*, i, ty)> op
+
 rules // Fold rules
   
   fold-type: // Composes parts of a type
