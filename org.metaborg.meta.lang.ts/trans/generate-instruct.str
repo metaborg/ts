@@ -231,7 +231,7 @@ rules // negation
 	
 	instruction-to-stratego :
 		Ia(Var(x), Not(Return(VarRef(t)))) -> 
-		  ${{x} := <task-create-not(!{t}|ctx)>}
+		  ${{x} := <task-create-not(|ctx)> {t}}
 		
 rules // else error
 	       
