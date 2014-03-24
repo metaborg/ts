@@ -4,7 +4,7 @@ module generate-instruct
 
 imports
   
-  include/TypeSystemLanguage
+  include/TypeSystemLanguage 
   lib/runtime/nabl/-
   lib/runtime/task/-
   pp
@@ -226,6 +226,12 @@ rules // return
   
 	// instruction-to-stratego :
 	// 	Ia(Var(l), Return(trm)) -> ${}
+	
+rules // negation
+	
+	instruction-to-stratego :
+		Ia(Var(x), Not(Return(VarRef(t)))) -> 
+		  ${{x} := <task-create-not(!{t}|ctx)>}
 		
 rules // else error
 	       
