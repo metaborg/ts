@@ -94,6 +94,9 @@ rules // code generation
   generate-stratego:
     (selected, position, ast, path, project-path) -> (filename, result)
     with
+      task-setup(|project-path);
+      index-setup(|<language>, project-path)
+    with
       filename := <guarantee-extension(|"generated.str")> path;
       result   := <instruct-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
 

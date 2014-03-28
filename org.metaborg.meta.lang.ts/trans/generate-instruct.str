@@ -371,6 +371,12 @@ rules // term
   term-to-stratego :
     ListTail(t*, t) -> $<[<<map(term-to-stratego); separate-by(|", ")> t*> | <<term-to-stratego>t>]>
     
+  term-to-stratego :
+  	Choice(trm1, trm2) -> ${<task-create-choice(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
+  	
+  term-to-stratego :
+  	Union(trm1, trm2) -> ${<task-create-combine(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
+    
   term-to-stratego : 
     StrInterp(StringQuotation1(_, part*)) -> $<[<<map(strinterp-part-to-stratego); separate-by(|", ")> part*>]>
     
