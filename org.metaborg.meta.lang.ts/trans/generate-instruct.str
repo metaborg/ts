@@ -156,7 +156,7 @@ rules // relations
     
   relation-to-stratego :
     Relation(trm1, rel, trm2, form) -> ${
-      type-relation-match(|ctx) : 
+      relation-match-custom(|ctx) : 
         ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2}) -> <task-create-id(|ctx, [{l}])> {<term-to-stratego>trm2}
         where 
           {s}
@@ -166,11 +166,11 @@ rules // relations
           
   instruction-to-stratego :
     Ia(Var(l), RelationMatch(trm1, rel, trm2)) ->
-      ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
+      ${{l} := <relation-create-match(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
 
   instruction-to-stratego :
     Iad(Var(l), RelationMatch(trm1, rel, trm2), VarRef(d)) ->
-      ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx); task-create-id(|ctx, [{d}])> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
+      ${{l} := <relation-create-match(|ctx); task-create-id(|ctx, [{d}])> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
       
   instruction-to-stratego :
     Ia(Var(l), RelationStore(trm1, rel, trm2)) ->
