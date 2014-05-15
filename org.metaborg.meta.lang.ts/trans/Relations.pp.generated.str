@@ -12,23 +12,23 @@ strategies
                       )
                     , H(
                         [SOpt(HS(), "0")]
-                      , [a442]
+                      , [a7]
                       )
                     ]
-    where a442 := <pp-V-list(prettyprint-Relation|"1")> a
+    where a7 := <pp-V-list(prettyprint-Relation|"1")> a
 
   prettyprint-Relation :
     RelationDef(a, b) -> [ H(
                              [SOpt(HS(), "0")]
                            , [ S("define ")
-                             , a443
+                             , a8
                              , S(" ")
-                             , b232
+                             , b3
                              ]
                            )
                          ]
-    where a443 := <pp-H-list(prettyprint-RelationProperty|", ")> a
-    where b232 := <pp-one-Z(prettyprint-SubTypeOp)> b
+    where a8 := <pp-H-list(prettyprint-RelationProperty|", ")> a
+    where b3 := <pp-one-Z(prettyprint-SubTypeOp)> b
 
   prettyprint-RelationProperty :
     Reflexive() -> [ H(
@@ -54,26 +54,26 @@ strategies
   prettyprint-Relation :
     RelationUnCond(a, b, c) -> [ H(
                                    [SOpt(HS(), "0")]
-                                 , [ a444
+                                 , [ a9
                                    , S(" ")
-                                   , b233
+                                   , b4
                                    , S(" ")
-                                   , c56
+                                   , c3
                                    ]
                                  )
                                ]
-    where a444 := <pp-one-Z(prettyprint-Pattern)> a
-    where b233 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c56 := <pp-one-Z(prettyprint-Pattern)> c
+    where a9 := <pp-one-Z(prettyprint-Pattern)> a
+    where b4 := <pp-one-Z(prettyprint-SubTypeOp)> b
+    where c3 := <pp-one-Z(prettyprint-Pattern)> c
 
   prettyprint-Relation :
     Relation(a, b, c, d) -> [ H(
                                 [SOpt(HS(), "0")]
-                              , [ a445
+                              , [ a10
                                 , S(" ")
-                                , b234
+                                , b5
                                 , S(" ")
-                                , c57
+                                , c4
                                 ]
                               )
                             , H(
@@ -81,41 +81,41 @@ strategies
                               , [S("where "), d0]
                               )
                             ]
-    where a445 := <pp-one-Z(prettyprint-Pattern)> a
-    where b234 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c57 := <pp-one-Z(prettyprint-Pattern)> c
+    where a10 := <pp-one-Z(prettyprint-Pattern)> a
+    where b5 := <pp-one-Z(prettyprint-SubTypeOp)> b
+    where c4 := <pp-one-Z(prettyprint-Pattern)> c
     where d0 := <pp-one-Z(prettyprint-Formula)> d
 
   prettyprint-Prop :
     RelationStore(a, b, c) -> [ H(
                                   [SOpt(HS(), "0")]
                                 , [ S("store ")
-                                  , a446
+                                  , a11
                                   , S(" ")
-                                  , b235
+                                  , b6
                                   , S(" ")
-                                  , c58
+                                  , c5
                                   ]
                                 )
                               ]
-    where a446 := <pp-one-Z(prettyprint-Term)> a
-    where b235 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c58 := <pp-one-Z(prettyprint-Term)> c
+    where a11 := <pp-one-Z(prettyprint-Term)> a
+    where b6 := <pp-one-Z(prettyprint-SubTypeOp)> b
+    where c5 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-Prop :
     RelationMatch(a, b, c) -> [ H(
                                   [SOpt(HS(), "0")]
-                                , [ a447
+                                , [ a12
                                   , S(" ")
-                                  , b236
+                                  , b7
                                   , S(" ")
-                                  , c59
+                                  , c6
                                   ]
                                 )
                               ]
-    where a447 := <pp-one-Z(prettyprint-Term)> a
-    where b236 := <pp-one-Z(prettyprint-SubTypeOp)> b
-    where c59 := <pp-one-Z(prettyprint-Term)> c
+    where a12 := <pp-one-Z(prettyprint-Term)> a
+    where b7 := <pp-one-Z(prettyprint-SubTypeOp)> b
+    where c6 := <pp-one-Z(prettyprint-Term)> c
 
   prettyprint-example =
     prettyprint-ModuleSection
