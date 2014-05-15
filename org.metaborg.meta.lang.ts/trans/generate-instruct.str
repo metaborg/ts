@@ -245,14 +245,22 @@ rules // else error
       
 rules // attribute of
               
+  // instruction-to-stratego :
+  //   I(Has(VarRef(x), attr, Var(t))) -> 
+  //     ${{t} := <{attr}-task(|ctx)> {x}}
+  //     
+  // instruction-to-stratego :
+  //   Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) -> 
+  //     ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {x}}
+
   instruction-to-stratego :
-    I(Has(VarRef(x), attr, Var(t))) -> 
-      ${{t} := <{attr}-task(|ctx)> {x}}
+    I(Has(trm, attr, Var(t))) -> 
+      ${{t} := <{attr}-task(|ctx)> {<term-to-stratego>trm}}
       
   instruction-to-stratego :
-    Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) -> 
-      ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {x}}
-
+    Id(Has(trm, attr, Var(t)), VarRef(d)) -> 
+      ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm}}
+      
 rules // definition of
             
   instruction-to-stratego :
