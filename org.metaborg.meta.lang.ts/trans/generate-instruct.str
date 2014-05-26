@@ -184,18 +184,35 @@ rules // type rule
 
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, VarRef(x)), Is([])) -> ${
-      create-{kind}-task(|ctx) :
+      {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[])> {x}
+        where
+        	{kind-term} := kind
     }
+    where cons-name := <pat-to-cons-name> pat
+    	  ; kind-term := <kind-to-term> kind
           
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, VarRef(x)), form) -> ${
-      create-{kind}-task(|ctx) :
+      {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[{l}])> {x}
-        where 
-          {s}
+        where
+        	where({kind-term} := kind)
+        ; {s}
     }
-    where (l, s) := <formula-to-stratego> form
+    where cons-name := <pat-to-cons-name> pat
+    	  ; kind-term := <kind-to-term> kind
+        ; (l, s) := <formula-to-stratego> form
+    
+  kind-to-term:
+  	"type" -> "Type()"
+  
+  kind-to-term:
+  	x -> $[NablProp_[x])]
+  	where <not(?"type")> x
+  	
+	pat-to-cons-name:
+		Op(name, arg*) -> $[[name]-[<length> arg*]]
 
 rules // well-formedness constraint
             
@@ -203,18 +220,20 @@ rules // well-formedness constraint
   
   rule-to-stratego :
     TypeRule(IsWF(pat), Is([])) -> ${
-      nabl-constraint(|ctx) :
+      {cons-name}-constraint(|ctx, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <fail>
     }
+    where cons-name := <pat-to-cons-name> pat
     
   rule-to-stratego :
     TypeRule(IsWF(pat), form) -> ${
-      nabl-constraint(|ctx) :
+      {cons-name}-constraint(|ctx, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <fail>
         where 
           {s}
     }
-    where (l, s) := <formula-to-stratego> form
+    where cons-name := <pat-to-cons-name> pat
+        ; (l, s) := <formula-to-stratego> form
   
 rules // instructions
 	
