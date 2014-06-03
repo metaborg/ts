@@ -184,21 +184,23 @@ rules // type rule
 
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, VarRef(x)), Is([])) -> ${
+    	create-property-task(|ctx, kind, old-uri*, new-uri*) = {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*)
       {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[])> {x}
         where
-        	{kind-term} := kind
+          {kind-term} := kind
     }
     where cons-name := <pat-to-cons-name> pat
     	  ; kind-term := <kind-to-term> kind
           
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, VarRef(x)), form) -> ${
+      create-property-task(|ctx, kind, old-uri*, new-uri*) = {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*)
       {cons-name}-property-task(|ctx, kind, old-uri*, new-uri*) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[{l}])> {x}
         where
-        	where({kind-term} := kind)
-        ; {s}
+          where({kind-term} := kind);
+          {s}
     }
     where cons-name := <pat-to-cons-name> pat
     	  ; kind-term := <kind-to-term> kind
@@ -213,6 +215,9 @@ rules // type rule
   	
 	pat-to-cons-name:
 		Op(name, arg*) -> $[[name]-[<length> arg*]]
+		
+	pat-to-cons-name:
+		As(_, Op(name, arg*)) -> $[[name]-[<length> arg*]]
 
 rules // well-formedness constraint
             
