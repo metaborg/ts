@@ -8,7 +8,7 @@ exports
 
   context-free syntax
     "type" "rules" TypeRule*    -> ModuleSection {cons("TypeRules")}
-    PropPattern                 -> TypeRule      {cons("TypeRuleUnCond")}
+    SimplePropPattern           -> TypeRule      {cons("TypeRuleUnCond")}
     PropPattern "where" Formula -> TypeRule      {cons("TypeRule")}
 
   context-free syntax
@@ -60,12 +60,15 @@ exports
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
 
   context-free syntax
-    {Pattern "+"}+ ":" Term      -> PropPattern {cons("HasTypePat")}
-    {Pattern "+"}+ "has" Id Term -> PropPattern {cons("HasPat")}
-    {Pattern "+"}+ ":-"          -> PropPattern {cons("IsWF")}
+    {Pattern "+"}+ ":" Term      -> SimplePropPattern {cons("HasTypePat")}
+    {Pattern "+"}+ "has" Id Term -> SimplePropPattern {cons("HasPat")}
+    SimplePropPattern            -> PropPattern       
+    {Pattern "+"}+ ":-"          -> PropPattern       {cons("IsWF")}
+    {Pattern "+"}+               -> PropPattern       {cons("IsWF")}
 
   context-free syntax
-    CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}
+    CONTENTCOMPLETE -> SimplePropPattern {cons("COMPLETION-SimplePropPattern")}
+    CONTENTCOMPLETE -> PropPattern       {cons("COMPLETION-PropPattern")}
 
   context-free syntax
     "definition" "of" Term -> Term {cons("DefOf")}

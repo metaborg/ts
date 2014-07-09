@@ -27,7 +27,7 @@ templates
     >
 
   TypeRule.TypeRuleUnCond = 
-    <<PropPattern>>
+    <<SimplePropPattern>>
 
   TypeRule.TypeRule = <
     <PropPattern>
@@ -94,9 +94,11 @@ templates // propositions
   
 templates // proposition patterns
    
-  PropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
-  PropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
-  PropPattern.IsWF       = <<Pattern+; separator=" + "> :->
+  SimplePropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
+  SimplePropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
+  PropPattern            = <<SimplePropPattern>>
+  PropPattern.IsWF       = <<Pattern+; separator=" + "> :-> // TODO: should become deprecated
+  PropPattern.IsWF       = <<Pattern+; separator=" + ">>
      
 templates // term operators
 
