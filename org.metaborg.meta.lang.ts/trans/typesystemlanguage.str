@@ -97,7 +97,7 @@ rules // code generation
       task-setup(|project-path);
       index-setup(|<language>, project-path)
     with
-      filename := <guarantee-extension(|"generated.str")> path;
+      filename := <guarantee-extension(|"generated.str")> $[src-gen/[path]];
       result   := <instruct-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
 
   // When given a tuple (path, string) this writes string into path.
