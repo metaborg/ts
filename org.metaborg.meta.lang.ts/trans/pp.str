@@ -1,18 +1,10 @@
 module pp
 
 imports
-  Terms.pp.generated
-  TypeSystemLanguage.pp.generated
-  Common.pp.generated
-  Identifiers.pp.generated
-  Layout.pp.generated
-  Constants.pp.generated
-  Vars.pp.generated
+  
   libstratego-gpp
-  Module.pp.generated
-  TypeFunctions.pp.generated
-  Signatures.pp.generated
-  PP.pp.generated
+  src-gen/pp/-
+  src-gen/pp/terms/-
   
 strategies 
   
@@ -21,3 +13,15 @@ strategies
   pp-term = prettyprint-Term; box2text-string(|80)
 
 	prettyprint-PPTerm = fail
+
+  pp-ts-string =
+    prettyprint-example
+    ; !V([], <id>)
+    ; box2text-string(|80)
+
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-ts-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-ts-string); debug(!"cannot pp ")))> ast
+    ;  result := ""

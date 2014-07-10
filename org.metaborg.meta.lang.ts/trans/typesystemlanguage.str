@@ -18,7 +18,6 @@ imports
 	label
   editor/TypeSystemLanguage-Outliner
   pp
-  TypeSystemLanguage.pp.generated
   include/TypeSystemLanguage-parenthesize
   instructions
   
@@ -155,15 +154,3 @@ rules // code generation
       ext      := <get-extension> path;
       filename := <guarantee-extension(|$[pp.[ext]])> path;
       result   := <pp-debug> selected
-
-  pp-ts-string =
-    prettyprint-example
-    ; !V([], <id>)
-    ; box2text-string(|80)
-
-  pp-debug :
-    ast -> result
-    with
-       result := <pp-ts-string> ast
-    <+ <bottomup(try(not(is-string); not(is-list); not(pp-ts-string); debug(!"cannot pp ")))> ast
-    ;  result := ""
