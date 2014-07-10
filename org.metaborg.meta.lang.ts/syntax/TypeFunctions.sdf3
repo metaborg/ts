@@ -2,27 +2,27 @@ module TypeFunctions
 
 imports
 
-	common/Identifiers
-	terms/Terms
-	TypeSystemLanguage
+  common/Identifiers
+  terms/Terms
+  TypeSystemLanguage
 
-templates
+context-free syntax
 
-	ModuleSection.TypeFunctions = <
-		type functions
-		
-		<TypeFunction*; separator="\n\n">
-	>
-	
-	TypeFunction.TypeFunctionUnCond = [
-		[Id] : 
-			[Pattern] -> [Term]
-	]
-	
-	TypeFunction.TypeFunction = [
-		[Id] :
-			[Pattern] -> [Term]
-			where [Formula]
-	]
-	
-	Prop.FuncAppl = [<[Id]> [Term] => [Pattern]]
+  ModuleSection.TypeFunctions = [
+    type functions
+    
+    [{TypeFunction "\n\n"}*]
+  ]
+  
+  TypeFunction.TypeFunctionUnCond = [
+    [Id] : 
+      [Pattern] -> [Term]
+  ]
+  
+  TypeFunction.TypeFunction = [
+    [Id] :
+      [Pattern] -> [Term]
+      where [Formula]
+  ]
+  
+  Prop.FuncAppl = [<[Id]> [Term] => [Pattern]]

@@ -4,12 +4,13 @@ imports
 
 	common/Identifiers
 
-templates
+context-free syntax
 
-	ModuleSection.Signatures = <
-		signatures
-		  <SignatureRule*; separator="\n">>
-	
-	SignatureRule.SignatureRule = <<Id> : <SignatureType>>
-	SignatureType.SigType = [[Id*; separator=" * "] -> [Id]]
-	SignatureType.SigInj  = <<Id>>
+  ModuleSection.Signatures = [
+    signatures
+      [{SignatureRule "\n"}*]]
+
+  SignatureRule.SignatureRule = [[Id] : [SignatureType]]
+  
+  SignatureType.SigType = [[{Id " * "}*] -> [Id]] 
+  SignatureType.SigInj  = Id

@@ -4,7 +4,9 @@ module terms/Vars
     common/Identifiers
  
   sorts Wld Var VarRef
-  templates
+  
+  context-free syntax
+  
     Wld.Wld           = <_>
     Var.ListWld       = <...>
     Var               = <<Wld>>
@@ -16,7 +18,3 @@ module terms/Vars
   context-free restrictions
 
     Wld -/- [a-zA-Z0-9\'\-\_]
-    
-
-
-    

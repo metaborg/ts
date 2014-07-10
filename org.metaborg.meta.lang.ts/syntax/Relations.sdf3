@@ -6,15 +6,15 @@ imports
 	terms/Terms
 	TypeSystemLanguage
 
-templates
+context-free syntax
 
 	ModuleSection.Relations = <
 		relations
 		
-		<Relation*; separator="\n\n">
+		<{Relation "\n\n"}*>
 	>
 	
-	Relation.RelationDef = <define <RelationProperty*; separator=", "> <SubTypeOp>>
+	Relation.RelationDef = <define <{RelationProperty ", "}*> <SubTypeOp>>
 	
 	RelationProperty.Reflexive  = <reflexive>
 	RelationProperty.Transitive = <transitive>

@@ -1,14 +1,12 @@
 module Module 
 
-templates 
+context-free syntax 
      
   Module.Module = <
   	module <ModuleID> 
         
-    <ModuleSection*; separator="\n\n">
+    <{ModuleSection "\n\n"}*>
     >
-    
-  //<ModMetaData*>  
     
   ModuleSection.Imports = <
     imports <ImportModule*>>

@@ -13,28 +13,23 @@ imports
 
 context-free start-symbols Module
 
-templates
-
-  // TsModule.Module = <
-  //   module <Id> 
-  //     <TypeRules*; separator="\n\n">
-  // >  
+context-free syntax
 
   ModuleSection.TypeRules = <
     type rules
     
-      <TypeRule*; separator="\n\n">
+      <{TypeRule "\n\n"}*>
     >
 
   TypeRule.TypeRuleUnCond = 
-    <<SimplePropPattern>>
+    PropPattern  
 
   TypeRule.TypeRule = <
     <PropPattern>
     where <Formula>
-    >
+    > 
 
-templates // formulas
+context-free syntax // formulas
 
   Formula = <<Prop>>
 
@@ -62,9 +57,9 @@ templates // formulas
   
   Formula = <(<Formula>)> {bracket}
 
-templates // instructions
+context-free syntax // instructions
 
-  Formula.Is = <[<Instruction*; separator="\n">]> 
+  Formula.Is = <[<{Instruction "\n"}*>]> 
      
   Instruction.I = <<Formula>;>  
   
@@ -78,7 +73,7 @@ context-free priorities
 
    Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
    
-templates // propositions
+context-free syntax // propositions
   
   Prop.True         = <true>
   Prop.False        = <false>
@@ -92,15 +87,13 @@ templates // propositions
   
   Prop.Return       = [return [Term]]
   
-templates // proposition patterns
+context-free syntax // proposition patterns
    
-  SimplePropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
-  SimplePropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
-  PropPattern            = <<SimplePropPattern>>
-  PropPattern.IsWF       = <<Pattern+; separator=" + "> :-> // TODO: should become deprecated
-  PropPattern.IsWF       = <<Pattern+; separator=" + ">>
+  PropPattern.HasTypePat = <<{Pattern " + "}+> : <Term>>
+  PropPattern.HasPat     = <<{Pattern " + "}+> has <Id> <Term>>
+  PropPattern.IsWF       = <<{Pattern " + "}+> :-> 
      
-templates // term operators
+context-free syntax // term operators
 
   Term.DefOf   = <definition of <Term>> 
   Term.Choice  = <<Term> or <Term>>     {assoc}
@@ -110,6 +103,6 @@ context-free priorities
 
    Term.DefOf > Term.Choice > Term.Union
 
-templates // keywords
+context-free syntax // keywords
 
   Id = <where> {reject}
