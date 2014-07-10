@@ -5,7 +5,7 @@ module common/Identifiers
   lexical syntax
   
     Id  = [a-zA-Z\_] [a-zA-Z0-9\'\-\_]*
-    LId = [a-zA-Z\_] [a-zA-Z0-9\'\-\_]*
+    LId = [a-zA-Z\_] [a-zA-Z0-9\'\-\_]* "*"
     Id  = [\'] [a-z]+
 
     LCID = [a-z] [a-zA-Z0-9\'\-\_]*
