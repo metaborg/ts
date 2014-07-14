@@ -14,9 +14,9 @@ imports
   
 rules 
  
-  to-stratego(|project-path, modname) : 
+  to-stratego: 
     Module(name, section*) ->
-    $[module [modname]
+    $[module src-gen/[name]
     
       [import]
       [import*]
@@ -75,7 +75,7 @@ rules
     
   import-to-stratego:
     Import(t) -> 
-    $[[t].generated
+    $[src-gen/[t]
     ]
     where task := <nabl-collect-use-task> t
         ; <not(task-has-failed)> task
