@@ -100,10 +100,13 @@ templates // proposition patterns
      
 templates // term operators
 
-  Term.DefOf = <definition of <Term>>
+  Term.DefOf   = <definition of <Term>> 
+  Term.Choice  = <<Term> or <Term>>     {assoc}
+  Term.Union   = <<Term> union <Term>>  {assoc}
   
-  Term.Union = <<Term> union <Term>>
-  Term.Choice  = [[Term] or [Term]]
+context-free priorities
+
+   Term.DefOf > Term.Choice > Term.Union
 
 templates // keywords
 

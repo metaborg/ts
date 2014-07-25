@@ -69,11 +69,16 @@ exports
 
   context-free syntax
     "definition" "of" Term -> Term {cons("DefOf")}
-    Term "union" Term      -> Term {cons("Union")}
-    Term "or" Term         -> Term {cons("Choice")}
+    Term "or" Term         -> Term {cons("Choice"), assoc}
+    Term "union" Term      -> Term {cons("Union"), assoc}
 
   context-free syntax
     CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}
+
+  context-free priorities
+    "definition" "of" Term -> Term >
+    Term "or" Term -> Term >
+    Term "union" Term -> Term
 
   context-free syntax
     "where" -> Id {reject}

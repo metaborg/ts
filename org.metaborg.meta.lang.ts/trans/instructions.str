@@ -42,7 +42,12 @@ rules
     where Label(l1, Is(i1*)) := <instruct-formula(|dep)> form1
         ; Label(l2, Is(i2*)) := <instruct-formula(|dep)> form2 
         ; l := <newname> "or"    
-
+    
+  instruct-formula(|dep) :
+  	Not(form) -> Label(l', Is([i*, Ia(Var(l'), Not(Return(VarRef(l))))]))
+  	where Label(l, Is(i*)) := <instruct-formula(|dep)> form
+  	    ; l' := <newname> "not"
+    
   instruct-formula(|dep) :
     Else(form, msg, target) -> Label(l, Is([is*, I(Else(Return(VarRef(l)), msg, target))]))
       where Label(l, Is(is*)) := <instruct-formula(|dep)> form

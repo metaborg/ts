@@ -4,7 +4,7 @@ module generate-instruct
 
 imports
   
-  include/TypeSystemLanguage
+  include/TypeSystemLanguage 
   lib/runtime/nabl/-
   lib/runtime/task/-
   pp
@@ -156,7 +156,7 @@ rules // relations
     
   relation-to-stratego :
     Relation(trm1, rel, trm2, form) -> ${
-      type-relation-match(|ctx) : 
+      relation-match-custom(|ctx) : 
         ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2}) -> <task-create-id(|ctx, [{l}])> {<term-to-stratego>trm2}
         where 
           {s}
@@ -166,11 +166,11 @@ rules // relations
           
   instruction-to-stratego :
     Ia(Var(l), RelationMatch(trm1, rel, trm2)) ->
-      ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
+      ${{l} := <relation-create-match(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
 
   instruction-to-stratego :
     Iad(Var(l), RelationMatch(trm1, rel, trm2), VarRef(d)) ->
-      ${{l} := <![<type-relation-match(|ctx) <+ task-create-fail(|ctx)>, <relation-create-match(|ctx)>]; task-create-choice(|ctx); task-create-id(|ctx, [{d}])> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
+      ${{l} := <relation-create-match(|ctx); task-create-id(|ctx, [{d}])> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
       
   instruction-to-stratego :
     Ia(Var(l), RelationStore(trm1, rel, trm2)) ->
@@ -226,6 +226,12 @@ rules // return
   
 	// instruction-to-stratego :
 	// 	Ia(Var(l), Return(trm)) -> ${}
+	
+rules // negation
+	
+	instruction-to-stratego :
+		Ia(Var(x), Not(Return(VarRef(t)))) -> 
+		  ${{x} := <task-create-not(|ctx)> {t}}
 		
 rules // else error
 	       
@@ -239,14 +245,22 @@ rules // else error
       
 rules // attribute of
               
+  // instruction-to-stratego :
+  //   I(Has(VarRef(x), attr, Var(t))) -> 
+  //     ${{t} := <{attr}-task(|ctx)> {x}}
+  //     
+  // instruction-to-stratego :
+  //   Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) -> 
+  //     ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {x}}
+
   instruction-to-stratego :
-    I(Has(VarRef(x), attr, Var(t))) -> 
-      ${{t} := <{attr}-task(|ctx)> {x}}
+    I(Has(trm, attr, Var(t))) -> 
+      ${{t} := <{attr}-task(|ctx)> {<term-to-stratego>trm}}
       
   instruction-to-stratego :
-    Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) -> 
-      ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {x}}
-
+    Id(Has(trm, attr, Var(t)), VarRef(d)) -> 
+      ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm}}
+      
 rules // definition of
             
   instruction-to-stratego :
@@ -365,11 +379,20 @@ rules // term
   term-to-stratego :
     ListTail(t*, t) -> $<[<<map(term-to-stratego); separate-by(|", ")> t*> | <<term-to-stratego>t>]>
     
+  term-to-stratego :
+  	Choice(trm1, trm2) -> ${<task-create-choice(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
+  	
+  term-to-stratego :
+  	Union(trm1, trm2) -> ${<task-create-combine(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
+    
   term-to-stratego : 
     StrInterp(StringQuotation1(_, part*)) -> $<[<<map(strinterp-part-to-stratego); separate-by(|", ")> part*>]>
     
   strinterp-part-to-stratego : 
     QStr(s) -> $["[s]"]
+    
+  strinterp-part-to-stratego : 
+    QDollar(s) -> $["[s]"]
     
   strinterp-part-to-stratego : 
     StringEscape1(_, VarRef(x)) -> $[[x]] 

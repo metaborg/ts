@@ -127,7 +127,9 @@ rules // bindings in multiple branches of an Or
         ; z2 := <newname> x
         ; rules( 
             RenameLeft  : Var(x) -> Var(z1) 
+            RenameLeft  : VarRef(x) -> VarRef(z1)            
             RenameRight : Var(x) -> Var(z2) 
+            RenameRight : VarRef(x) -> VarRef(z2) 
           )
 
    
