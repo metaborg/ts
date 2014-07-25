@@ -1,0 +1,12 @@
+module src-gen/signatures/terms/StringQuotations-sig
+
+imports
+  src-gen/signatures/terms/Terms-sig
+
+
+signature
+  sorts
+    PPTerm StringQuotation StringQuotedPart1 StringQuotedChars1 DollarOpen1 DollarClose1 QuotedBracket1 Dollar1 StringQuotedPart2 StringQuotedChars2 DollarOpen2 DollarClose2 QuotedBracket2 Dollar2 StringQuotedPart3 StringQuotedChars3 DollarOpen3 DollarClose3 QuotedBracket3 Dollar3 StringQuotedPart4 StringQuotedChars4 DollarOpen4 DollarClose4 QuotedBracket4 Dollar4 Padding
+
+  constructors
+     : StringQuotation -> PPTerm

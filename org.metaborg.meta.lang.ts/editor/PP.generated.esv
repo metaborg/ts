@@ -1,9 +1,0 @@
-module PP.generated
-
-completions
-  completion template PropPattern : "Pattern : Term" =
-    <Pattern:Pattern> " : " <Term:Term>  
-  completion template PropPattern : "Pattern has Id Term" =
-    <Pattern:Pattern> " has " <Id:Id> " " <Term:Term>  
-  completion template PropPattern : "Pattern :-" =
-    <Pattern:Pattern> " :-"  
