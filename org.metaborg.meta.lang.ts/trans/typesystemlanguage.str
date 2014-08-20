@@ -18,8 +18,8 @@ imports
 	label
   editor/TypeSystemLanguage-Outliner
   pp
+  src-gen/pp/-
   include/TypeSystemLanguage-parenthesize
-  coq-semantics/main
   instructions
   
   generate-instruct // instead of generate

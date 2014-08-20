@@ -34,18 +34,10 @@ strategies
   prettyprint-ModuleSection :
     Relations(t0__) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [S("relations")]
-                         )
-                       , H(
-                           []
-                         , [S("")]
-                         )
-                       , H(
-                           [SOpt(HS(), "0")]
-                         , [t0__']
+                         , [S("relations "), t0__']
                          )
                        ]
-    with t0__' := <pp-V-list(prettyprint-Relation|"")> t0__
+    with t0__' := <pp-H-list(prettyprint-Relation)> t0__
 
   is-ModuleSection =
     ?Relations(_)
@@ -60,7 +52,7 @@ strategies
                                    ]
                                  )
                                ]
-    with t0__' := <pp-H-list(prettyprint-RelationProperty|", ")> t0__
+    with t0__' := <pp-H-list(prettyprint-RelationProperty|",")> t0__
     with t1__' := <pp-one-Z(prettyprint-SubTypeOp)> t1__
 
   is-Relation =
@@ -122,11 +114,9 @@ strategies
                                             , t1__'
                                             , S(" ")
                                             , t2__'
+                                            , S(" where ")
+                                            , t3__'
                                             ]
-                                          )
-                                        , H(
-                                            [SOpt(HS(), "0")]
-                                          , [S("where "), t3__']
                                           )
                                         ]
     with t0__' := <pp-one-Z(prettyprint-Pattern)> t0__

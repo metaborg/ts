@@ -1,4 +1,5 @@
 bin
+target
 .cache
 include/TypeSystemLanguage.def
 include/TypeSystemLanguage-parenthesize.str

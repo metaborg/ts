@@ -27,11 +27,10 @@ strategies
   prettyprint-ModuleSection :
     Signatures(t0__) -> [ H(
                             [SOpt(HS(), "0")]
-                          , [S("signatures")]
+                          , [S("signatures "), t0__']
                           )
-                        , t0__'
                         ]
-    with t0__' := <pp-indent(|"2")> [<pp-V-list(prettyprint-SignatureRule)> t0__]
+    with t0__' := <pp-H-list(prettyprint-SignatureRule)> t0__
 
   is-ModuleSection =
     ?Signatures(_)
@@ -54,7 +53,7 @@ strategies
                              , [t0__', S(" -> "), t1__']
                              )
                            ]
-    with t0__' := <pp-H-list(prettyprint-Id|" * ")> t0__
+    with t0__' := <pp-H-list(prettyprint-Id|"*")> t0__
     with t1__' := <pp-one-Z(prettyprint-Id)> t1__
 
   is-SignatureType =

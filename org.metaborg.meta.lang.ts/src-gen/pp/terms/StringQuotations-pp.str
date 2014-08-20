@@ -18,6 +18,9 @@ strategies
   prettyprint-example =
     prettyprint-PPTerm
 
+  prettyprint-example =
+    prettyprint-StringQuotation
+
   prettyprint-PPTerm :
     t0__ -> [ H(
                 [SOpt(HS(), "0")]
@@ -27,28 +30,84 @@ strategies
     where not(is-PPTerm)
     where t0__' := <pp-one-Z(prettyprint-StringQuotation)> t0__
 
+  prettyprint-StringQuotation :
+    StringQuotation1(t0__, t1__) -> [ H(
+                                        [SOpt(HS(), "0")]
+                                      , [ S("$ [ ")
+                                        , t0__'
+                                        , S(" ")
+                                        , t1__'
+                                        , S(" ]")
+                                        ]
+                                      )
+                                    ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-H-list(prettyprint-StringQuotedPart1)> t1__
+
+  is-StringQuotation =
+    ?StringQuotation1(_, _)
+
+  prettyprint-StringQuotation :
+    StringQuotation2(t0__, t1__) -> [ H(
+                                        [SOpt(HS(), "0")]
+                                      , [ S("$ { ")
+                                        , t0__'
+                                        , S(" ")
+                                        , t1__'
+                                        , S(" }")
+                                        ]
+                                      )
+                                    ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-H-list(prettyprint-StringQuotedPart2)> t1__
+
+  is-StringQuotation =
+    ?StringQuotation2(_, _)
+
+  prettyprint-StringQuotation :
+    StringQuotation3(t0__, t1__) -> [ H(
+                                        [SOpt(HS(), "0")]
+                                      , [ S("$ ( ")
+                                        , t0__'
+                                        , S(" ")
+                                        , t1__'
+                                        , S(" )")
+                                        ]
+                                      )
+                                    ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-H-list(prettyprint-StringQuotedPart3)> t1__
+
+  is-StringQuotation =
+    ?StringQuotation3(_, _)
+
+  prettyprint-StringQuotation :
+    StringQuotation4(t0__, t1__) -> [ H(
+                                        [SOpt(HS(), "0")]
+                                      , [ S("$ < ")
+                                        , t0__'
+                                        , S(" ")
+                                        , t1__'
+                                        , S(" >")
+                                        ]
+                                      )
+                                    ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-H-list(prettyprint-StringQuotedPart4)> t1__
+
+  is-StringQuotation =
+    ?StringQuotation4(_, _)
+
   is-PPTerm =
+    fail
+
+  is-StringQuotation =
     fail
 
 
 strategies
-  prettyprint-StringQuotedPart1 =
-    ![S(<is-string>)]
-
-  prettyprint-StringQuotedPart2 =
-    ![S(<is-string>)]
-
-  prettyprint-StringQuotedPart3 =
-    ![S(<is-string>)]
-
-  prettyprint-StringQuotation =
-    ![S(<is-string>)]
-
-  prettyprint-StringQuotedPart4 =
-    ![S(<is-string>)]
-
-  prettyprint-Padding =
-    ![S(<is-string>)]
+  prettyprint-example =
+    prettyprint-PPTerm
 
   prettyprint-example =
     prettyprint-StringQuotedPart1
@@ -60,10 +119,149 @@ strategies
     prettyprint-StringQuotedPart3
 
   prettyprint-example =
-    prettyprint-StringQuotation
-
-  prettyprint-example =
     prettyprint-StringQuotedPart4
 
   prettyprint-example =
     prettyprint-Padding
+
+  prettyprint-example =
+    prettyprint-OptLAYOUT
+
+  prettyprint-PPTerm :
+    t0__ -> [ H(
+                [SOpt(HS(), "0")]
+              , [t0__']
+              )
+            ]
+    where not(is-PPTerm)
+    where t0__' := <pp-one-Z(prettyprint-StringQuotation)> t0__
+
+  prettyprint-StringQuotedPart1 :
+    StringEscape1(t0__, t1__, t2__, t3__) -> [ H(
+                                                 [SOpt(HS(), "0")]
+                                               , [ t0__'
+                                                 , S("[")
+                                                 , t1__'
+                                                 , t2__'
+                                                 , t3__'
+                                                 , S("]")
+                                                 ]
+                                               )
+                                             ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-one-Z(prettyprint-OptLAYOUT)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+    with t3__' := <pp-one-Z(prettyprint-OptLAYOUT)> t3__
+
+  is-StringQuotedPart1 =
+    ?StringEscape1(_, _, _, _)
+
+  prettyprint-StringQuotedPart2 :
+    StringEscape2(t0__, t1__, t2__, t3__) -> [ H(
+                                                 [SOpt(HS(), "0")]
+                                               , [ t0__'
+                                                 , S("{")
+                                                 , t1__'
+                                                 , t2__'
+                                                 , t3__'
+                                                 , S("}")
+                                                 ]
+                                               )
+                                             ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-one-Z(prettyprint-OptLAYOUT)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+    with t3__' := <pp-one-Z(prettyprint-OptLAYOUT)> t3__
+
+  is-StringQuotedPart2 =
+    ?StringEscape2(_, _, _, _)
+
+  prettyprint-StringQuotedPart3 :
+    StringEscape3(t0__, t1__, t2__, t3__) -> [ H(
+                                                 [SOpt(HS(), "0")]
+                                               , [ t0__'
+                                                 , S("(")
+                                                 , t1__'
+                                                 , t2__'
+                                                 , t3__'
+                                                 , S(")")
+                                                 ]
+                                               )
+                                             ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-one-Z(prettyprint-OptLAYOUT)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+    with t3__' := <pp-one-Z(prettyprint-OptLAYOUT)> t3__
+
+  is-StringQuotedPart3 =
+    ?StringEscape3(_, _, _, _)
+
+  prettyprint-StringQuotedPart4 :
+    StringEscape4(t0__, t1__, t2__, t3__) -> [ H(
+                                                 [SOpt(HS(), "0")]
+                                               , [ t0__'
+                                                 , S("<")
+                                                 , t1__'
+                                                 , t2__'
+                                                 , t3__'
+                                                 , S(">")
+                                                 ]
+                                               )
+                                             ]
+    with t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+    with t1__' := <pp-one-Z(prettyprint-OptLAYOUT)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+    with t3__' := <pp-one-Z(prettyprint-OptLAYOUT)> t3__
+
+  is-StringQuotedPart4 =
+    ?StringEscape4(_, _, _, _)
+
+  prettyprint-Padding :
+    t0__ -> [ H(
+                [SOpt(HS(), "0")]
+              , [t0__']
+              )
+            ]
+    where not(is-Padding)
+    where t0__' := <pp-one-Z(prettyprint-Padding)> t0__
+
+  prettyprint-OptLAYOUT :
+    None() -> [ H(
+                  []
+                , [S("")]
+                )
+              ]
+
+  is-OptLAYOUT =
+    ?None()
+
+  prettyprint-OptLAYOUT :
+    Some() -> [ H(
+                  [SOpt(HS(), "0")]
+                , [S(" ")]
+                )
+              ]
+
+  is-OptLAYOUT =
+    ?Some()
+
+  is-PPTerm =
+    fail
+
+  is-StringQuotedPart1 =
+    fail
+
+  is-StringQuotedPart2 =
+    fail
+
+  is-StringQuotedPart3 =
+    fail
+
+  is-StringQuotedPart4 =
+    fail
+
+  is-Padding =
+    fail
+
+  is-OptLAYOUT =
+    fail

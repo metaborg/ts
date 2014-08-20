@@ -395,4 +395,4 @@ rules // term
     QDollar(s) -> $["[s]"]
     
   strinterp-part-to-stratego : 
-    StringEscape1(_, VarRef(x)) -> $[[x]] 
+    StringEscape1(_, _, VarRef(x), _) -> $[[x]] 

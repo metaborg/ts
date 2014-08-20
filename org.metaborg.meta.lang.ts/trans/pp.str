@@ -1,9 +1,8 @@
 module pp
 
 imports
+  libstratego-gpp
   src-gen/pp/-
-  src-gen/pp/common/-
-  src-gen/pp/terms/-
   
 strategies 
   

@@ -1,12 +1,11 @@
 module PP
 
-imports
+imports common/Identifiers	
+        terms/Terms
 
-	common/Identifiers
-	terms/Terms
 
-templates // Productions for desugared patterns, used to pretty print desugared code.
+context-free syntax
 
   PropPattern.HasTypePat = <<Pattern> : <Term>> {avoid}
-  PropPattern.HasPat     = <<Pattern> has <Id> <Term>> {avoid}
-  PropPattern.IsWF       = <<Pattern> :-> {avoid}
+  PropPattern.HasPat = <<Pattern> has <Id> <Term>> {avoid}
+  PropPattern.IsWF = <<Pattern> :-> {avoid}

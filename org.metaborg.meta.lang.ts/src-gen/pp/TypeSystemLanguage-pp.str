@@ -40,15 +40,10 @@ strategies
   prettyprint-ModuleSection :
     TypeRules(t0__) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [S("type rules")]
+                         , [S("type rules "), t0__']
                          )
-                       , H(
-                           []
-                         , [S("")]
-                         )
-                       , t0__'
                        ]
-    with t0__' := <pp-indent(|"2")> [<pp-V-list(prettyprint-TypeRule|"")> t0__]
+    with t0__' := <pp-H-list(prettyprint-TypeRule)> t0__
 
   is-ModuleSection =
     ?TypeRules(_)
@@ -67,11 +62,7 @@ strategies
   prettyprint-TypeRule :
     TypeRule(t0__, t1__) -> [ H(
                                 [SOpt(HS(), "0")]
-                              , [t0__']
-                              )
-                            , H(
-                                [SOpt(HS(), "0")]
-                              , [S("where "), t1__']
+                              , [t0__', S(" where "), t1__']
                               )
                             ]
     with t0__' := <pp-one-Z(prettyprint-PropPattern)> t0__
@@ -132,11 +123,7 @@ strategies
   prettyprint-Formula :
     Or(t0__, t1__) -> [ H(
                           [SOpt(HS(), "0")]
-                        , [t0__']
-                        )
-                      , H(
-                          [SOpt(HS(), "0")]
-                        , [S("or "), t1__']
+                        , [t0__', S(" or "), t1__']
                         )
                       ]
     with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
@@ -148,11 +135,7 @@ strategies
   prettyprint-Formula :
     And(t0__, t1__) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [t0__']
-                         )
-                       , H(
-                           [SOpt(HS(), "0")]
-                         , [S("and "), t1__']
+                         , [t0__', S(" and "), t1__']
                          )
                        ]
     with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
@@ -176,9 +159,9 @@ strategies
   prettyprint-Formula :
     Parenthetical(t0__) -> [ H(
                                [SOpt(HS(), "0")]
-                             , [ S("(")
+                             , [ S("( ")
                                , t0__'
-                               , S(")")
+                               , S(" )")
                                ]
                              )
                            ]
@@ -198,13 +181,13 @@ strategies
   prettyprint-Formula :
     Is(t0__) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [ S("[")
+                  , [ S("[ ")
                     , t0__'
-                    , S("]")
+                    , S(" ]")
                     ]
                   )
                 ]
-    with t0__' := <pp-V-list(prettyprint-Instruction)> t0__
+    with t0__' := <pp-H-list(prettyprint-Instruction)> t0__
 
   is-Formula =
     ?Is(_)
@@ -212,7 +195,7 @@ strategies
   prettyprint-Instruction :
     I(t0__) -> [ H(
                    [SOpt(HS(), "0")]
-                 , [t0__', S(";")]
+                 , [t0__', S(" ;")]
                  )
                ]
     with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
@@ -226,7 +209,7 @@ strategies
                         , [ t0__'
                           , S(" provided ")
                           , t1__'
-                          , S(";")
+                          , S(" ;")
                           ]
                         )
                       ]
@@ -242,7 +225,7 @@ strategies
                         , [ t0__'
                           , S(" := ")
                           , t1__'
-                          , S(";")
+                          , S(" ;")
                           ]
                         )
                       ]
@@ -260,7 +243,7 @@ strategies
                                  , t1__'
                                  , S(" provided ")
                                  , t2__'
-                                 , S(";")
+                                 , S(" ;")
                                  ]
                                )
                              ]
@@ -405,7 +388,7 @@ strategies
                                 , [t0__', S(" : "), t1__']
                                 )
                               ]
-    with t0__' := <pp-H-list(prettyprint-Pattern|" + ")> t0__
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
     with t1__' := <pp-one-Z(prettyprint-Term)> t1__
 
   is-PropPattern =
@@ -422,7 +405,7 @@ strategies
                                     ]
                                   )
                                 ]
-    with t0__' := <pp-H-list(prettyprint-Pattern|" + ")> t0__
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
     with t1__' := <pp-one-Z(prettyprint-Id)> t1__
     with t2__' := <pp-one-Z(prettyprint-Term)> t2__
 
@@ -435,7 +418,7 @@ strategies
                     , [t0__', S(" :-")]
                     )
                   ]
-    with t0__' := <pp-H-list(prettyprint-Pattern|" + ")> t0__
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
 
   is-PropPattern =
     ?IsWF(_)

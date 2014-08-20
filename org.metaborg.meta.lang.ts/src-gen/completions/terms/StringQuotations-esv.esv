@@ -1,4 +1,27 @@
+
 module src-gen/completion/terms/StringQuotations-esv
 
 imports
   src-gen/completion/terms/Terms-esv
+
+completions
+  completion template StringQuotation : "$ [ Padding ]" =
+    "$ [ " <Padding:Padding> " " <:StringQuotedPart1> " ]"  
+  completion template StringQuotation : "$ { Padding }" =
+    "$ { " <Padding:Padding> " " <:StringQuotedPart2> " }"  
+  completion template StringQuotation : "$ ( Padding )" =
+    "$ ( " <Padding:Padding> " " <:StringQuotedPart3> " )"  
+  completion template StringQuotation : "$ < Padding >" =
+    "$ < " <Padding:Padding> " " <:StringQuotedPart4> " >"  
+
+completions
+  completion template StringQuotedPart1 : "Padding[OptLAYOUTTermOptLAYOUT]" =
+    <Padding:Padding> "[" <OptLAYOUT:OptLAYOUT> <Term:Term> <OptLAYOUT:OptLAYOUT> "]"  
+  completion template StringQuotedPart2 : "Padding{OptLAYOUTTermOptLAYOUT}" =
+    <Padding:Padding> "{" <OptLAYOUT:OptLAYOUT> <Term:Term> <OptLAYOUT:OptLAYOUT> "}"  
+  completion template StringQuotedPart3 : "Padding(OptLAYOUTTermOptLAYOUT)" =
+    <Padding:Padding> "(" <OptLAYOUT:OptLAYOUT> <Term:Term> <OptLAYOUT:OptLAYOUT> ")"  
+  completion template StringQuotedPart4 : "Padding<OptLAYOUTTermOptLAYOUT>" =
+    <Padding:Padding> "<" <OptLAYOUT:OptLAYOUT> <Term:Term> <OptLAYOUT:OptLAYOUT> ">"  
+  completion template OptLAYOUT : " " =
+    " "                                        

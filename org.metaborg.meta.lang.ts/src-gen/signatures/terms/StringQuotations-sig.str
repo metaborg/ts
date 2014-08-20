@@ -6,7 +6,46 @@ imports
 
 signature
   sorts
-    PPTerm StringQuotation StringQuotedPart1 StringQuotedChars1 DollarOpen1 DollarClose1 QuotedBracket1 Dollar1 StringQuotedPart2 StringQuotedChars2 DollarOpen2 DollarClose2 QuotedBracket2 Dollar2 StringQuotedPart3 StringQuotedChars3 DollarOpen3 DollarClose3 QuotedBracket3 Dollar3 StringQuotedPart4 StringQuotedChars4 DollarOpen4 DollarClose4 QuotedBracket4 Dollar4 Padding
+    PPTerm StringQuotation StringQuotedPart1 StringQuotedChars1 QuotedBracket1 Dollar1 StringQuotedPart2 StringQuotedChars2 QuotedBracket2 Dollar2 StringQuotedPart3 StringQuotedChars3 QuotedBracket3 Dollar3 StringQuotedPart4 StringQuotedChars4 QuotedBracket4 Dollar4 Padding
 
   constructors
-     : StringQuotation -> PPTerm
+                     : StringQuotation -> PPTerm
+    StringQuotation1 : Padding * List(StringQuotedPart1) -> StringQuotation
+    StringQuotation2 : Padding * List(StringQuotedPart2) -> StringQuotation
+    StringQuotation3 : Padding * List(StringQuotedPart3) -> StringQuotation
+    StringQuotation4 : Padding * List(StringQuotedPart4) -> StringQuotation
+
+  constructors
+                  : StringQuotation -> PPTerm
+    StringEscape1 : Padding * OptLAYOUT * Term * OptLAYOUT -> StringQuotedPart1
+    QStr          : StringQuotedChars1 -> StringQuotedPart1
+    QDollar       : Dollar1 -> StringQuotedPart1
+    QBr           : QuotedBracket1 -> StringQuotedPart1
+                  : StringQuotedChars1
+                  : QuotedBracket1
+                  : Dollar1
+    StringEscape2 : Padding * OptLAYOUT * Term * OptLAYOUT -> StringQuotedPart2
+    QStr          : StringQuotedChars2 -> StringQuotedPart2
+    QDollar       : Dollar2 -> StringQuotedPart2
+    QBr           : QuotedBracket2 -> StringQuotedPart2
+                  : StringQuotedChars2
+                  : QuotedBracket2
+                  : Dollar2
+    StringEscape3 : Padding * OptLAYOUT * Term * OptLAYOUT -> StringQuotedPart3
+    QStr          : StringQuotedChars3 -> StringQuotedPart3
+    QDollar       : Dollar3 -> StringQuotedPart3
+    QBr           : QuotedBracket3 -> StringQuotedPart3
+                  : StringQuotedChars3
+                  : QuotedBracket3
+                  : Dollar3
+    StringEscape4 : Padding * OptLAYOUT * Term * OptLAYOUT -> StringQuotedPart4
+    QStr          : StringQuotedChars4 -> StringQuotedPart4
+    QDollar       : Dollar4 -> StringQuotedPart4
+    QBr           : QuotedBracket4 -> StringQuotedPart4
+                  : StringQuotedChars4
+                  : QuotedBracket4
+                  : Dollar4
+                  : Padding -> Padding
+                  : Padding
+    None          : OptLAYOUT
+    Some          : OptLAYOUT

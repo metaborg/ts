@@ -7,6 +7,9 @@ imports
 
 
 strategies
+  prettyprint-Alt1 =
+    ![S(<is-string>)]
+
   prettyprint-LongCom =
     ![S(<is-string>)]
 
@@ -18,6 +21,9 @@ strategies
 
   prettyprint-CommChar =
     ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-Alt1
 
   prettyprint-example =
     prettyprint-LongCom

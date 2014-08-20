@@ -19,19 +19,15 @@ strategies
   prettyprint-Module :
     Module(t0__, t1__) -> [ H(
                               [SOpt(HS(), "0")]
-                            , [S("module "), t0__']
-                            )
-                          , H(
-                              []
-                            , [S("")]
-                            )
-                          , H(
-                              [SOpt(HS(), "0")]
-                            , [t1__']
+                            , [ S("module ")
+                              , t0__'
+                              , S(" ")
+                              , t1__'
+                              ]
                             )
                           ]
     with t0__' := <pp-one-Z(prettyprint-ModuleID)> t0__
-    with t1__' := <pp-V-list(prettyprint-ModuleSection|"")> t1__
+    with t1__' := <pp-H-list(prettyprint-ModuleSection)> t1__
 
   is-Module =
     ?Module(_, _)
@@ -50,7 +46,7 @@ strategies
   prettyprint-ImportModule :
     ImportWildcard(t0__) -> [ H(
                                 [SOpt(HS(), "0")]
-                              , [t0__', S("/-")]
+                              , [t0__', S(" /-")]
                               )
                             ]
     with t0__' := <pp-one-Z(prettyprint-ModuleID)> t0__

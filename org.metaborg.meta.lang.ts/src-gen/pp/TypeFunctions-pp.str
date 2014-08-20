@@ -31,18 +31,10 @@ strategies
   prettyprint-ModuleSection :
     TypeFunctions(t0__) -> [ H(
                                [SOpt(HS(), "0")]
-                             , [S("type functions")]
-                             )
-                           , H(
-                               []
-                             , [S("")]
-                             )
-                           , H(
-                               [SOpt(HS(), "0")]
-                             , [t0__']
+                             , [S("type functions "), t0__']
                              )
                            ]
-    with t0__' := <pp-V-list(prettyprint-TypeFunction|"")> t0__
+    with t0__' := <pp-H-list(prettyprint-TypeFunction)> t0__
 
   is-ModuleSection =
     ?TypeFunctions(_)
@@ -50,15 +42,17 @@ strategies
   prettyprint-TypeFunction :
     TypeFunctionUnCond(t0__, t1__, t2__) -> [ H(
                                                 [SOpt(HS(), "0")]
-                                              , [t0__', S(" :")]
+                                              , [ t0__'
+                                                , S(" : ")
+                                                , t1__'
+                                                , S(" -> ")
+                                                , t2__'
+                                                ]
                                               )
-                                            , t1__'
                                             ]
     with t0__' := <pp-one-Z(prettyprint-Id)> t0__
-    with t1__' := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> t1__
-                                    , S(" -> ")
-                                    , <pp-one-Z(prettyprint-Term)> t2__
-                                    ]
+    with t1__' := <pp-one-Z(prettyprint-Pattern)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
 
   is-TypeFunction =
     ?TypeFunctionUnCond(_, _, _)
@@ -66,19 +60,20 @@ strategies
   prettyprint-TypeFunction :
     TypeFunction(t0__, t1__, t2__, t3__) -> [ H(
                                                 [SOpt(HS(), "0")]
-                                              , [t0__', S(" :")]
+                                              , [ t0__'
+                                                , S(" : ")
+                                                , t1__'
+                                                , S(" -> ")
+                                                , t2__'
+                                                , S(" where ")
+                                                , t3__'
+                                                ]
                                               )
-                                            , t1__'
-                                            , t3__'
                                             ]
     with t0__' := <pp-one-Z(prettyprint-Id)> t0__
-    with t1__' := <pp-indent(|"2")> [ <pp-one-Z(prettyprint-Pattern)> t1__
-                                    , S(" -> ")
-                                    , <pp-one-Z(prettyprint-Term)> t2__
-                                    ]
-    with t3__' := <pp-indent(|"2")> [ S("where ")
-                                    , <pp-one-Z(prettyprint-Formula)> t3__
-                                    ]
+    with t1__' := <pp-one-Z(prettyprint-Pattern)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+    with t3__' := <pp-one-Z(prettyprint-Formula)> t3__
 
   is-TypeFunction =
     ?TypeFunction(_, _, _, _)
@@ -86,9 +81,9 @@ strategies
   prettyprint-Prop :
     FuncAppl(t0__, t1__, t2__) -> [ H(
                                       [SOpt(HS(), "0")]
-                                    , [ S("<")
+                                    , [ S("< ")
                                       , t0__'
-                                      , S("> ")
+                                      , S(" > ")
                                       , t1__'
                                       , S(" => ")
                                       , t2__'

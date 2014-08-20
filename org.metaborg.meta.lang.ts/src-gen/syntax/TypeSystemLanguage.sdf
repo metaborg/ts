@@ -51,7 +51,7 @@ exports
     Term ":" Pattern         -> Prop {cons("HasType")}
     Term "has" Id Pattern    -> Prop {cons("Has")}
     Term "==" Term           -> Prop {cons("Eq")}
-    Term "=>" Pattern        -> Prop {cons("Match")}
+    Term "=" ">" Pattern     -> Prop {cons("Match")}
     Term "bind" Var          -> Prop {cons("Bind")}
     VarRef "project" Pattern -> Prop {cons("Project")}
     "return" Term            -> Prop {cons("Return")}
