@@ -1,0 +1,26 @@
+module common/Layout
+exports
+  sorts LongCom CommChar Asterisk Eof
+
+  lexical syntax
+    [\t\ \n\r]          -> LAYOUT   
+    "//" ~[\n]* Alt1    -> LAYOUT   
+    [\n]                -> Alt1     
+    Eof                 -> Alt1     
+    "/*" CommChar* "*/" -> LongCom  
+                        -> Eof      
+    ~[\*]               -> CommChar 
+    "*"                 -> Asterisk 
+    Asterisk            -> CommChar 
+
+  lexical restrictions
+    Asterisk -/- [\/]
+    Eof -/- ~[]
+
+  lexical syntax
+    LongCom -> LAYOUT 
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+    LAYOUT? -/- [\/] . [\*]
+    LAYOUT? -/- [\/] . [\/]

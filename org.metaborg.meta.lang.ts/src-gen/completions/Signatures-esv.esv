@@ -1,0 +1,12 @@
+module src-gen/completion/Signatures-esv
+
+imports
+  src-gen/completion/common/Identifiers-esv
+
+completions
+  completion template ModuleSection : "signatures " =
+    "signatures " <:SignatureRule>  
+  completion template SignatureRule : "Id : SignatureType" =
+    <Id:Id> " : " <SignatureType:SignatureType>  
+  completion template SignatureType : " -> Id" =
+    <:Id> " -> " <Id:Id>  

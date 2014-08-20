@@ -1,0 +1,65 @@
+module src-gen/pp/PP-pp
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  src-gen/signatures/PP-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/terms/Terms-sig
+
+
+imports
+  src-gen/pp/common/Identifiers-pp
+  src-gen/pp/terms/Terms-pp
+
+
+strategies
+  prettyprint-example =
+    prettyprint-PropPattern
+
+  prettyprint-PropPattern :
+    HasTypePat(t0__, t1__) -> [ H(
+                                  [SOpt(HS(), "0")]
+                                , [t0__', S(" : "), t1__']
+                                )
+                              ]
+    with t0__' := <pp-one-Z(prettyprint-Pattern)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+
+  is-PropPattern =
+    ?HasTypePat(_, _)
+
+  prettyprint-PropPattern :
+    HasPat(t0__, t1__, t2__) -> [ H(
+                                    [SOpt(HS(), "0")]
+                                  , [ t0__'
+                                    , S(" has ")
+                                    , t1__'
+                                    , S(" ")
+                                    , t2__'
+                                    ]
+                                  )
+                                ]
+    with t0__' := <pp-one-Z(prettyprint-Pattern)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Id)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+
+  is-PropPattern =
+    ?HasPat(_, _, _)
+
+  prettyprint-PropPattern :
+    IsWF(t0__) -> [ H(
+                      [SOpt(HS(), "0")]
+                    , [t0__', S(" :-")]
+                    )
+                  ]
+    with t0__' := <pp-one-Z(prettyprint-Pattern)> t0__
+
+  is-PropPattern =
+    ?IsWF(_)
+
+  is-PropPattern =
+    fail

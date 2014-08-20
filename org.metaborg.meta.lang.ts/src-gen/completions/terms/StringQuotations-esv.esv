@@ -1,0 +1,14 @@
+module src-gen/completion/terms/StringQuotations-esv
+
+imports
+  src-gen/completion/terms/Terms-esv
+
+completions
+  completion template StringQuotation : "$ [ Padding ]" =
+    "$ [ " <Padding:Padding> " " <:StringQuotedPart1> " ]"  
+  completion template StringQuotation : "$ { Padding }" =
+    "$ { " <Padding:Padding> " " <:StringQuotedPart2> " }"  
+  completion template StringQuotation : "$ ( Padding )" =
+    "$ ( " <Padding:Padding> " " <:StringQuotedPart3> " )"  
+  completion template StringQuotation : "$ < Padding >" =
+    "$ < " <Padding:Padding> " " <:StringQuotedPart4> " >"  

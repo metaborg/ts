@@ -1,113 +1,76 @@
 module TypeSystemLanguage
 
-imports 
-  common/Identifiers   
-  common/Layout 
-  terms/Terms
-  terms/Vars
+imports common/Identifiers	
+        common/Layout	
+        terms/Terms	
+        terms/Vars	
+        Module	
+        Signatures	
+        TypeFunctions	
+        Relations	
+        PP
+
+
+context-free start-symbols
+
   Module
-  Signatures
-  TypeFunctions
-  Relations
-  PP
 
-context-free start-symbols Module
+context-free syntax
 
-templates
+  ModuleSection.TypeRules = <type rules <TypeRule*>> 
+  TypeRule.TypeRuleUnCond = <<PropPattern>> 
+  TypeRule.TypeRule = <<PropPattern> where <Formula>> 
 
-  // TsModule.Module = <
-  //   module <Id> 
-  //     <TypeRules*; separator="\n\n">
-  // >  
+context-free syntax
 
-  ModuleSection.TypeRules = <
-    type rules
-    
-      <TypeRule*; separator="\n\n">
-    >
+  Formula = <<Prop>> 
+  Formula.Else = <<Formula> else error <Term> on <Term>> {left}
+  Formula.Not = <not <Formula>> 
+  Formula.Or = <<Formula> or <Formula>> {assoc}
+  Formula.And = <<Formula> and <Formula>> {assoc}
+  Formula.Label = <<LId> :: <Formula>> 
+  Formula = <( <Formula> )> {bracket}
 
-  TypeRule.TypeRuleUnCond = 
-    <<PropPattern>>
+context-free syntax
 
-  TypeRule.TypeRule = <
-    <PropPattern>
-    where <Formula>
-    >
+  Formula.Is = <[ <Instruction*> ]> 
+  Instruction.I = <<Formula> ;> 
+  Instruction.Id = <<Formula> provided <VarRef> ;> 
+  Instruction.Ia = <<Var> := <Formula> ;> 
+  Instruction.Iad = <<Var> := <Formula> provided <VarRef> ;> 
 
-templates // formulas
-
-  Formula = <<Prop>>
-
-  Formula.Else = <
-    <Formula> else error <Term> on <Term>
-  > {left} 
-  
-  Formula.Not = <
-    not <Formula>
-  >
-    
-  Formula.Or = <
-    <Formula> 
-    or <Formula>
-  > {assoc}
-     
-  Formula.And = <  
-    <Formula> 
-    and <Formula> 
-  > {assoc}
-  
-  Formula.Label = <
-    <LId> :: <Formula>
-  >
-  
-  Formula = <(<Formula>)> {bracket}
-
-templates // instructions
-
-  Formula.Is = <[<Instruction*; separator="\n">]> 
-     
-  Instruction.I = <<Formula>;>  
-  
-  Instruction.Id = <<Formula> provided <VarRef>;>  
-  
-  Instruction.Ia = <<Var> := <Formula>;>  
-  
-  Instruction.Iad = <<Var> := <Formula> provided <VarRef>;> 
-    
 context-free priorities
 
-   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
-   
-templates // propositions
-  
-  Prop.True         = <true>
-  Prop.False        = <false>
-  Prop.HasType      = <<Term> : <Pattern>>
-  Prop.Has          = <<Term> has <Id> <Pattern>>  
-  Prop.Eq           = [[Term] == [Term]] 
-  Prop.Match        = [[Term] => [Pattern]]
-  
-  Prop.Bind         = [[Term] bind [Var]]
-  Prop.Project      = [[VarRef] project [Pattern]] // at most one Var in Pattern
-  
-  Prop.Return       = [return [Term]]
-  
-templates // proposition patterns
-   
-  PropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
-  PropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
-  PropPattern.IsWF       = <<Pattern+; separator=" + "> :->
-     
-templates // term operators
+  Formula = LId "::" Formula  > Formula = "not" Formula  > Formula = Formula "else" "error" Term "on" Term  > Formula = Formula "and" Formula  > Formula = Formula "or" Formula 
 
-  Term.DefOf   = <definition of <Term>> 
-  Term.Choice  = <<Term> or <Term>>     {assoc}
-  Term.Union   = <<Term> union <Term>>  {assoc}
-  
+context-free syntax
+
+  Prop.True = <true> 
+  Prop.False = <false> 
+  Prop.HasType = <<Term> : <Pattern>> 
+  Prop.Has = <<Term> has <Id> <Pattern>> 
+  Prop.Eq = <<Term> == <Term>> 
+  Prop.Match = <<Term> =\> <Pattern>> 
+  Prop.Bind = <<Term> bind <Var>> 
+  Prop.Project = <<VarRef> project <Pattern>> 
+  Prop.Return = <return <Term>> 
+
+context-free syntax
+
+  PropPattern.HasTypePat = <<{Pattern "+"}+> : <Term>> 
+  PropPattern.HasPat = <<{Pattern "+"}+> has <Id> <Term>> 
+  PropPattern.IsWF = <<{Pattern "+"}+> :-> 
+
+context-free syntax
+
+  Term.DefOf = <definition of <Term>> 
+  Term.Choice = <<Term> or <Term>> {assoc}
+  Term.Union = <<Term> union <Term>> {assoc}
+
 context-free priorities
 
-   Term.DefOf > Term.Choice > Term.Union
+  Term = "definition" "of" Term  > Term = Term "or" Term  > Term = Term "union" Term 
 
-templates // keywords
+context-free syntax
 
   Id = <where> {reject}

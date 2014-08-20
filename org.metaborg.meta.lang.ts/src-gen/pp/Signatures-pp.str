@@ -1,0 +1,80 @@
+module src-gen/pp/Signatures-pp
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  src-gen/signatures/Signatures-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+
+
+imports
+  src-gen/pp/common/Identifiers-pp
+
+
+strategies
+  prettyprint-example =
+    prettyprint-ModuleSection
+
+  prettyprint-example =
+    prettyprint-SignatureRule
+
+  prettyprint-example =
+    prettyprint-SignatureType
+
+  prettyprint-ModuleSection :
+    Signatures(t0__) -> [ H(
+                            [SOpt(HS(), "0")]
+                          , [S("signatures "), t0__']
+                          )
+                        ]
+    with t0__' := <pp-H-list(prettyprint-SignatureRule)> t0__
+
+  is-ModuleSection =
+    ?Signatures(_)
+
+  prettyprint-SignatureRule :
+    SignatureRule(t0__, t1__) -> [ H(
+                                     [SOpt(HS(), "0")]
+                                   , [t0__', S(" : "), t1__']
+                                   )
+                                 ]
+    with t0__' := <pp-one-Z(prettyprint-Id)> t0__
+    with t1__' := <pp-one-Z(prettyprint-SignatureType)> t1__
+
+  is-SignatureRule =
+    ?SignatureRule(_, _)
+
+  prettyprint-SignatureType :
+    SigType(t0__, t1__) -> [ H(
+                               [SOpt(HS(), "0")]
+                             , [t0__', S(" -> "), t1__']
+                             )
+                           ]
+    with t0__' := <pp-H-list(prettyprint-Id|"*")> t0__
+    with t1__' := <pp-one-Z(prettyprint-Id)> t1__
+
+  is-SignatureType =
+    ?SigType(_, _)
+
+  prettyprint-SignatureType :
+    SigInj(t0__) -> [ H(
+                        [SOpt(HS(), "0")]
+                      , [t0__']
+                      )
+                    ]
+    with t0__' := <pp-one-Z(prettyprint-Id)> t0__
+
+  is-SignatureType =
+    ?SigInj(_)
+
+  is-ModuleSection =
+    fail
+
+  is-SignatureRule =
+    fail
+
+  is-SignatureType =
+    fail

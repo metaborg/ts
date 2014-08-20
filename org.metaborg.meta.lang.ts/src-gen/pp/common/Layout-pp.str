@@ -1,0 +1,38 @@
+module src-gen/pp/common/Layout-pp
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  src-gen/signatures/common/Layout-sig
+
+
+strategies
+  prettyprint-Alt1 =
+    ![S(<is-string>)]
+
+  prettyprint-LongCom =
+    ![S(<is-string>)]
+
+  prettyprint-Eof =
+    ![S(<is-string>)]
+
+  prettyprint-Asterisk =
+    ![S(<is-string>)]
+
+  prettyprint-CommChar =
+    ![S(<is-string>)]
+
+  prettyprint-example =
+    prettyprint-Alt1
+
+  prettyprint-example =
+    prettyprint-LongCom
+
+  prettyprint-example =
+    prettyprint-Eof
+
+  prettyprint-example =
+    prettyprint-Asterisk
+
+  prettyprint-example =
+    prettyprint-CommChar

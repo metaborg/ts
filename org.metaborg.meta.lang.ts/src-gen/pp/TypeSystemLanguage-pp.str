@@ -1,0 +1,470 @@
+module src-gen/pp/TypeSystemLanguage-pp
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  src-gen/signatures/TypeSystemLanguage-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/common/Layout-sig
+  src-gen/signatures/terms/Terms-sig
+  src-gen/signatures/terms/Vars-sig
+  src-gen/signatures/Module-sig
+  src-gen/signatures/Signatures-sig
+  src-gen/signatures/TypeFunctions-sig
+  src-gen/signatures/Relations-sig
+  src-gen/signatures/PP-sig
+
+
+imports
+  src-gen/pp/common/Identifiers-pp
+  src-gen/pp/common/Layout-pp
+  src-gen/pp/terms/Terms-pp
+  src-gen/pp/terms/Vars-pp
+  src-gen/pp/Module-pp
+  src-gen/pp/Signatures-pp
+  src-gen/pp/TypeFunctions-pp
+  src-gen/pp/Relations-pp
+  src-gen/pp/PP-pp
+
+
+strategies
+  prettyprint-example =
+    prettyprint-ModuleSection
+
+  prettyprint-example =
+    prettyprint-TypeRule
+
+  prettyprint-ModuleSection :
+    TypeRules(t0__) -> [ H(
+                           [SOpt(HS(), "0")]
+                         , [S("type rules "), t0__']
+                         )
+                       ]
+    with t0__' := <pp-H-list(prettyprint-TypeRule)> t0__
+
+  is-ModuleSection =
+    ?TypeRules(_)
+
+  prettyprint-TypeRule :
+    TypeRuleUnCond(t0__) -> [ H(
+                                [SOpt(HS(), "0")]
+                              , [t0__']
+                              )
+                            ]
+    with t0__' := <pp-one-Z(prettyprint-PropPattern)> t0__
+
+  is-TypeRule =
+    ?TypeRuleUnCond(_)
+
+  prettyprint-TypeRule :
+    TypeRule(t0__, t1__) -> [ H(
+                                [SOpt(HS(), "0")]
+                              , [t0__', S(" where "), t1__']
+                              )
+                            ]
+    with t0__' := <pp-one-Z(prettyprint-PropPattern)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+
+  is-TypeRule =
+    ?TypeRule(_, _)
+
+  is-ModuleSection =
+    fail
+
+  is-TypeRule =
+    fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-Formula
+
+  prettyprint-Formula :
+    t0__ -> [ H(
+                [SOpt(HS(), "0")]
+              , [t0__']
+              )
+            ]
+    where not(is-Formula)
+    where t0__' := <pp-one-Z(prettyprint-Prop)> t0__
+
+  prettyprint-Formula :
+    Else(t0__, t1__, t2__) -> [ H(
+                                  [SOpt(HS(), "0")]
+                                , [ t0__'
+                                  , S(" else error ")
+                                  , t1__'
+                                  , S(" on ")
+                                  , t2__'
+                                  ]
+                                )
+                              ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+
+  is-Formula =
+    ?Else(_, _, _)
+
+  prettyprint-Formula :
+    Not(t0__) -> [ H(
+                     [SOpt(HS(), "0")]
+                   , [S("not "), t0__']
+                   )
+                 ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+
+  is-Formula =
+    ?Not(_)
+
+  prettyprint-Formula :
+    Or(t0__, t1__) -> [ H(
+                          [SOpt(HS(), "0")]
+                        , [t0__', S(" or "), t1__']
+                        )
+                      ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+
+  is-Formula =
+    ?Or(_, _)
+
+  prettyprint-Formula :
+    And(t0__, t1__) -> [ H(
+                           [SOpt(HS(), "0")]
+                         , [t0__', S(" and "), t1__']
+                         )
+                       ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+
+  is-Formula =
+    ?And(_, _)
+
+  prettyprint-Formula :
+    Label(t0__, t1__) -> [ H(
+                             [SOpt(HS(), "0")]
+                           , [t0__', S(" :: "), t1__']
+                           )
+                         ]
+    with t0__' := <pp-one-Z(prettyprint-LId)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+
+  is-Formula =
+    ?Label(_, _)
+
+  prettyprint-Formula :
+    Parenthetical(t0__) -> [ H(
+                               [SOpt(HS(), "0")]
+                             , [ S("( ")
+                               , t0__'
+                               , S(" )")
+                               ]
+                             )
+                           ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+
+  is-Formula =
+    fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-Formula
+
+  prettyprint-example =
+    prettyprint-Instruction
+
+  prettyprint-Formula :
+    Is(t0__) -> [ H(
+                    [SOpt(HS(), "0")]
+                  , [ S("[ ")
+                    , t0__'
+                    , S(" ]")
+                    ]
+                  )
+                ]
+    with t0__' := <pp-H-list(prettyprint-Instruction)> t0__
+
+  is-Formula =
+    ?Is(_)
+
+  prettyprint-Instruction :
+    I(t0__) -> [ H(
+                   [SOpt(HS(), "0")]
+                 , [t0__', S(" ;")]
+                 )
+               ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+
+  is-Instruction =
+    ?I(_)
+
+  prettyprint-Instruction :
+    Id(t0__, t1__) -> [ H(
+                          [SOpt(HS(), "0")]
+                        , [ t0__'
+                          , S(" provided ")
+                          , t1__'
+                          , S(" ;")
+                          ]
+                        )
+                      ]
+    with t0__' := <pp-one-Z(prettyprint-Formula)> t0__
+    with t1__' := <pp-one-Z(prettyprint-VarRef)> t1__
+
+  is-Instruction =
+    ?Id(_, _)
+
+  prettyprint-Instruction :
+    Ia(t0__, t1__) -> [ H(
+                          [SOpt(HS(), "0")]
+                        , [ t0__'
+                          , S(" := ")
+                          , t1__'
+                          , S(" ;")
+                          ]
+                        )
+                      ]
+    with t0__' := <pp-one-Z(prettyprint-Var)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+
+  is-Instruction =
+    ?Ia(_, _)
+
+  prettyprint-Instruction :
+    Iad(t0__, t1__, t2__) -> [ H(
+                                 [SOpt(HS(), "0")]
+                               , [ t0__'
+                                 , S(" := ")
+                                 , t1__'
+                                 , S(" provided ")
+                                 , t2__'
+                                 , S(" ;")
+                                 ]
+                               )
+                             ]
+    with t0__' := <pp-one-Z(prettyprint-Var)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Formula)> t1__
+    with t2__' := <pp-one-Z(prettyprint-VarRef)> t2__
+
+  is-Instruction =
+    ?Iad(_, _, _)
+
+  is-Formula =
+    fail
+
+  is-Instruction =
+    fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-Prop
+
+  prettyprint-Prop :
+    True() -> [ H(
+                  [SOpt(HS(), "0")]
+                , [S("true")]
+                )
+              ]
+
+  is-Prop =
+    ?True()
+
+  prettyprint-Prop :
+    False() -> [ H(
+                   [SOpt(HS(), "0")]
+                 , [S("false")]
+                 )
+               ]
+
+  is-Prop =
+    ?False()
+
+  prettyprint-Prop :
+    HasType(t0__, t1__) -> [ H(
+                               [SOpt(HS(), "0")]
+                             , [t0__', S(" : "), t1__']
+                             )
+                           ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Pattern)> t1__
+
+  is-Prop =
+    ?HasType(_, _)
+
+  prettyprint-Prop :
+    Has(t0__, t1__, t2__) -> [ H(
+                                 [SOpt(HS(), "0")]
+                               , [ t0__'
+                                 , S(" has ")
+                                 , t1__'
+                                 , S(" ")
+                                 , t2__'
+                                 ]
+                               )
+                             ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Id)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Pattern)> t2__
+
+  is-Prop =
+    ?Has(_, _, _)
+
+  prettyprint-Prop :
+    Eq(t0__, t1__) -> [ H(
+                          [SOpt(HS(), "0")]
+                        , [t0__', S(" == "), t1__']
+                        )
+                      ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+
+  is-Prop =
+    ?Eq(_, _)
+
+  prettyprint-Prop :
+    Match(t0__, t1__) -> [ H(
+                             [SOpt(HS(), "0")]
+                           , [t0__', S(" => "), t1__']
+                           )
+                         ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Pattern)> t1__
+
+  is-Prop =
+    ?Match(_, _)
+
+  prettyprint-Prop :
+    Bind(t0__, t1__) -> [ H(
+                            [SOpt(HS(), "0")]
+                          , [t0__', S(" bind "), t1__']
+                          )
+                        ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Var)> t1__
+
+  is-Prop =
+    ?Bind(_, _)
+
+  prettyprint-Prop :
+    Project(t0__, t1__) -> [ H(
+                               [SOpt(HS(), "0")]
+                             , [t0__', S(" project "), t1__']
+                             )
+                           ]
+    with t0__' := <pp-one-Z(prettyprint-VarRef)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Pattern)> t1__
+
+  is-Prop =
+    ?Project(_, _)
+
+  prettyprint-Prop :
+    Return(t0__) -> [ H(
+                        [SOpt(HS(), "0")]
+                      , [S("return "), t0__']
+                      )
+                    ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+
+  is-Prop =
+    ?Return(_)
+
+  is-Prop =
+    fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-PropPattern
+
+  prettyprint-PropPattern :
+    HasTypePat(t0__, t1__) -> [ H(
+                                  [SOpt(HS(), "0")]
+                                , [t0__', S(" : "), t1__']
+                                )
+                              ]
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+
+  is-PropPattern =
+    ?HasTypePat(_, _)
+
+  prettyprint-PropPattern :
+    HasPat(t0__, t1__, t2__) -> [ H(
+                                    [SOpt(HS(), "0")]
+                                  , [ t0__'
+                                    , S(" has ")
+                                    , t1__'
+                                    , S(" ")
+                                    , t2__'
+                                    ]
+                                  )
+                                ]
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
+    with t1__' := <pp-one-Z(prettyprint-Id)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Term)> t2__
+
+  is-PropPattern =
+    ?HasPat(_, _, _)
+
+  prettyprint-PropPattern :
+    IsWF(t0__) -> [ H(
+                      [SOpt(HS(), "0")]
+                    , [t0__', S(" :-")]
+                    )
+                  ]
+    with t0__' := <pp-H-list(prettyprint-Pattern|"+")> t0__
+
+  is-PropPattern =
+    ?IsWF(_)
+
+  is-PropPattern =
+    fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-Term
+
+  prettyprint-Term :
+    DefOf(t0__) -> [ H(
+                       [SOpt(HS(), "0")]
+                     , [S("definition of "), t0__']
+                     )
+                   ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+
+  is-Term =
+    ?DefOf(_)
+
+  prettyprint-Term :
+    Choice(t0__, t1__) -> [ H(
+                              [SOpt(HS(), "0")]
+                            , [t0__', S(" or "), t1__']
+                            )
+                          ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+
+  is-Term =
+    ?Choice(_, _)
+
+  prettyprint-Term :
+    Union(t0__, t1__) -> [ H(
+                             [SOpt(HS(), "0")]
+                           , [t0__', S(" union "), t1__']
+                           )
+                         ]
+    with t0__' := <pp-one-Z(prettyprint-Term)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+
+  is-Term =
+    ?Union(_, _)
+
+  is-Term =
+    fail

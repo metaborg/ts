@@ -1,18 +1,8 @@
 module pp
 
 imports
-  Terms.pp.generated
-  TypeSystemLanguage.pp.generated
-  Common.pp.generated
-  Identifiers.pp.generated
-  Layout.pp.generated
-  Constants.pp.generated
-  Vars.pp.generated
   libstratego-gpp
-  Module.pp.generated
-  TypeFunctions.pp.generated
-  Signatures.pp.generated
-  PP.pp.generated
+  src-gen/pp/-
   
 strategies 
   

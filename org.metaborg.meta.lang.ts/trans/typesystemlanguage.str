@@ -18,7 +18,7 @@ imports
 	label
   editor/TypeSystemLanguage-Outliner
   pp
-  TypeSystemLanguage.pp.generated
+  src-gen/pp/-
   include/TypeSystemLanguage-parenthesize
   instructions
   
