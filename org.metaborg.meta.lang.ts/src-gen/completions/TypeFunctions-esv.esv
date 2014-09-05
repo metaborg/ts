@@ -1,17 +1,17 @@
 
-module src-gen/completion/TypeFunctions-esv
+module src-gen/completions/TypeFunctions-esv
 
 imports
-  src-gen/completion/common/Identifiers-esv
-  src-gen/completion/terms/Terms-esv
-  src-gen/completion/TypeSystemLanguage-esv
+  src-gen/completions/common/Identifiers-esv
+  src-gen/completions/terms/Terms-esv
+  src-gen/completions/TypeSystemLanguage-esv
 
 completions
   completion template ModuleSection : "type functions " =
-    "type functions\n\n" (cursor) (blank)  
+    "type functions " <:TypeFunction>  
   completion template TypeFunction : "Id : Pattern -> Term" =
-    <Id:Id> " :\n\t" <Pattern:Pattern> " -> " <Term:Term> (blank)  
+    <Id:Id> " : " <Pattern:Pattern> " -> " <Term:Term>  
   completion template TypeFunction : "Id : Pattern -> Term where Formula" =
-    <Id:Id> " :\n\t" <Pattern:Pattern> " -> " <Term:Term> "\n\twhere " <Formula:Formula> (blank)  
-  completion template Prop : "<Id> Term => Pattern" =
-    "<" <Id:Id> "> " <Term:Term> " => " <Pattern:Pattern>  
+    <Id:Id> " : " <Pattern:Pattern> " -> " <Term:Term> " where " <Formula:Formula>  
+  completion template Prop : "< Id > Term => Pattern" =
+    "< " <Id:Id> " > " <Term:Term> " => " <Pattern:Pattern>  

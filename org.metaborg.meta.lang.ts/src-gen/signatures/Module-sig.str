@@ -6,3 +6,7 @@ signature
     Imports        : List(ImportModule) -> ModuleSection
     ImportWildcard : ModuleID -> ImportModule
     Import         : ModuleID -> ImportModule
+
+  constructors
+     : String -> ModuleID
+     : String -> ModuleIDPart

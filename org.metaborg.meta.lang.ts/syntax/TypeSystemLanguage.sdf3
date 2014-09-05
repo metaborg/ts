@@ -50,7 +50,7 @@ context-free syntax
   Prop.HasType = <<Term> : <Pattern>> 
   Prop.Has = <<Term> has <Id> <Pattern>> 
   Prop.Eq = <<Term> == <Term>> 
-  Prop.Match = <<Term> =\> <Pattern>> 
+  Prop.Match = [[Term] => [Pattern]] 
   Prop.Bind = <<Term> bind <Var>> 
   Prop.Project = <<VarRef> project <Pattern>> 
   Prop.Return = <return <Term>> 

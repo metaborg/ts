@@ -1,8 +1,8 @@
 
-module src-gen/completion/terms/StringQuotations-esv
+module src-gen/completions/terms/StringQuotations-esv
 
 imports
-  src-gen/completion/terms/Terms-esv
+  src-gen/completions/terms/Terms-esv
 
 completions
   completion template StringQuotation : "$ [ Padding ]" =
