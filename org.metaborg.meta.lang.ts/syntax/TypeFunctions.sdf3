@@ -8,6 +8,6 @@ imports common/Identifiers
 context-free syntax
 
   ModuleSection.TypeFunctions = <type functions <TypeFunction*>> 
-  TypeFunction.TypeFunctionUnCond = <<Id> : <Pattern> -\> <Term>> 
-  TypeFunction.TypeFunction = <<Id> : <Pattern> -\> <Term> where <Formula>> 
-  Prop.FuncAppl = <\< <Id> \> <Term> =\> <Pattern>> 
+  TypeFunction.TypeFunctionUnCond = [[Id] : [Pattern] -> [Term]]
+  TypeFunction.TypeFunction = [[Id] : [Pattern] -> [Term] where [Formula]] 
+  Prop.FuncAppl = [< [Id] > [Term] => [Pattern]] 

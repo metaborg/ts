@@ -41,7 +41,7 @@ context-free syntax
 
 context-free priorities
 
-  Formula = LId "::" Formula  > Formula = "not" Formula  > Formula = Formula "else" "error" Term "on" Term  > Formula = Formula "and" Formula  > Formula = Formula "or" Formula 
+  Formula.Label  > Formula.Not  > Formula.Else  > Formula.And  > Formula.Or 
 
 context-free syntax
 
@@ -69,7 +69,7 @@ context-free syntax
 
 context-free priorities
 
-  Term = "definition" "of" Term  > Term = Term "or" Term  > Term = Term "union" Term 
+  Term.DefOf > Term.Choice > Term.Union 
 
 context-free syntax
 

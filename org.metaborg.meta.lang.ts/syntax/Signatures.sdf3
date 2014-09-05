@@ -7,5 +7,5 @@ context-free syntax
 
   ModuleSection.Signatures = <signatures <SignatureRule*>> 
   SignatureRule.SignatureRule = <<Id> : <SignatureType>> 
-  SignatureType.SigType = <<{Id "*"}*> -\> <Id>> 
+  SignatureType.SigType = [[{Id "*"}*] -> [Id]] 
   SignatureType.SigInj = <<Id>> 
