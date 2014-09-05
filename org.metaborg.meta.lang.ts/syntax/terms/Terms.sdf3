@@ -40,4 +40,11 @@ context-free syntax
   Term.Tuple = <( <{Term ","}*> )> 
   Term.List = <[ <{Term ","}*> ]> 
   Term.ListTail = <[ <{Term ","}*> | <Term> ]> 
-  Term.StrInterp = <<PPTerm>> 
+  Term.StrInterp = <<PPTerm>>
+  
+context-free syntax
+
+// Extensions not yet implemented!
+
+  // Capture free substitution
+  Term.Subst = <[<Id> -\> <Term>] <Pattern>>

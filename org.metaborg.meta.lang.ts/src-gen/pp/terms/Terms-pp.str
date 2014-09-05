@@ -317,3 +317,30 @@ strategies
 
   is-Term =
     fail
+
+
+strategies
+  prettyprint-example =
+    prettyprint-Term
+
+  prettyprint-Term :
+    Subst(t0__, t1__, t2__) -> [ H(
+                                   [SOpt(HS(), "0")]
+                                 , [ S("[")
+                                   , t0__'
+                                   , S(" -> ")
+                                   , t1__'
+                                   , S("] ")
+                                   , t2__'
+                                   ]
+                                 )
+                               ]
+    with t0__' := <pp-one-Z(prettyprint-Id)> t0__
+    with t1__' := <pp-one-Z(prettyprint-Term)> t1__
+    with t2__' := <pp-one-Z(prettyprint-Pattern)> t2__
+
+  is-Term =
+    ?Subst(_, _, _)
+
+  is-Term =
+    fail

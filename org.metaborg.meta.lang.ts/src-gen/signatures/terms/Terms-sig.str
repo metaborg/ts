@@ -39,3 +39,6 @@ signature
     List      : List(Term) -> Term
     ListTail  : List(Term) * Term -> Term
     StrInterp : PPTerm -> Term
+
+  constructors
+    Subst : Id * Term * Pattern -> Term

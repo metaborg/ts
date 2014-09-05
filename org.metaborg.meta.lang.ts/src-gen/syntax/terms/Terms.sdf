@@ -37,3 +37,9 @@ exports
 
   context-free syntax
     CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}
+
+  context-free syntax
+    "[" Id "->" Term "]" Pattern -> Term {cons("Subst")}
+
+  context-free syntax
+    CONTENTCOMPLETE -> Term {cons("COMPLETION-Term")}
