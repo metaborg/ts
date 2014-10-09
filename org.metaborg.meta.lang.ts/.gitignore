@@ -24,7 +24,7 @@ utils
 lib/runtime
 lib/*.generated.str
 lib-refactoring/*.generated.str
-/include
+include/*
 lib/analysis
 lib/editor
 lib/index
@@ -33,3 +33,4 @@ lib/properties
 lib/task
 lib/tmpl
 lib/types
+!include/Stratego-Coq.tbl
