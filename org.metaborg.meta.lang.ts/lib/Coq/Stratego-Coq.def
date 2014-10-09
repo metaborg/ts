@@ -76,6 +76,16 @@ exports
   context-free syntax
     CONTENTCOMPLETE -> AssumptionKeyword {cons("COMPLETION-AssumptionKeyword")}
 
+  lexical syntax
+    "Axiom"      -> Reserved 
+    "Conjecture" -> Reserved 
+    "Parameter"  -> Reserved 
+    "Parameters" -> Reserved 
+    "Variable"   -> Reserved 
+    "Variables"  -> Reserved 
+    "Hypothesis" -> Reserved 
+    "Hypotheses" -> Reserved 
+
   context-free syntax
     "Theorem"     -> AssertionKeyword {cons("AssertionTheorem")}
     "Lemma"       -> AssertionKeyword {cons("AssertionLemma")}
@@ -90,8 +100,14 @@ exports
     CONTENTCOMPLETE -> AssertionKeyword {cons("COMPLETION-AssertionKeyword")}
 
   lexical syntax
-    AssumptionKeyword -> Reserved 
-    AssertionKeyword  -> Reserved 
+    "Theorem"     -> Reserved 
+    "Lemma"       -> Reserved 
+    "Remark"      -> Reserved 
+    "Fact"        -> Reserved 
+    "Corollary"   -> Reserved 
+    "Proposition" -> Reserved 
+    "Definition"  -> Reserved 
+    "Example"     -> Reserved 
 
   context-free syntax
     Assumption      -> Sentence 
@@ -126,7 +142,7 @@ exports
     "CoInductive" {IndBody "with"}+ "."      -> Inductive {cons("CoInductive")}
     Ident OptBinders ":" Term ":=" ConsDecls -> IndBody   {cons("Induc")}
     "|" {ConsDecl "|"}+                      -> ConsDecls {cons("ListDeclBar")}
-    {ConsDecl "|"}+                          -> ConsDecls {cons("ListDecl")}
+    {ConsDecl "|"}*                          -> ConsDecls {cons("ListDecl")}
     Ident OptBinders OptType                 -> ConsDecl  {cons("ConsDecl")}
 
   context-free syntax

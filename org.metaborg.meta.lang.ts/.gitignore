@@ -34,3 +34,4 @@ lib/task
 lib/tmpl
 lib/types
 !include/Stratego-Coq.tbl
+/include/
