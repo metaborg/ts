@@ -598,21 +598,21 @@ imports Lexical Gallina
 exports
   context-free syntax
                            -> OptType       {cons("None")}
-    ":" Term               -> OptType       
+    ":" Term               -> OptType       {cons("OptType")}
                            -> OptInTerm     {cons("None")}
-    "in" Term              -> OptInTerm     
+    "in" Term              -> OptInTerm     {cons("OptInTerm")}
                            -> OptDepRetType {cons("None")}
     OptAlias ReturnType    -> OptDepRetType {cons("DepRet")}
                            -> OptAlias      {cons("None")}
     "as" Name              -> OptAlias      {cons("As")}
                            -> OptReturnType {cons("None")}
-    ReturnType             -> OptReturnType 
+    ReturnType             -> OptReturnType {cons("OptReturnType")}
                            -> OptBinders    {cons("None")}
-    Binder+                -> OptBinders    
+    Binder+                -> OptBinders    {cons("OptBinders")}
                            -> OptTerms      {cons("None")}
-    Term+                  -> OptTerms      
+    Term+                  -> OptTerms      {cons("OptTerms")}
                            -> OptSort       {cons("None")}
-    ":" Sort               -> OptSort       
+    ":" Sort               -> OptSort       {cons("OptSort")}
                            -> OptAnnotation {cons("None")}
     "{" "struct" Ident "}" -> OptAnnotation {cons("Anno")}
 
@@ -629,9 +629,9 @@ exports
 
   context-free syntax
                                 -> OptIdents        {cons("None")}
-    Ident+                      -> OptIdents        
+    Ident+                      -> OptIdents        {cons("OptIdents")}
                                 -> OptWhereNotation {cons("None")}
-    "where" {Notation "where"}+ -> OptWhereNotation 
+    "where" {Notation "where"}+ -> OptWhereNotation {cons("OptWhereNotation")}
 
   context-free syntax
     CONTENTCOMPLETE -> OptIdents        {cons("COMPLETION-OptIdents")}
@@ -835,14 +835,16 @@ imports
   
 exports
   variables
-    "term"  [a-z0-9\-\_\']+ -> Term      {prefer}
-    "decl"  [a-z0-9\-\_\']+ -> ConsDecls {prefer}
-    "sent"  [a-z0-9\-\_\']+ -> Sentence  {prefer}
-    "ident" [a-z0-9\-\_\']+ -> Ident     {prefer}
+    "term"  [a-z0-9\-\_\']+ -> Term       {prefer}
+    "decl"  [a-z0-9\-\_\']+ -> ConsDecls  {prefer}
+    "sent"  [a-z0-9\-\_\']+ -> Sentence   {prefer}
+    "ident" [a-z0-9\-\_\']+ -> Ident      {prefer}
+    "bind"  [a-z0-9\-\_\']+ -> OptBinders {prefer}
 
   context-free syntax
     "T" "|[" Term      "]|" -> E {cons("ToMetaExpr")}
     "S" "|[" Sentence  "]|" -> E {cons("ToMetaExpr")}
+    "D" "|[" ConsDecl  "]|" -> E {cons("ToMetaExpr")}
         "|[" TopLevel* "]|" -> E {cons("ToMetaListExpr")}
 
   lexical syntax
@@ -850,6 +852,7 @@ exports
     "decl"  [a-z0-9\-\_\']+ -> Ident {reject}
     "sent"  [a-z0-9\-\_\']+ -> Ident {reject}
     "ident" [a-z0-9\-\_\']+ -> Ident {reject}
+    "bind"  [a-z0-9\-\_\']+ -> Ident {reject}
   
   
 context-free restrictions

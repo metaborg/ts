@@ -10,6 +10,9 @@ imports
   names
   lib/editor-common.generated
   include/TypeSystemLanguage
+  lib/Coq/pp/-
+  lib/Coq/-
+  lib/Coq/signatures/-
 
 rules
   
@@ -20,16 +23,18 @@ rules
     ; filename := <guarantee-extension(|"v")> path
     ; coq-file := <strip-annos; module-to-coq> ast
     with
-       result := <parenthesize-Coq; prettyprint-CoqFile; box2text-string(|100)> coq-file
-    <+ <bottomup(try(not(is-string) ; not(is-list) ; not(prettyprint-example) ; debug(!"cannot pp ")))> coq-file
+       result := <parenthesize-Coq; prettyprintCoq-CoqFile; box2text-string(|100)> coq-file
+    <+ <bottomup(try(not(is-string) ; not(is-list) ; not(prettyprintCoq-example) ; debug(!"cannot pp ")))> coq-file
     ;  result := ""
 
 rules
   
   module-to-coq:
-  	Module(name, rule*) -> Sent([IND_HT(final-def*)])
+  	Module(name, rule*) -> <build-module(|<base-filename> name)> ind_decl
   		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rules-to-coq); concat> rule*
-  		    ; final-def*  := [definition*, TYPE_EQUALITY()] 
+  		    ; term_eq := "term_eq" // Workaround because I don't want to unquote this below.
+  		    ; decls   := ListDeclBar([ definition*, D|[HT_eq e ty1 ty2 (hty1: has_type e ty1) (tyeq: term_eq ty1 ty2) : has_type e ty2]| ]) 
+  		    ; ind_decl  := S|[Inductive has_type : term -> term -> Prop := decls.]|
 
 rules // Type rules
   type-rules-to-coq:
@@ -42,9 +47,10 @@ rules // Type rules
   	TypeRuleUnCond(rule) -> <type-rules-to-coq> TypeRule(rule, True())
   	
   type-rule-to-coq(|cond*):
-    (name, bind*, final-type) -> HT_DEF(name, bind*, type)
+    (ident_name, bind*, final-type) -> D|[ident_name binds : term_type]|
     where
-      type                      := <foldr(!final-type, fold-type)> cond*
+      term_type  := <foldr(!final-type, fold-type)> cond*
+    ; binds      := OptBinders(bind*)
 
 rules // PropPattern
   
@@ -58,13 +64,13 @@ rules // PropPattern
     HasPat(pat*, "type", ty) -> <prop-pats-to-coq(|bound*, i)> HasTypePat(pat*, ty)
     
   prop-pats-to-coq(|bound*, i):
-    IsWF(_) -> <debug(!":- rules not supported: "); fail>
+    IsWF(_) -> <debug(!":- rules are not supported: "); fail>
     
-  prop-pat-to-coq(|bound*, i, ty):
+  prop-pat-to-coq(|bound*, i, term_ty):
     pat@(Op(name, _)) -> ($[[name]C_ht], <union> (bound*, b*), ty')
     where
-      (pat', b*, _) := <term-to-coq(|i)> pat
-    ; ty'           := HT_APP_TYPE(pat', ty)
+      (term_pat', b*, _) := <term-to-coq(|i)> pat
+    ; ty'                := T|[has_type term_pat' term_ty]|
 
   prop-pat-to-coq(|bound*, i, ty):
     As(_, op) -> <prop-pat-to-coq(|bound*, i, ty)> op
@@ -72,60 +78,4 @@ rules // PropPattern
 rules // Fold rules
   
   fold-type: // Composes parts of a type
-    (x, y) -> Product(x, y)
-
-overlays
-
-  IND_HT(terms) =
-		Inductive(
-		  Ind(
-		    [ Induc(
-		        "has_type"
-		      , [Binds(["C"], Ref("Context"))]
-		      , Type(
-		          Product(Ref("term"), Product(Ref("term"), Sort(Prop())))
-		        )
-		      , ListDeclBar(terms)
-		      )
-		    ]
-		  )
-		)
-
-  HT_DEF(name, binds, type) =
-		ConsDecl(
-		  name
-		, binds
-		, Type(type)
-    )
-  
-  HT_APP_TYPE(e1, e2) =
-	  APPLY2(
-	    Apply(Ref("has_type"), Ref("C"))
-	    , e1
-	    , e2
-	  )
-	  
-	CONS(hd, tl) = APPLY2(Ref("cons"), hd, tl)
-	
-	APPLY2(op, e1, e2) = Apply(Apply(op, e1), e2)
-	APPLY4(op, e1, e2, e3, e4) = APPLY2(APPLY2(op, e1, e2), e3, e4)
-	
-	TYPE_EQUALITY =
-	  ConsDecl(
-      "HT_eq"
-      , [ Bind("e")
-        , Bind("ty1")
-        , Bind("ty2")
-        , Binds(
-            ["hty1"]
-            , HT_APP_TYPE(Ref("e"), Ref("ty1"))
-            )
-        , Binds(
-            ["tyeq"]
-          , Apply(Apply(Ref("term_eq"), Ref("ty1")), Ref("ty2"))
-          )
-        ]
-      , Type(
-          HT_APP_TYPE(Ref("e"), Ref("ty2"))
-        )
-      )
+    (term_x, term_y) -> T|[term_x -> term_y]|

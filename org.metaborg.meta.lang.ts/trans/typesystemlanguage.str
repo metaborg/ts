@@ -21,6 +21,7 @@ imports
   src-gen/pp/-
   include/TypeSystemLanguage-parenthesize
   instructions
+  coq-semantics/main
   
   generate-instruct // instead of generate
   
