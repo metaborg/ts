@@ -840,6 +840,7 @@ exports
     "sent"  [a-z0-9\-\_\']+ -> Sentence   {prefer}
     "ident" [a-z0-9\-\_\']+ -> Ident      {prefer}
     "bind"  [a-z0-9\-\_\']+ -> OptBinders {prefer}
+    "equations" [a-z0-9\-\_\']+ -> Equations {prefer}
 
   context-free syntax
     "T" "|[" Term      "]|" -> E {cons("ToMetaExpr")}
@@ -853,10 +854,40 @@ exports
     "sent"  [a-z0-9\-\_\']+ -> Ident {reject}
     "ident" [a-z0-9\-\_\']+ -> Ident {reject}
     "bind"  [a-z0-9\-\_\']+ -> Ident {reject}
+    "equations" [a-z0-9\-\_\']+ -> Ident {reject}
   
   
 context-free restrictions
   Term   -/- [\_a-z0-9\']
+
+exports
+  variables
+    "optType"          [a-z0-9\-\_\']+ -> OptType          {prefer}
+    "optInTerm"        [a-z0-9\-\_\']+ -> OptInTerm        {prefer}
+    "optDepRetType"    [a-z0-9\-\_\']+ -> OptDepRetType    {prefer}
+    "optAlias"         [a-z0-9\-\_\']+ -> OptAlias         {prefer}
+    "optReturnType"    [a-z0-9\-\_\']+ -> OptReturnType    {prefer}
+    "optBinders"       [a-z0-9\-\_\']+ -> OptBinders       {prefer}
+    "optTerms"         [a-z0-9\-\_\']+ -> OptTerms         {prefer}
+    "optSort"          [a-z0-9\-\_\']+ -> OptSort          {prefer}
+    "OptAnnotation"    [a-z0-9\-\_\']+ -> OptAnnotation    {prefer}
+    "optIdents"        [a-z0-9\-\_\']+ -> OptSort          {prefer}
+    "optIdents"        [a-z0-9\-\_\']+ -> OptIdents        {prefer}
+    "optWhereNotation" [a-z0-9\-\_\']+ -> OptWhereNotation {prefer}
+    
+  lexical syntax
+    "optType"          [a-z0-9\-\_\']+ -> Ident {reject}
+    "optInTerm"        [a-z0-9\-\_\']+ -> Ident {reject}
+    "optDepRetType"    [a-z0-9\-\_\']+ -> Ident {reject}
+    "optAlias"         [a-z0-9\-\_\']+ -> Ident {reject}
+    "optReturnType"    [a-z0-9\-\_\']+ -> Ident {reject}
+    "optBinders"       [a-z0-9\-\_\']+ -> Ident {reject}
+    "optTerms"         [a-z0-9\-\_\']+ -> Ident {reject}
+    "optSort"          [a-z0-9\-\_\']+ -> Ident {reject}
+    "OptAnnotation"    [a-z0-9\-\_\']+ -> Ident {reject}
+    "optIdents"        [a-z0-9\-\_\']+ -> Ident {reject}
+    "optIdents"        [a-z0-9\-\_\']+ -> Ident {reject}
+    "optWhereNotation" [a-z0-9\-\_\']+ -> Ident {reject}
 
 module Stratego-Sugar-Overlays
 imports
