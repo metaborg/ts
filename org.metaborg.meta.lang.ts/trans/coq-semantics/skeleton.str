@@ -1,4 +1,4 @@
-module cot-semantics/skeleton
+module coq-semantics/skeleton
 
 rules
   
