@@ -20,8 +20,8 @@ rules
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       task-setup(|project-path)
-    ; filename := <guarantee-extension(|"v")> path
-    ; coq-file := <strip-annos; module-to-coq> ast
+    ; filename := "src-gen/verification/types.v"
+    ; coq-file := <strip-annos; module-to-coq(|"types")> ast
     with
        result := <parenthesize-Coq; prettyprintCoq-CoqFile; box2text-string(|100)> coq-file
     <+ <bottomup(try(not(is-string) ; not(is-list) ; not(prettyprintCoq-example) ; debug(!"cannot pp ")))> coq-file
@@ -29,8 +29,8 @@ rules
 
 rules
   
-  module-to-coq:
-  	Module(name, rule*) -> <build-module(|<base-filename> name)> ind_decl
+  module-to-coq(|filename):
+  	Module(name, rule*) -> <build-module(|filename)> ind_decl
   		where definition* := <filter(?TypeRules(<id>)); concat; filter(type-rules-to-coq); concat> rule*
   		    ; term_eq := "term_eq" // Workaround because I don't want to unquote this below.
   		    ; decls   := ListDeclBar([ definition*, D|[HT_eq e ty1 ty2 (hty1: has_type e ty1) (tyeq: term_eq ty1 ty2) : has_type e ty2]| ]) 
