@@ -4,17 +4,18 @@ rules
   
     build-module(|language):
     sent_has_type -> |[
-Require Import ident_sdf_mod.
-Require Import ident_nabl_mod.
+Require Import ident_sdf.
+Require Import ident_nabl.
 Require Import ts_nabl.
+Require Import Coq.Lists.List.
 
 Module ident_ts.
-
+  Import ListNotations.
   Module ident_nabl_mod := ident_nabl_gen. 
   Export ident_nabl_mod.
   Module ident_ts_mod := ident_ts_nabl_gen. 
   Export ident_ts_mod.
-
+  
   Module ts_wf := TS_NaBL_def ident_sdf_gen ident_nabl_mod ident_ts_mod. 
   Import ts_wf.
 
@@ -29,12 +30,11 @@ End ident_ts.
       ]|
       where
         ident_language := language;
-        ident_sdf      := $[SDF_[language]];
-        ident_nabl     := $[NaBL_[language]];
+        ident_sdf      := $[syntax];
+        ident_nabl     := $[names];
         ident_ts       := $[TS_[language]];
-        ident_sdf_mod  := $[SDF_[language]_mod];
-        ident_nabl_mod := $[NaBL_[language]_mod];
+        ident_nabl_mod := $[NaBL_names_mod];
         ident_ts_mod   := $[TS_[language]_mod];
-        ident_sdf_gen  := $[SDF_[language]_gen];
-        ident_nabl_gen := $[NaBL_[language]_gen];
-        ident_ts_nabl_gen := $[TS_NaBL_[language]_gen]
+        ident_sdf_gen  := $[SDF_syntax_gen];
+        ident_nabl_gen := $[NaBL_names_gen];
+        ident_ts_nabl_gen := $[TS_NaBL_names_gen]
