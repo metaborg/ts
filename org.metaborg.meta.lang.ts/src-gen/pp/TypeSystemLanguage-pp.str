@@ -31,11 +31,6 @@ imports
 
 
 strategies
-  prettyprint-SDF-start-symbols =
-    prettyprint-Module
-
-
-strategies
   prettyprint-example =
     prettyprint-ModuleSection
 
