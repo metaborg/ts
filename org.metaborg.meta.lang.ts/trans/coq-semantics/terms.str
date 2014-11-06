@@ -34,13 +34,12 @@ rules // Props
     ; (term_e2', b-e2*, ie2) := <term-to-coq(|ie1)> e2
   
   prop-to-coq(|i):
-    HasType(DefOf(VarRef(ident_x)), e2) -> ([T|[lookup t def_of ident_x ident_ns ident_kx ident_ty]|], bind*, i')
+    HasType(DefOf(VarRef(ident_x)), e2) -> ([T|[lookup t def_of ident_x VariableNS ident_kx ident_ty]|], bind*, i')
     where
       ident_kx               := $[k[<Fst>i]]
-    ; ident_ns               := "ns"
     ; (ident_ty, b-e2*, ie2) := <term-to-coq(|<incI> i)> e2
     ; i'                     := <addX(|ident_x, ident_kx)> ie2
-    ; bind*                  := <union> (<map(!Bind(<id>))> ["ns", ident_kx, ident_x], b-e2*)
+    ; bind*                  := <union> (<map(!Bind(<id>))> [ident_kx, ident_x], b-e2*)
   
   prop-to-coq(|i):
     Eq(e1, e2) -> ([T|[eq term_e1' term_e2']|], <union> (b-e1*, b-e2*), ie2)
