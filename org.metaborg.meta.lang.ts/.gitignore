@@ -1,4 +1,5 @@
 bin
+target
 .cache
 include/TypeSystemLanguage.def
 include/TypeSystemLanguage-parenthesize.str
@@ -32,3 +33,4 @@ lib/properties
 lib/task
 lib/tmpl
 lib/types
+src-gen
