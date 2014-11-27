@@ -33,6 +33,19 @@ context-free syntax
     <PropPattern>
     where <Formula>
     >
+    
+  TypeRule.TypeSigConst = [
+    [{Id ","}*] : [Term]
+  ] {prefer}
+  
+  TypeRule.TypeSigUnCond = [
+    [{Id ","}*] : [{Pattern " * "}*] -> [Term]
+  ]
+  
+  TypeRule.TypeSig = [
+    [{Id ","}*] : [{Pattern " * "}*] -> [Term]
+    where [Formula]
+  ]
 
 context-free syntax // formulas
 
@@ -97,7 +110,7 @@ context-free syntax // proposition patterns
   PropPattern.HasTypePat = <<{Pattern" + "}*> : <Term>>
   PropPattern.HasPat     = <<{Pattern" + "}*> has <Id> <Term>>
   PropPattern.IsWF       = <<{Pattern" + "}*> :->
-     
+      
 context-free syntax // term operators
 
   Term.DefOf   = <definition of <Term>> 
