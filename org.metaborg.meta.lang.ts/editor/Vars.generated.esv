@@ -1,7 +1,0 @@
-module Vars.generated
-
-completions
-  completion template Wld : "_" =
-    "_"  
-  completion template Var : "..." =
-    "..."  

@@ -20,7 +20,7 @@ language General properties
   start symbols : Module
  
   provider : include/typesystemlanguage.ctree                                                                
-  //provider : include/typesystemlanguage-java.jar                                                             
+  provider : include/typesystemlanguage-java.jar                                                             
                                                                                                              
   observer : editor-analyze                      (multifile)                                                 
                                                                                                                                                                                                 
