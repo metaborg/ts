@@ -11,9 +11,3 @@ strategies
   pp-pattern = prettyprint-Pattern; box2text-string(|80)
   
   pp-term = prettyprint-Term; box2text-string(|80)
-
-	prettyprint-PPTerm = fail
-
-strategies // Temporary hacks
-  
-  prettyprint-StringQuotation = fail

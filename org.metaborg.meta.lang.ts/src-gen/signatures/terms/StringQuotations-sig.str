@@ -9,9 +9,7 @@ signature
     PPTerm StringQuotation StringQuotedPart1 StringQuotedChars1 QuotedBracket1 Dollar1 StringQuotedPart2 StringQuotedChars2 QuotedBracket2 Dollar2 StringQuotedPart3 StringQuotedChars3 QuotedBracket3 Dollar3 StringQuotedPart4 StringQuotedChars4 QuotedBracket4 Dollar4 Padding
 
   constructors
-     : StringQuotation -> PPTerm
-
-  constructors
+                     : StringQuotation -> PPTerm
     StringQuotation1 : Padding * List(StringQuotedPart1) -> StringQuotation
     StringEscape1    : Padding * Term -> StringQuotedPart1
     QStr             : StringQuotedChars1 -> StringQuotedPart1

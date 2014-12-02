@@ -33,4 +33,3 @@ lib/properties
 lib/task
 lib/tmpl
 lib/types
-/examples/*.str
