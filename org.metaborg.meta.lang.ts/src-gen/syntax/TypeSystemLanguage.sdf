@@ -7,9 +7,12 @@ exports
     Module
 
   context-free syntax
-    "type" "rules" TypeRule*    -> ModuleSection {cons("TypeRules")}
-    PropPattern                 -> TypeRule      {cons("TypeRuleUnCond")}
-    PropPattern "where" Formula -> TypeRule      {cons("TypeRule")}
+    "type" "rules" TypeRule*                               -> ModuleSection {cons("TypeRules")}
+    PropPattern                                            -> TypeRule      {cons("TypeRuleUnCond")}
+    PropPattern "where" Formula                            -> TypeRule      {cons("TypeRule")}
+    {Id ","}* ":" Term                                     -> TypeRule      {cons("TypeSigConst"), prefer}
+    {Id ","}* ":" {Pattern "*"}* "->" Term                 -> TypeRule      {cons("TypeSigUnCond")}
+    {Id ","}* ":" {Pattern "*"}* "->" Term "where" Formula -> TypeRule      {cons("TypeSig")}
 
   context-free syntax
     CONTENTCOMPLETE -> ModuleSection {cons("COMPLETION-ModuleSection")}
@@ -60,9 +63,9 @@ exports
     CONTENTCOMPLETE -> Prop {cons("COMPLETION-Prop")}
 
   context-free syntax
-    {Pattern "+"}+ ":" Term      -> PropPattern {cons("HasTypePat")}
-    {Pattern "+"}+ "has" Id Term -> PropPattern {cons("HasPat")}
-    {Pattern "+"}+ ":-"          -> PropPattern {cons("IsWF")}
+    {Pattern "+"}* ":" Term      -> PropPattern {cons("HasTypePat")}
+    {Pattern "+"}* "has" Id Term -> PropPattern {cons("HasPat")}
+    {Pattern "+"}* ":-"          -> PropPattern {cons("IsWF")}
 
   context-free syntax
     CONTENTCOMPLETE -> PropPattern {cons("COMPLETION-PropPattern")}

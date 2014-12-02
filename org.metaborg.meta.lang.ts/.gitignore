@@ -33,4 +33,4 @@ lib/properties
 lib/task
 lib/tmpl
 lib/types
-src-gen
+/examples/*.str

@@ -1,6 +1,7 @@
 module TypeSystemLanguage
 
-imports 
+imports
+
   common/Identifiers   
   common/Layout 
   terms/Terms

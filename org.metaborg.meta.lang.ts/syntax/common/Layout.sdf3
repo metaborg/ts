@@ -1,32 +1,30 @@
 module common/Layout
 
-  sorts LongCom CommChar Asterisk Eof 
+sorts
 
-  lexical syntax
+  LongCom CommChar Asterisk Eof
 
-    [\t\ \n\r]                -> LAYOUT
-    "//" ~[\n]* ([\n] | Eof)	-> LAYOUT
+lexical syntax
 
-    
-    "/*" CommChar* "*/"       -> LongCom
-                              -> Eof  
+  LAYOUT = [\t\ \n\r] 
+  LAYOUT = "//" ~[\n]* [\n] | Eof 
+  LongCom = "/*" CommChar* "*/" 
+  Eof =  
+  CommChar = ~[\*] 
+  Asterisk = "*" 
+  CommChar = Asterisk 
 
-    ~[\*]                     -> CommChar
+lexical restrictions
 
-    "*"                       -> Asterisk
-    Asterisk                  -> CommChar
+  Asterisk -/- [\/]
+  Eof -/- ~[]
 
-  lexical restrictions
+lexical syntax
 
-    Asterisk -/- [\/]
-    Eof      -/- ~[]
+  LAYOUT = LongCom 
 
-  lexical syntax
+context-free restrictions
 
-    LongCom   -> LAYOUT
-    
-  context-free restrictions
-
-    LAYOUT? -/- [\ \t\n\r]
-    LAYOUT? -/- [\/].[\*]
-    LAYOUT? -/- [\/].[\/]
+  LAYOUT? -/- [\ \t\n\r]
+  LAYOUT? -/- [\/].[\*]
+  LAYOUT? -/- [\/].[\/]

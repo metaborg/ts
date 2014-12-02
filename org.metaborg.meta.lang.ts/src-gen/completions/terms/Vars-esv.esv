@@ -1,0 +1,10 @@
+module src-gen/completions/terms/Vars-esv
+
+imports
+  src-gen/completions/common/Identifiers-esv
+
+completions
+  completion template Wld : "_" =
+    "_"  
+  completion template Var : "..." =
+    "..."  

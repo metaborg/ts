@@ -1,9 +1,11 @@
 module terms/Terms
 
-imports terms/Constants	
-        common/Identifiers	
-        terms/Vars	
-        terms/StringQuotations
+imports
+ 
+  terms/Constants	
+  common/Identifiers	
+  terms/Vars	
+  terms/StringQuotations
         
 sorts Pattern
 
