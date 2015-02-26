@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: org.metaborg.meta.lang.ts;singleton:=true
 Export-Package: org.metaborg.meta.lang.ts
 Bundle-Name: TypeSystemLanguage Plug-in
-Bundle-Version: 1.3.0.qualifier
+Bundle-Version: 1.4.0.qualifier
 Require-Bundle: lpg.runtime,org.eclipse.ui.editors,org.spoofax.interpr
  eter.core,org.strategoxt.imp.nativebundle,org.strategoxt.strj,org.ecl
  ipse.jface.text,org.spoofax.terms,org.spoofax.jsglr,org.eclipse.ui.wo
