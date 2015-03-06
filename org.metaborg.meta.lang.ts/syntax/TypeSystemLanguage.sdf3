@@ -1,6 +1,7 @@
 module TypeSystemLanguage
 
-imports 
+imports
+
   common/Identifiers   
   common/Layout 
   terms/Terms
@@ -13,7 +14,7 @@ imports
 
 context-free start-symbols Module
 
-templates
+context-free syntax
 
   // TsModule.Module = <
   //   module <Id> 
@@ -23,7 +24,7 @@ templates
   ModuleSection.TypeRules = <
     type rules
     
-      <TypeRule*; separator="\n\n">
+      <{TypeRule "\n\n"}*>
     >
 
   TypeRule.TypeRuleUnCond = 
@@ -33,8 +34,21 @@ templates
     <PropPattern>
     where <Formula>
     >
+    
+  TypeRule.TypeSigConst = [
+    [{Id ","}*] : [Term]
+  ] {prefer}
+  
+  TypeRule.TypeSigUnCond = [
+    [{Id ","}*] : [{Pattern " * "}*] -> [Term]
+  ]
+  
+  TypeRule.TypeSig = [
+    [{Id ","}*] : [{Pattern " * "}*] -> [Term]
+    where [Formula]
+  ]
 
-templates // formulas
+context-free syntax // formulas
 
   Formula = <<Prop>>
 
@@ -62,9 +76,9 @@ templates // formulas
   
   Formula = <(<Formula>)> {bracket}
 
-templates // instructions
+context-free syntax // instructions
 
-  Formula.Is = <[<Instruction*; separator="\n">]> 
+  Formula.Is = <[<{Instruction "\n"}*>]> 
      
   Instruction.I = <<Formula>;>  
   
@@ -78,7 +92,7 @@ context-free priorities
 
    Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
    
-templates // propositions
+context-free syntax // propositions
   
   Prop.True         = <true>
   Prop.False        = <false>
@@ -92,13 +106,13 @@ templates // propositions
   
   Prop.Return       = [return [Term]]
   
-templates // proposition patterns
+context-free syntax // proposition patterns
    
-  PropPattern.HasTypePat = <<Pattern+; separator=" + "> : <Term>>
-  PropPattern.HasPat     = <<Pattern+; separator=" + "> has <Id> <Term>>
-  PropPattern.IsWF       = <<Pattern+; separator=" + "> :->
-     
-templates // term operators
+  PropPattern.HasTypePat = <<{Pattern" + "}*> : <Term>>
+  PropPattern.HasPat     = <<{Pattern" + "}*> has <Id> <Term>>
+  PropPattern.IsWF       = <<{Pattern" + "}*> :->
+      
+context-free syntax // term operators
 
   Term.DefOf   = <definition of <Term>> 
   Term.Choice  = <<Term> or <Term>>     {assoc}
@@ -108,6 +122,6 @@ context-free priorities
 
    Term.DefOf > Term.Choice > Term.Union
 
-templates // keywords
+context-free syntax // keywords
 
   Id = <where> {reject}

@@ -10,6 +10,61 @@ strategies // desugaring
   
   desugar-all = 
     innermost(desugar)
+    
+rules // type signatures
+	
+  split-rule :
+  	TypeSig(cs@[_, _ | _], ts, t, form) -> <map(!TypeSig([<id>], ts, t, form))> cs
+
+  desugar :
+  	TypeSigUnCond(cs, ts, t) -> TypeSig(cs, ts, t, True())
+  	
+  desugar :
+  	TypeSigConst(cs, t) -> TypeSigUnCond(cs, [], t)
+  	
+  desugar :
+  	TypeSig([c], ts, t, form) -> 
+  	TypeRule(
+  		HasTypePat([Op(c, vars)], t),
+  		And(And(form', form''), form)
+  	)
+  	where {| Previous, Forms
+  	       : xs := <map(<newname>"e")> ts;
+  	         vars := <map(!Var(<id>))> xs;
+  	         form' := <zip; filter(child-to-type); foldr(!True(), !And(<Fst>,<Snd>))> (xs, ts);
+  	         form'' := <Forms <+ !True()>
+  	       |}
+  	      
+  child-to-type :
+  	(x, t) -> HasType(VarRef(x), t'')
+  	where <not(?Wld())> t;
+  	      t' := <alltd(linearize(|VarRef(x)))> t;
+  	      t'' :=<lift-constant-type(|VarRef(x))> t'
+  	  	
+  linearize(|e) :
+  	Var(x) -> Var(y)
+  	where if <Previous> x => VarRef(z) then
+  		      y := <newname> x;
+  		      form := <Forms <+ !True()>;
+  		      form' := Else(Eq(VarRef(x), VarRef(y)), 
+  		      	         StrInterp(StringQuotation1("", [QStr("Type should be equal to type of "), 
+  		      	                                StringEscape1("", VarRef(z))])), e);
+  		      rules( Forms : _ -> And(form, form') )
+  		    else
+  		    	rules(Previous : x -> e); y := x
+  		    end
+  		    
+   lift-constant-type(|e) :
+   	 Var(x) -> Var(x)
+   	 
+   lift-constant-type(|e) :
+   	t@Op(c, ts) -> Var(a)
+   	 where a := <newname> "t";
+  		     form := <Forms <+ !True()>;
+  		     form' := Else( Match(VarRef(a), t)
+                        , Str(<concat-strings>["\"", c, " expected\""])
+                        , e);
+   	       rules( Forms : _ -> And(form, form'))
 
 rules // unconditional rules
   
@@ -19,10 +74,10 @@ rules // unconditional rules
 rules // rule splitting
    
   desugar :
-  	TypeRules(t*) -> TypeRules(<mapconcat(split-rule <+ MkSingleton); not(?t*)> t*)
+  	TypeRules(t*) -> TypeRules(<mapconcat(split-rule <+ MkSingleton); not(?t*)> t*)  
   
   split-rule :
-    TypeRuleUnCond(pat) -> <split-patterns; map(!TypeRuleUnCond(<id>))> pat
+    TypeRuleUnCond(pat) -> <split-patterns; map(!TypeRuleUnCond(<id>))> pat  
 
   split-rule :
     TypeRule(pat, form) -> <split-patterns; map(!TypeRule(<id>, form))> pat

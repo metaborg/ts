@@ -1,30 +1,23 @@
-module Module 
+module Module
 
-templates 
-     
+context-free syntax
+
   Module.Module = <
-  	module <ModuleID> 
+    module <ModuleID> 
         
-    <ModuleSection*; separator="\n\n">
-    >
-    
-  //<ModMetaData*>  
-    
+    <{ModuleSection "\n\n"}*>
+    > 
   ModuleSection.Imports = <
-    imports <ImportModule*>>
-
-  ImportModule.ImportWildcard=
-  	<<ModuleID>/->
-  	            
-  ImportModule.Import = <<ModuleID>>
+    imports <ImportModule*>> 
+  ImportModule.ImportWildcard = <<ModuleID>/-> 
+  ImportModule.Import = <<ModuleID>> 
 
 lexical syntax
 
-  ModuleID     = {ModuleIDPart "/"}+ 
+  ModuleID = {ModuleIDPart "/"}+ 
   ModuleIDPart = [a-zA-Z\.\_] [a-zA-Z0-9\'\.\-\_]* 
-    
   ModuleID = "relations" {reject}
 
 lexical restrictions
-  
+
   ModuleID -/- [a-zA-Z0-9\'\.\-\_]

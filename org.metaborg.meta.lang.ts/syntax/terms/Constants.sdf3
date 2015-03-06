@@ -1,19 +1,24 @@
 module terms/Constants
 
-  sorts Int Real String StrChar
+sorts
 
-  lexical syntax
+  Int Real String StrChar
 
-    [\-]? [0-9]+              -> Int
-    [\-]? [0-9]+ [\.] [0-9]+ 	-> Real
-    "\"" StrChar* "\""        -> String
-    ~[\"\\]                   -> StrChar
-    [\\] [\"tnr\\]            -> StrChar
-    
-  sorts Char CharChar
+lexical syntax
 
-  lexical syntax
-    "'" CharChar "'"          -> Char
-    ~[\']                     -> CharChar
-    [\\] [\'ntr\ ]            -> CharChar
-    Char                      -> Id {reject}
+  Int = [\-]? [0-9]+ 
+  Real = [\-]? [0-9]+ [\.] [0-9]+ 
+  String = "\"" StrChar* "\"" 
+  StrChar = ~[\"\\] 
+  StrChar = [\\] [\"tnr\\] 
+
+sorts
+
+  Char CharChar
+
+lexical syntax
+
+  Char = "'" CharChar "'" 
+  CharChar = ~[\'] 
+  CharChar = [\\] [\'ntr\ ] 
+  Id = Char {reject}

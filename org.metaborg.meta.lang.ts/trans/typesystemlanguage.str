@@ -18,7 +18,6 @@ imports
 	label
   editor/TypeSystemLanguage-Outliner
   pp
-  TypeSystemLanguage.pp.generated
   include/TypeSystemLanguage-parenthesize
   instructions
   

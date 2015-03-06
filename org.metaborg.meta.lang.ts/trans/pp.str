@@ -1,18 +1,10 @@
 module pp
 
 imports
-  Terms.pp.generated
-  TypeSystemLanguage.pp.generated
-  Common.pp.generated
-  Identifiers.pp.generated
-  Layout.pp.generated
-  Constants.pp.generated
-  Vars.pp.generated
+  
   libstratego-gpp
-  Module.pp.generated
-  TypeFunctions.pp.generated
-  Signatures.pp.generated
-  PP.pp.generated
+  src-gen/pp/TypeSystemLanguage-pp
+  src-gen/pp/terms/Terms-pp
   
 strategies 
   
@@ -20,4 +12,7 @@ strategies
   
   pp-term = prettyprint-Term; box2text-string(|80)
 
-	prettyprint-PPTerm = fail
+rules // Hacks for missing string interpolation pp rules.
+  
+  prettyprint-StringQuotation = with(fail|"Pretty printing string quotations is not yet supported")
+  
