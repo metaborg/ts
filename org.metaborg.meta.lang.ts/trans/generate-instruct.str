@@ -75,7 +75,7 @@ rules
     
   import-to-stratego:
     Import(t) -> 
-    $[[t].generated
+    $[src-gen/types/[t]
     ]
     where task := <nabl-collect-use-task> t
         ; <not(task-has-failed)> task
