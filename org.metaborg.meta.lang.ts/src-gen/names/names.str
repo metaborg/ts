@@ -1,4 +1,4 @@
-module names
+module src-gen/names/names
 
 imports
   lib/runtime/nabl/-
@@ -7,7 +7,8 @@ imports
   lib/runtime/types/-
   lib/runtime/relations/-
   lib/runtime/editor/-
-  include/TypeSystemLanguage
+  src-gen/signatures/-
+  src-gen/signatures/terms/-
 
 
 signature

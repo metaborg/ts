@@ -2,8 +2,9 @@ module names
 
 imports 
 	
-	include/TypeSystemLanguage
-	
+  src-gen/signatures/-
+  src-gen/signatures/terms/-
+  	
 namespaces
 
   Module
