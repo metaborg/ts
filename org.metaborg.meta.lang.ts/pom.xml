@@ -28,26 +28,25 @@
 						<arg>-la</arg><arg>stratego-gpp</arg>
 						<arg>-la</arg><arg>stratego-xtc</arg>
 						<arg>-la</arg><arg>stratego-aterm</arg>
-						<arg>-la</arg><arg>stratego-parallel</arg>
 					</strategoArgs>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.metaborg</groupId>
 						<artifactId>org.metaborg.meta.lang.template</artifactId>
-						<version>${metaborg-version}</version>
+						<version>${metaborg-baseline-version}</version>
 						<type>spoofax-language</type>
 					</dependency>
 					<dependency>
 						<groupId>org.metaborg</groupId>
 						<artifactId>org.metaborg.meta.lang.nabl</artifactId>
-						<version>${metaborg-version}</version>
+						<version>${metaborg-baseline-version}</version>
 						<type>spoofax-language</type>
 					</dependency>
 					<dependency>
 						<groupId>org.metaborg</groupId>
 						<artifactId>org.metaborg.meta.lang.esv</artifactId>
-						<version>${metaborg-version}</version>
+						<version>${metaborg-baseline-version}</version>
 						<type>spoofax-language</type>
 					</dependency>
 				</dependencies>
