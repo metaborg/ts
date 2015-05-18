@@ -3,8 +3,8 @@ module pp
 imports
   
   libstratego-gpp
-  src-gen/pp/TypeSystemLanguage-pp
-  src-gen/pp/terms/Terms-pp
+  pp/TypeSystemLanguage-pp
+  pp/terms/Terms-pp
   
 strategies 
   
