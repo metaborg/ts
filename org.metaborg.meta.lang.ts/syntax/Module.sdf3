@@ -17,6 +17,7 @@ lexical syntax
   ModuleID = {ModuleIDPart "/"}+ 
   ModuleIDPart = [a-zA-Z\.\_] [a-zA-Z0-9\'\.\-\_]* 
   ModuleID = "relations" {reject}
+  ModuleID = "type" {reject}
 
 lexical restrictions
 
