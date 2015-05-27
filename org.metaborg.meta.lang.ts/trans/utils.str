@@ -7,3 +7,6 @@ strategies
   
   pattern-vars =
     collect(?Var(<id>))
+  
+  pattern-wlds =
+    collect(?Wld())
