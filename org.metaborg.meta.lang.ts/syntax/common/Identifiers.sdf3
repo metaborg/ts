@@ -39,3 +39,4 @@ lexical syntax
   Keyword = "rules" 
   Keyword = "namespaces" 
   Keyword = "properties" 
+  Keyword = "define" 
