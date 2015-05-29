@@ -155,11 +155,17 @@ rules // split Match into more specific operations
   desugar :
     Match(trm, pat) -> Eq(trm, pat)
     where <pattern-vars> pat => []
+        ; <pattern-wlds> pat => []
     
   desugar :
     prop@Match(trm, pat) -> form
     where not(<?Var(_)> pat); ys := <pattern-vars> pat; not([])
         ; form := <foldr(!True(), !And(<Fst; mk-project(|trm, pat)>, <Snd>))> ys
+    
+  desugar :
+    prop@Match(trm, pat) -> form
+    where not(<?Var(_)> pat); [] := <pattern-vars> pat; [_|_] := <pattern-wlds> pat
+        ; form := And(Project(trm,<oncetd(\Wld() -> Var(<newname> "match")\)>pat), True())
                    
   mk-project(|trm, pat) :
     y -> Project(trm, <alltd(\Var(x) -> Wld() where not(<eq>(x,y))\)>pat)
