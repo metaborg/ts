@@ -44,7 +44,7 @@ rules
         ; rule*       := <collect(rule-to-stratego)> section*
         ; projection* := <bagof-Projections>
         ; import*     := <collect(imports-to-stratego)> section*
-        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types")>))> section* => []
+        ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types");not(string-starts-with(|"src-gen/"))>))> section* => []
           then
             import := 
               $[imports
