@@ -1,0 +1,396 @@
+module src-gen/check/TypeSystemLanguage-chk
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  libstratego-sglr
+  src-gen/signatures/TypeSystemLanguage-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/common/Layout-sig
+  src-gen/signatures/terms/Terms-sig
+  src-gen/signatures/terms/Vars-sig
+  src-gen/signatures/Module-sig
+  src-gen/signatures/Signatures-sig
+  src-gen/signatures/TypeFunctions-sig
+  src-gen/signatures/Relations-sig
+  src-gen/signatures/PP-sig
+
+
+imports
+  src-gen/check/common/Identifiers-chk
+  src-gen/check/common/Layout-chk
+  src-gen/check/terms/Terms-chk
+  src-gen/check/terms/Vars-chk
+  src-gen/check/Module-chk
+  src-gen/check/Signatures-chk
+  src-gen/check/TypeFunctions-chk
+  src-gen/check/Relations-chk
+  src-gen/check/PP-chk
+
+
+strategies
+  check-SDF-start-symbols =
+    check-Module
+
+
+strategies
+  check-example =
+    check-ModuleSection
+
+  check-example =
+    check-TypeRule
+
+  check-ModuleSection :
+    TypeRules(t1__) -> <id>
+    with <map(check-TypeRule <+ error-TypeRule)> t1__
+
+  is-ModuleSection-with-constructor =
+    ?TypeRules(_)
+
+  check-TypeRule :
+    TypeRuleUnCond(t1__) -> <id>
+    with <(check-PropPattern <+ error-PropPattern)> t1__
+
+  is-TypeRule-with-constructor =
+    ?TypeRuleUnCond(_)
+
+  check-TypeRule :
+    TypeRule(t1__, t2__) -> <id>
+    with <(check-PropPattern <+ error-PropPattern)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+
+  is-TypeRule-with-constructor =
+    ?TypeRule(_, _)
+
+  check-TypeRule :
+    TypeSigConst(t1__, t2__) -> <id>
+    with <map(check-Id <+ error-Id)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-TypeRule-with-constructor =
+    ?TypeSigConst(_, _)
+
+  check-TypeRule :
+    TypeSigUnCond(t1__, t2__, t3__) -> <id>
+    with <map(check-Id <+ error-Id)> t1__
+    with <map(check-Pattern <+ error-Pattern)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-TypeRule-with-constructor =
+    ?TypeSigUnCond(_, _, _)
+
+  check-TypeRule :
+    TypeSig(t1__, t2__, t3__, t4__) -> <id>
+    with <map(check-Id <+ error-Id)> t1__
+    with <map(check-Pattern <+ error-Pattern)> t2__
+    with <(check-Term <+ error-Term)> t3__
+    with <(check-Formula <+ error-Formula)> t4__
+
+  is-TypeRule-with-constructor =
+    ?TypeSig(_, _, _, _)
+
+  is-ModuleSection-with-constructor =
+    fail
+
+  is-TypeRule-with-constructor =
+    fail
+
+  check-ModuleSection :
+    amb([h|hs]) -> <check-ModuleSection> h
+
+  check-TypeRule :
+    amb([h|hs]) -> <check-TypeRule> h
+
+  error-ModuleSection =
+    debug(!"Unexpected constructor. Expected constructor from sort ModuleSection instead. ")
+
+  error-TypeRule =
+    debug(!"Unexpected constructor. Expected constructor from sort TypeRule instead. ")
+
+
+strategies
+  check-example =
+    check-Formula
+
+  check-Formula :
+    t1__ -> <id>
+    where not(is-Formula-with-constructor)
+    where <(check-Prop <+ error-Prop)> t1__
+
+  check-Formula :
+    Else(t1__, t2__, t3__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+    with <(check-Term <+ error-Term)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-Formula-with-constructor =
+    ?Else(_, _, _)
+
+  check-Formula :
+    Not(t1__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+
+  is-Formula-with-constructor =
+    ?Not(_)
+
+  check-Formula :
+    Or(t1__, t2__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+
+  is-Formula-with-constructor =
+    ?Or(_, _)
+
+  check-Formula :
+    And(t1__, t2__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+
+  is-Formula-with-constructor =
+    ?And(_, _)
+
+  check-Formula :
+    Label(t1__, t2__) -> <id>
+    with <(check-LId <+ error-LId)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+
+  is-Formula-with-constructor =
+    ?Label(_, _)
+
+  check-Formula :
+    Parenthetical(t1__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+
+  is-Formula-with-constructor =
+    fail
+
+  check-Formula :
+    amb([h|hs]) -> <check-Formula> h
+
+  error-Formula =
+    debug(!"Unexpected constructor. Expected constructor from sort Formula instead. ")
+
+
+strategies
+  check-example =
+    check-Formula
+
+  check-example =
+    check-Instruction
+
+  check-Formula :
+    Is(t1__) -> <id>
+    with <map(check-Instruction <+ error-Instruction)> t1__
+
+  is-Formula-with-constructor =
+    ?Is(_)
+
+  check-Instruction :
+    I(t1__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+
+  is-Instruction-with-constructor =
+    ?I(_)
+
+  check-Instruction :
+    Id(t1__, t2__) -> <id>
+    with <(check-Formula <+ error-Formula)> t1__
+    with <(check-VarRef <+ error-VarRef)> t2__
+
+  is-Instruction-with-constructor =
+    ?Id(_, _)
+
+  check-Instruction :
+    Ia(t1__, t2__) -> <id>
+    with <(check-Var <+ error-Var)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+
+  is-Instruction-with-constructor =
+    ?Ia(_, _)
+
+  check-Instruction :
+    Iad(t1__, t2__, t3__) -> <id>
+    with <(check-Var <+ error-Var)> t1__
+    with <(check-Formula <+ error-Formula)> t2__
+    with <(check-VarRef <+ error-VarRef)> t3__
+
+  is-Instruction-with-constructor =
+    ?Iad(_, _, _)
+
+  is-Formula-with-constructor =
+    fail
+
+  is-Instruction-with-constructor =
+    fail
+
+  check-Formula :
+    amb([h|hs]) -> <check-Formula> h
+
+  check-Instruction :
+    amb([h|hs]) -> <check-Instruction> h
+
+  error-Formula =
+    debug(!"Unexpected constructor. Expected constructor from sort Formula instead. ")
+
+  error-Instruction =
+    debug(!"Unexpected constructor. Expected constructor from sort Instruction instead. ")
+
+
+strategies
+  check-example =
+    check-Prop
+
+  check-Prop :
+    True() -> <id>
+
+  is-Prop-with-constructor =
+    ?True()
+
+  check-Prop :
+    False() -> <id>
+
+  is-Prop-with-constructor =
+    ?False()
+
+  check-Prop :
+    HasType(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Pattern <+ error-Pattern)> t2__
+
+  is-Prop-with-constructor =
+    ?HasType(_, _)
+
+  check-Prop :
+    Has(t1__, t2__, t3__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Id <+ error-Id)> t2__
+    with <(check-Pattern <+ error-Pattern)> t3__
+
+  is-Prop-with-constructor =
+    ?Has(_, _, _)
+
+  check-Prop :
+    Eq(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-Prop-with-constructor =
+    ?Eq(_, _)
+
+  check-Prop :
+    Match(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Pattern <+ error-Pattern)> t2__
+
+  is-Prop-with-constructor =
+    ?Match(_, _)
+
+  check-Prop :
+    Bind(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Var <+ error-Var)> t2__
+
+  is-Prop-with-constructor =
+    ?Bind(_, _)
+
+  check-Prop :
+    Project(t1__, t2__) -> <id>
+    with <(check-VarRef <+ error-VarRef)> t1__
+    with <(check-Pattern <+ error-Pattern)> t2__
+
+  is-Prop-with-constructor =
+    ?Project(_, _)
+
+  check-Prop :
+    Return(t1__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+
+  is-Prop-with-constructor =
+    ?Return(_)
+
+  is-Prop-with-constructor =
+    fail
+
+  check-Prop :
+    amb([h|hs]) -> <check-Prop> h
+
+  error-Prop =
+    debug(!"Unexpected constructor. Expected constructor from sort Prop instead. ")
+
+
+strategies
+  check-example =
+    check-PropPattern
+
+  check-PropPattern :
+    HasTypePat(t1__, t2__) -> <id>
+    with <map(check-Pattern <+ error-Pattern)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-PropPattern-with-constructor =
+    ?HasTypePat(_, _)
+
+  check-PropPattern :
+    HasPat(t1__, t2__, t3__) -> <id>
+    with <map(check-Pattern <+ error-Pattern)> t1__
+    with <(check-Id <+ error-Id)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-PropPattern-with-constructor =
+    ?HasPat(_, _, _)
+
+  check-PropPattern :
+    IsWF(t1__) -> <id>
+    with <map(check-Pattern <+ error-Pattern)> t1__
+
+  is-PropPattern-with-constructor =
+    ?IsWF(_)
+
+  is-PropPattern-with-constructor =
+    fail
+
+  check-PropPattern :
+    amb([h|hs]) -> <check-PropPattern> h
+
+  error-PropPattern =
+    debug(!"Unexpected constructor. Expected constructor from sort PropPattern instead. ")
+
+
+strategies
+  check-example =
+    check-Term
+
+  check-Term :
+    DefOf(t1__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+
+  is-Term-with-constructor =
+    ?DefOf(_)
+
+  check-Term :
+    Choice(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-Term-with-constructor =
+    ?Choice(_, _)
+
+  check-Term :
+    Union(t1__, t2__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-Term-with-constructor =
+    ?Union(_, _)
+
+  is-Term-with-constructor =
+    fail
+
+  check-Term :
+    amb([h|hs]) -> <check-Term> h
+
+  error-Term =
+    debug(!"Unexpected constructor. Expected constructor from sort Term instead. ")

@@ -1,0 +1,55 @@
+module src-gen/check/PP-chk
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  libstratego-sglr
+  src-gen/signatures/PP-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/terms/Terms-sig
+
+
+imports
+  src-gen/check/common/Identifiers-chk
+  src-gen/check/terms/Terms-chk
+
+
+strategies
+  check-example =
+    check-PropPattern
+
+  check-PropPattern :
+    HasTypePat(t1__, t2__) -> <id>
+    with <(check-Pattern <+ error-Pattern)> t1__
+    with <(check-Term <+ error-Term)> t2__
+
+  is-PropPattern-with-constructor =
+    ?HasTypePat(_, _)
+
+  check-PropPattern :
+    HasPat(t1__, t2__, t3__) -> <id>
+    with <(check-Pattern <+ error-Pattern)> t1__
+    with <(check-Id <+ error-Id)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-PropPattern-with-constructor =
+    ?HasPat(_, _, _)
+
+  check-PropPattern :
+    IsWF(t1__) -> <id>
+    with <(check-Pattern <+ error-Pattern)> t1__
+
+  is-PropPattern-with-constructor =
+    ?IsWF(_)
+
+  is-PropPattern-with-constructor =
+    fail
+
+  check-PropPattern :
+    amb([h|hs]) -> <check-PropPattern> h
+
+  error-PropPattern =
+    debug(!"Unexpected constructor. Expected constructor from sort PropPattern instead. ")

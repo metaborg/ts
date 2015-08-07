@@ -3,6 +3,7 @@ module src-gen/pp/terms/Signatures-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/terms/Signatures-sig
 
 
@@ -62,6 +63,9 @@ strategies
 
   is-Sort =
     fail
+
+  prettyprint-Sort :
+    amb([h|hs]) -> <prettyprint-Sort> h
 
 
 strategies
@@ -124,6 +128,12 @@ strategies
   is-PPTerm =
     fail
 
+  prettyprint-TypeDecl :
+    amb([h|hs]) -> <prettyprint-TypeDecl> h
+
+  prettyprint-PPTerm :
+    amb([h|hs]) -> <prettyprint-PPTerm> h
+
 
 strategies
   prettyprint-example =
@@ -173,3 +183,9 @@ strategies
 
   is-TypeParam =
     fail
+
+  prettyprint-TypeParams :
+    amb([h|hs]) -> <prettyprint-TypeParams> h
+
+  prettyprint-TypeParam :
+    amb([h|hs]) -> <prettyprint-TypeParam> h

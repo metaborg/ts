@@ -3,6 +3,7 @@ module src-gen/pp/Relations-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/Relations-sig
 
 
@@ -186,6 +187,18 @@ strategies
   is-Prop =
     fail
 
+  prettyprint-ModuleSection :
+    amb([h|hs]) -> <prettyprint-ModuleSection> h
+
+  prettyprint-RelationProperty :
+    amb([h|hs]) -> <prettyprint-RelationProperty> h
+
+  prettyprint-Relation :
+    amb([h|hs]) -> <prettyprint-Relation> h
+
+  prettyprint-Prop :
+    amb([h|hs]) -> <prettyprint-Prop> h
+
 
 strategies
   prettyprint-SubTypeOp =
@@ -193,3 +206,6 @@ strategies
 
   prettyprint-example =
     prettyprint-SubTypeOp
+
+  prettyprint-SubTypeOp :
+    amb([h|hs]) -> <prettyprint-SubTypeOp> h

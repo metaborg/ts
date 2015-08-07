@@ -1,0 +1,92 @@
+module src-gen/check/TypeFunctions-chk
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  libstratego-sglr
+  src-gen/signatures/TypeFunctions-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/terms/Terms-sig
+  src-gen/signatures/TypeSystemLanguage-sig
+
+
+imports
+  src-gen/check/common/Identifiers-chk
+  src-gen/check/terms/Terms-chk
+  src-gen/check/TypeSystemLanguage-chk
+
+
+strategies
+  check-example =
+    check-ModuleSection
+
+  check-example =
+    check-TypeFunction
+
+  check-example =
+    check-Prop
+
+  check-ModuleSection :
+    TypeFunctions(t1__) -> <id>
+    with <map(check-TypeFunction <+ error-TypeFunction)> t1__
+
+  is-ModuleSection-with-constructor =
+    ?TypeFunctions(_)
+
+  check-TypeFunction :
+    TypeFunctionUnCond(t1__, t2__, t3__) -> <id>
+    with <(check-Id <+ error-Id)> t1__
+    with <(check-Pattern <+ error-Pattern)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-TypeFunction-with-constructor =
+    ?TypeFunctionUnCond(_, _, _)
+
+  check-TypeFunction :
+    TypeFunction(t1__, t2__, t3__, t4__) -> <id>
+    with <(check-Id <+ error-Id)> t1__
+    with <(check-Pattern <+ error-Pattern)> t2__
+    with <(check-Term <+ error-Term)> t3__
+    with <(check-Formula <+ error-Formula)> t4__
+
+  is-TypeFunction-with-constructor =
+    ?TypeFunction(_, _, _, _)
+
+  check-Prop :
+    FuncAppl(t1__, t2__, t3__) -> <id>
+    with <(check-Id <+ error-Id)> t1__
+    with <(check-Term <+ error-Term)> t2__
+    with <(check-Pattern <+ error-Pattern)> t3__
+
+  is-Prop-with-constructor =
+    ?FuncAppl(_, _, _)
+
+  is-ModuleSection-with-constructor =
+    fail
+
+  is-TypeFunction-with-constructor =
+    fail
+
+  is-Prop-with-constructor =
+    fail
+
+  check-ModuleSection :
+    amb([h|hs]) -> <check-ModuleSection> h
+
+  check-TypeFunction :
+    amb([h|hs]) -> <check-TypeFunction> h
+
+  check-Prop :
+    amb([h|hs]) -> <check-Prop> h
+
+  error-ModuleSection =
+    debug(!"Unexpected constructor. Expected constructor from sort ModuleSection instead. ")
+
+  error-TypeFunction =
+    debug(!"Unexpected constructor. Expected constructor from sort TypeFunction instead. ")
+
+  error-Prop =
+    debug(!"Unexpected constructor. Expected constructor from sort Prop instead. ")

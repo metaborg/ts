@@ -3,6 +3,7 @@ module src-gen/pp/Common-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/Common-sig
 
 
@@ -48,3 +49,24 @@ strategies
 
   prettyprint-example =
     prettyprint-EOF
+
+  prettyprint-ID :
+    amb([h|hs]) -> <prettyprint-ID> h
+
+  prettyprint-INT :
+    amb([h|hs]) -> <prettyprint-INT> h
+
+  prettyprint-STRING :
+    amb([h|hs]) -> <prettyprint-STRING> h
+
+  prettyprint-StringChar :
+    amb([h|hs]) -> <prettyprint-StringChar> h
+
+  prettyprint-BackSlashChar :
+    amb([h|hs]) -> <prettyprint-BackSlashChar> h
+
+  prettyprint-CommentChar :
+    amb([h|hs]) -> <prettyprint-CommentChar> h
+
+  prettyprint-EOF :
+    amb([h|hs]) -> <prettyprint-EOF> h

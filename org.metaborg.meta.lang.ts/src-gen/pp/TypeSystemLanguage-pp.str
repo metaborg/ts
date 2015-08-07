@@ -3,6 +3,7 @@ module src-gen/pp/TypeSystemLanguage-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/TypeSystemLanguage-sig
 
 
@@ -144,6 +145,12 @@ strategies
   is-TypeRule =
     fail
 
+  prettyprint-ModuleSection :
+    amb([h|hs]) -> <prettyprint-ModuleSection> h
+
+  prettyprint-TypeRule :
+    amb([h|hs]) -> <prettyprint-TypeRule> h
+
 
 strategies
   prettyprint-example =
@@ -245,6 +252,9 @@ strategies
   is-Formula =
     fail
 
+  prettyprint-Formula :
+    amb([h|hs]) -> <prettyprint-Formula> h
+
 
 strategies
   prettyprint-example =
@@ -334,6 +344,12 @@ strategies
 
   is-Instruction =
     fail
+
+  prettyprint-Formula :
+    amb([h|hs]) -> <prettyprint-Formula> h
+
+  prettyprint-Instruction :
+    amb([h|hs]) -> <prettyprint-Instruction> h
 
 
 strategies
@@ -452,6 +468,9 @@ strategies
   is-Prop =
     fail
 
+  prettyprint-Prop :
+    amb([h|hs]) -> <prettyprint-Prop> h
+
 
 strategies
   prettyprint-example =
@@ -501,6 +520,9 @@ strategies
   is-PropPattern =
     fail
 
+  prettyprint-PropPattern :
+    amb([h|hs]) -> <prettyprint-PropPattern> h
+
 
 strategies
   prettyprint-example =
@@ -543,3 +565,6 @@ strategies
 
   is-Term =
     fail
+
+  prettyprint-Term :
+    amb([h|hs]) -> <prettyprint-Term> h

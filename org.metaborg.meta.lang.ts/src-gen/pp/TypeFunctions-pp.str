@@ -3,6 +3,7 @@ module src-gen/pp/TypeFunctions-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/TypeFunctions-sig
 
 
@@ -110,3 +111,12 @@ strategies
 
   is-Prop =
     fail
+
+  prettyprint-ModuleSection :
+    amb([h|hs]) -> <prettyprint-ModuleSection> h
+
+  prettyprint-TypeFunction :
+    amb([h|hs]) -> <prettyprint-TypeFunction> h
+
+  prettyprint-Prop :
+    amb([h|hs]) -> <prettyprint-Prop> h

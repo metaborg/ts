@@ -3,6 +3,7 @@ module src-gen/pp/PP-pp
 imports
   libstratego-gpp
   runtime/tmpl/pp
+  libstratego-sglr
   src-gen/signatures/PP-sig
 
 
@@ -63,3 +64,6 @@ strategies
 
   is-PropPattern =
     fail
+
+  prettyprint-PropPattern :
+    amb([h|hs]) -> <prettyprint-PropPattern> h

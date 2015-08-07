@@ -1,0 +1,153 @@
+module src-gen/check/Relations-chk
+
+imports
+  libstratego-gpp
+  runtime/tmpl/pp
+  libstratego-sglr
+  src-gen/signatures/Relations-sig
+
+
+imports
+  src-gen/signatures/common/Identifiers-sig
+  src-gen/signatures/terms/Terms-sig
+  src-gen/signatures/TypeSystemLanguage-sig
+
+
+imports
+  src-gen/check/common/Identifiers-chk
+  src-gen/check/terms/Terms-chk
+  src-gen/check/TypeSystemLanguage-chk
+
+
+strategies
+  check-example =
+    check-ModuleSection
+
+  check-example =
+    check-RelationProperty
+
+  check-example =
+    check-Relation
+
+  check-example =
+    check-Prop
+
+  check-ModuleSection :
+    Relations(t1__) -> <id>
+    with <map(check-Relation <+ error-Relation)> t1__
+
+  is-ModuleSection-with-constructor =
+    ?Relations(_)
+
+  check-Relation :
+    RelationDef(t1__, t2__) -> <id>
+    with <map(check-RelationProperty <+ error-RelationProperty)> t1__
+    with <(check-SubTypeOp <+ error-SubTypeOp)> t2__
+
+  is-Relation-with-constructor =
+    ?RelationDef(_, _)
+
+  check-RelationProperty :
+    Reflexive() -> <id>
+
+  is-RelationProperty-with-constructor =
+    ?Reflexive()
+
+  check-RelationProperty :
+    Transitive() -> <id>
+
+  is-RelationProperty-with-constructor =
+    ?Transitive()
+
+  check-RelationProperty :
+    Symmetric() -> <id>
+
+  is-RelationProperty-with-constructor =
+    ?Symmetric()
+
+  check-Relation :
+    RelationUnCond(t1__, t2__, t3__) -> <id>
+    with <(check-Pattern <+ error-Pattern)> t1__
+    with <(check-SubTypeOp <+ error-SubTypeOp)> t2__
+    with <(check-Pattern <+ error-Pattern)> t3__
+
+  is-Relation-with-constructor =
+    ?RelationUnCond(_, _, _)
+
+  check-Relation :
+    Relation(t1__, t2__, t3__, t4__) -> <id>
+    with <(check-Pattern <+ error-Pattern)> t1__
+    with <(check-SubTypeOp <+ error-SubTypeOp)> t2__
+    with <(check-Pattern <+ error-Pattern)> t3__
+    with <(check-Formula <+ error-Formula)> t4__
+
+  is-Relation-with-constructor =
+    ?Relation(_, _, _, _)
+
+  check-Prop :
+    RelationStore(t1__, t2__, t3__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-SubTypeOp <+ error-SubTypeOp)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-Prop-with-constructor =
+    ?RelationStore(_, _, _)
+
+  check-Prop :
+    RelationMatch(t1__, t2__, t3__) -> <id>
+    with <(check-Term <+ error-Term)> t1__
+    with <(check-SubTypeOp <+ error-SubTypeOp)> t2__
+    with <(check-Term <+ error-Term)> t3__
+
+  is-Prop-with-constructor =
+    ?RelationMatch(_, _, _)
+
+  is-ModuleSection-with-constructor =
+    fail
+
+  is-RelationProperty-with-constructor =
+    fail
+
+  is-Relation-with-constructor =
+    fail
+
+  is-Prop-with-constructor =
+    fail
+
+  check-ModuleSection :
+    amb([h|hs]) -> <check-ModuleSection> h
+
+  check-RelationProperty :
+    amb([h|hs]) -> <check-RelationProperty> h
+
+  check-Relation :
+    amb([h|hs]) -> <check-Relation> h
+
+  check-Prop :
+    amb([h|hs]) -> <check-Prop> h
+
+  error-ModuleSection =
+    debug(!"Unexpected constructor. Expected constructor from sort ModuleSection instead. ")
+
+  error-RelationProperty =
+    debug(!"Unexpected constructor. Expected constructor from sort RelationProperty instead. ")
+
+  error-Relation =
+    debug(!"Unexpected constructor. Expected constructor from sort Relation instead. ")
+
+  error-Prop =
+    debug(!"Unexpected constructor. Expected constructor from sort Prop instead. ")
+
+
+strategies
+  check-SubTypeOp =
+    is-string
+
+  check-example =
+    check-SubTypeOp
+
+  check-SubTypeOp :
+    amb([h|hs]) -> <check-SubTypeOp> h
+
+  error-SubTypeOp =
+    debug(!"Unexpected constructor. Expected string from sort SubTypeOp instead. ")
