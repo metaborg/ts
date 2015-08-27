@@ -30,14 +30,9 @@ imports
 
 rules // Analysis
 	
-	editor-analyze = analysis-default-editor
+	editor-analyze = analyze-all(id, desugar-all, id|<language>, <project-path>)
 	
-	analysis-single-default-interface = 
-		analysis-single-default(id, desugar-all, id|<language>)
-	analysis-multiple-default-interface = 
-		analysis-multiple-default(parse-file <+ !(), id, desugar-all, id|<language>, <project-path>)
-	
-	editor-save = where(generate-stratego; write-string-to-file); analysis-save-default(|<language>)
+	editor-save = where(generate-stratego; write-string-to-file)
 
 rules // Editor services
 	
@@ -92,9 +87,6 @@ rules // code generation
   // Transforms a selection to Stratego
   generate-stratego:
     (selected, position, ast, path, project-path) -> (filename, result)
-    with
-      task-setup(|project-path);
-      index-setup(|<language>, project-path)
     with
       filename := <guarantee-extension(|"generated.str")> path;
       result   := <instruct-formulas; to-stratego(|project-path, <guarantee-extension(|"generated")> path)> selected
