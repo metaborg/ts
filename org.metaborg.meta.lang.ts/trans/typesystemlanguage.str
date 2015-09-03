@@ -12,7 +12,8 @@ imports
 	runtime/task/-
 	runtime/index/- 
 	runtime/tmpl/-
-	names
+	pp/-
+    names
 	check
 	desugar
 	label
@@ -32,7 +33,7 @@ rules // Analysis
 	
 	editor-analyze = analyze-all(id, desugar-all, id|<language>, <project-path>)
 	
-	editor-save = where(generate-stratego; write-string-to-file)
+	editor-save = where(generate-stratego; write-string-to-file); !None()
 
 rules // Editor services
 	

@@ -69,24 +69,27 @@ rules
         [<map(import-to-stratego)> import*]]
     
   import-to-stratego:
-    Import(t) -> 
-    $[[t]
+    Import(m) -> 
+    $[[m']
     ]
-    where task := <nabl-collect-use-task> t
-        ; <task-has-failed> task
-    
+    where 
+       <nabl-collect-use-task; not(task-has-failed)> m
+    ;  m' := $[src-gen/types/[m]]
+    <+ mn := <left-match; implode-string> (<explode-string> m, <explode-string> "syntax/")
+    ;  m' := $[src-gen/signatures/[mn]-sig]
+    <+ m' := m    
+ 
   import-to-stratego:
-    Import(t) -> 
-    $[[t].generated
+    ImportWildcard(m) ->
+    $[[m']/-
     ]
-    where task := <nabl-collect-use-task> t
-        ; <not(task-has-failed)> task
-    
-  import-to-stratego:
-    ImportWildcard(t) -> 
-    $[[t]/-
-    ]
-        
+    where
+       "syntax" := m
+    ;  m' := "src-gen/signatures"  
+    <+ mn := <left-match; implode-string> (<explode-string> m, <explode-string> "syntax/")
+    ;  m' := $[src-gen/signatures/[mn]]
+    <+ m' := m 
+      
 rules
   
   task-dependencies =
