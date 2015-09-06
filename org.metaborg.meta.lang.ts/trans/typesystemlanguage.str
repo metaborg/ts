@@ -33,7 +33,7 @@ rules // Analysis
 
 	editor-analyze = analyze-all(id, desugar-all, id|<language>, <project-path>)
 
-	editor-save = where(generate-stratego; write-string-to-file); !None()
+	editor-save = with(generate-stratego; write-string-to-file); !None()
 
 rules // Editor services
 
@@ -96,14 +96,12 @@ rules // code generation
   // When given a tuple (path, string) this writes string into path.
   write-string-to-file =
     ?(filename, string);
-    if <dirname; readdir> filename then
-      with(
-        handle := <fopen> (filename, "w");
-        <fputs> (string, handle);
-        <fclose> handle;
-        <refresh-workspace-file> filename
-      )
-    end
+    with(
+      handle := <fopen> (filename, "w");
+      <fputs> (string, handle);
+      <fclose> handle;
+      <refresh-workspace-file> filename
+    )
 
   desugar-service :
     (selected, position, ast, path, project-path) -> (filename, result)
