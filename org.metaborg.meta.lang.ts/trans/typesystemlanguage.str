@@ -31,7 +31,7 @@ imports
 
 rules // Analysis
 
-	editor-analyze = analyze-all(id, desugar-all, id|<language>, <project-path>)
+	editor-analyze = analyze-all(id, desugar-all, id|<language>)
 
 	editor-save = with(generate-stratego; write-string-to-file); !None()
 
