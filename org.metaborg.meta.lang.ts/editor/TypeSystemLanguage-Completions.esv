@@ -2,7 +2,7 @@ module TypeSystemLanguage-Completions
 
 imports
 
-  src-gen/completions/TypeSystemLanguage-esv
+  completions/TypeSystemLanguage-esv
 
 completions
 
