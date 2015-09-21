@@ -2,7 +2,7 @@ module desugar
 
 imports
   
-  include/TypeSystemLanguage
+  TypeSystemLanguage
 	label
 	utils
 

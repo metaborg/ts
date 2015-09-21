@@ -4,9 +4,9 @@ module generate-instruct
 
 imports
   
-  include/TypeSystemLanguage 
-  lib/runtime/nabl/-
-  lib/runtime/task/-
+  TypeSystemLanguage 
+  runtime/nabl/-
+  runtime/task/-
   pp
   desugar
   label

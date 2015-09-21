@@ -2,7 +2,7 @@ module check
 
 imports
 
-	include/TypeSystemLanguage
+	TypeSystemLanguage
 
 rules // Extensions for error/warning/note reporting
 	

@@ -18,8 +18,7 @@ language General properties
   extensions    : ts
   table         : include/TypeSystemLanguage.tbl
   start symbols : Module
- 
-  provider : include/typesystemlanguage.ctree                                                                
+                                                             
   provider : include/typesystemlanguage-java.jar                                                             
                                                                                                              
   observer : editor-analyze                      (multifile)                                                 

@@ -1,6 +1,6 @@
 module label
 
-imports include/TypeSystemLanguage
+imports TypeSystemLanguage
 
 rules
   
