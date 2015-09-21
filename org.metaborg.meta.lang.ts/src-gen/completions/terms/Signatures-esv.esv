@@ -1,9 +1,9 @@
-module src-gen/completions/terms/Signatures-esv
+module completions/terms/Signatures-esv
 
 imports
-  src-gen/completions/common/Identifiers-esv
-  src-gen/completions/terms/Constants-esv
-  src-gen/completions/terms/StringQuotations-esv
+  completions/common/Identifiers-esv
+  completions/terms/Constants-esv
+  completions/terms/StringQuotations-esv
 
 completions
   completion template Sort : "Id ( )" =

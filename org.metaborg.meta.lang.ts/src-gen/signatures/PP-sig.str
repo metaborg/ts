@@ -1,8 +1,8 @@
-module src-gen/signatures/PP-sig
+module signatures/PP-sig
 
 imports
-  src-gen/signatures/common/Identifiers-sig
-  src-gen/signatures/terms/Terms-sig
+  signatures/common/Identifiers-sig
+  signatures/terms/Terms-sig
 
 
 signature

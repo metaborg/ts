@@ -1,8 +1,8 @@
-module src-gen/completions/PP-esv
+module completions/PP-esv
 
 imports
-  src-gen/completions/common/Identifiers-esv
-  src-gen/completions/terms/Terms-esv
+  completions/common/Identifiers-esv
+  completions/terms/Terms-esv
 
 completions
   completion template PropPattern : "Pattern : Term" =

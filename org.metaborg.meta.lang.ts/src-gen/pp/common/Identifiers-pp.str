@@ -1,9 +1,9 @@
-module src-gen/pp/common/Identifiers-pp
+module pp/common/Identifiers-pp
 
 imports
   libstratego-gpp
   runtime/tmpl/pp
-  src-gen/signatures/common/Identifiers-sig
+  signatures/common/Identifiers-sig
 
 
 strategies

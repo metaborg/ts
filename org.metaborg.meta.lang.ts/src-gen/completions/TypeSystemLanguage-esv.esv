@@ -1,15 +1,15 @@
-module src-gen/completions/TypeSystemLanguage-esv
+module completions/TypeSystemLanguage-esv
 
 imports
-  src-gen/completions/common/Identifiers-esv
-  src-gen/completions/common/Layout-esv
-  src-gen/completions/terms/Terms-esv
-  src-gen/completions/terms/Vars-esv
-  src-gen/completions/Module-esv
-  src-gen/completions/Signatures-esv
-  src-gen/completions/TypeFunctions-esv
-  src-gen/completions/Relations-esv
-  src-gen/completions/PP-esv
+  completions/common/Identifiers-esv
+  completions/common/Layout-esv
+  completions/terms/Terms-esv
+  completions/terms/Vars-esv
+  completions/Module-esv
+  completions/Signatures-esv
+  completions/TypeFunctions-esv
+  completions/Relations-esv
+  completions/PP-esv
 
 completions
   completion template ModuleSection : "type rules " =

@@ -1,10 +1,10 @@
 
-module src-gen/completions/TypeFunctions-esv
+module completions/TypeFunctions-esv
 
 imports
-  src-gen/completions/common/Identifiers-esv
-  src-gen/completions/terms/Terms-esv
-  src-gen/completions/TypeSystemLanguage-esv
+  completions/common/Identifiers-esv
+  completions/terms/Terms-esv
+  completions/TypeSystemLanguage-esv
 
 completions
   completion template ModuleSection : "type functions " =

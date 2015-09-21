@@ -1,15 +1,15 @@
-module src-gen/signatures/TypeSystemLanguage-sig
+module signatures/TypeSystemLanguage-sig
 
 imports
-  src-gen/signatures/common/Identifiers-sig
-  src-gen/signatures/common/Layout-sig
-  src-gen/signatures/terms/Terms-sig
-  src-gen/signatures/terms/Vars-sig
-  src-gen/signatures/Module-sig
-  src-gen/signatures/Signatures-sig
-  src-gen/signatures/TypeFunctions-sig
-  src-gen/signatures/Relations-sig
-  src-gen/signatures/PP-sig
+  signatures/common/Identifiers-sig
+  signatures/common/Layout-sig
+  signatures/terms/Terms-sig
+  signatures/terms/Vars-sig
+  signatures/Module-sig
+  signatures/Signatures-sig
+  signatures/TypeFunctions-sig
+  signatures/Relations-sig
+  signatures/PP-sig
 
 
 signature

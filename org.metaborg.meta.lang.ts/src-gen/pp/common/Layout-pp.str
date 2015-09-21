@@ -1,9 +1,9 @@
-module src-gen/pp/common/Layout-pp
+module pp/common/Layout-pp
 
 imports
   libstratego-gpp
   runtime/tmpl/pp
-  src-gen/signatures/common/Layout-sig
+  signatures/common/Layout-sig
 
 
 strategies

@@ -1,21 +1,21 @@
-module src-gen/pp/terms/Signatures-pp
+module pp/terms/Signatures-pp
 
 imports
   libstratego-gpp
   runtime/tmpl/pp
-  src-gen/signatures/terms/Signatures-sig
+  signatures/terms/Signatures-sig
 
 
 imports
-  src-gen/signatures/common/Identifiers-sig
-  src-gen/signatures/terms/Constants-sig
-  src-gen/signatures/terms/StringQuotations-sig
+  signatures/common/Identifiers-sig
+  signatures/terms/Constants-sig
+  signatures/terms/StringQuotations-sig
 
 
 imports
-  src-gen/pp/common/Identifiers-pp
-  src-gen/pp/terms/Constants-pp
-  src-gen/pp/terms/StringQuotations-pp
+  pp/common/Identifiers-pp
+  pp/terms/Constants-pp
+  pp/terms/StringQuotations-pp
 
 
 strategies

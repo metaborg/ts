@@ -1,7 +1,7 @@
-module src-gen/signatures/terms/StringQuotations-sig
+module signatures/terms/StringQuotations-sig
 
 imports
-  src-gen/signatures/terms/Terms-sig
+  signatures/terms/Terms-sig
 
 
 signature

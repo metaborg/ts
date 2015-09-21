@@ -1,9 +1,9 @@
-module src-gen/signatures/Relations-sig
+module signatures/Relations-sig
 
 imports
-  src-gen/signatures/common/Identifiers-sig
-  src-gen/signatures/terms/Terms-sig
-  src-gen/signatures/TypeSystemLanguage-sig
+  signatures/common/Identifiers-sig
+  signatures/terms/Terms-sig
+  signatures/TypeSystemLanguage-sig
 
 
 signature

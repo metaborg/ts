@@ -1,7 +1,7 @@
-module src-gen/signatures/terms/Vars-sig
+module signatures/terms/Vars-sig
 
 imports
-  src-gen/signatures/common/Identifiers-sig
+  signatures/common/Identifiers-sig
 
 
 signature

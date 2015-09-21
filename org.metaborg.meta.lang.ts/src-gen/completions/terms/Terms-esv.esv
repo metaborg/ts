@@ -1,10 +1,10 @@
-module src-gen/completions/terms/Terms-esv
+module completions/terms/Terms-esv
 
 imports
-  src-gen/completions/terms/Constants-esv
-  src-gen/completions/common/Identifiers-esv
-  src-gen/completions/terms/Vars-esv
-  src-gen/completions/terms/StringQuotations-esv
+  completions/terms/Constants-esv
+  completions/common/Identifiers-esv
+  completions/terms/Vars-esv
+  completions/terms/StringQuotations-esv
 
 completions
   completion template Pattern : "Id()" =

@@ -1,9 +1,9 @@
-module src-gen/pp/terms/Constants-pp
+module pp/terms/Constants-pp
 
 imports
   libstratego-gpp
   runtime/tmpl/pp
-  src-gen/signatures/terms/Constants-sig
+  signatures/terms/Constants-sig
 
 
 strategies
