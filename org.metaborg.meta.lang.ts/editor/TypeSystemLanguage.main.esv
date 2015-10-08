@@ -1,23 +1,20 @@
 module TypeSystemLanguage.main
 
-imports TypeSystemLanguage.generated TypeSystemLanguage-Refactorings 
-  TypeSystemLanguage-Colorer TypeSystemLanguage-Completions TypeSystemLanguage-Folding 
+imports
+
+  TypeSystemLanguage-Colorer TypeSystemLanguage-Completions
   TypeSystemLanguage-References TypeSystemLanguage-Syntax
   TypeSystemLanguage-Menus
 
 language General properties
                   
-  extends       : Root
-                  
-  description   : "Spoofax/IMP-generated editor for the TypeSystemLanguage language"
-  url           : http://strategoxt.org
-                  
+  name : TypeSystemLanguage
+  
   extensions    : ts
   table         : include/TypeSystemLanguage.tbl
   start symbols : Module
  
   provider : include/typesystemlanguage.ctree                                                                
-  provider : include/typesystemlanguage-java.jar                                                             
                                                                                                              
   observer : editor-analyze                      (multifile)                                                 
                                                                                                                                                                                                 
