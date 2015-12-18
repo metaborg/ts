@@ -15,3 +15,6 @@ rules // Extensions for error/warning/note reporting
 	constraint-note:
 		_ -> <fail>
 
+rules
+
+  nabl-check-disable-unresolved = string-starts-with(|"trans/") + string-starts-with(|"analysis/") + string-starts-with(|"src-gen/")
