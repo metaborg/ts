@@ -2,9 +2,8 @@ module editor/TypeSystemLanguage-Outliner
 
 imports
   include/TypeSystemLanguage
-  lib/runtime/editor/outline-library
-  lib/runtime/editor/origins
-  editor/TypeSystemLanguage-Outliner.generated
+  runtime/editor/outline-library
+  runtime/editor/origins
 
 rules
   
