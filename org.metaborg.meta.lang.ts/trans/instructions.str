@@ -1,6 +1,6 @@
 module instructions
 
-imports include/TypeSystemLanguage
+imports signatures/TypeSystemLanguage-sig
 
 // signature
 //   constructors

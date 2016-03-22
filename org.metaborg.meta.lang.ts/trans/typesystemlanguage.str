@@ -5,8 +5,8 @@ imports
 	libstratego-lib
 	libstratego-gpp
 	libstratego-aterm
-	include/TypeSystemLanguage
-	editor-common.generated
+	signatures/TypeSystemLanguage-sig
+	stratego/metaborg
 	runtime/analysis/-
 	runtime/nabl/-
 	runtime/task/-
@@ -17,9 +17,9 @@ imports
 	check
 	desugar
 	label
-  editor/TypeSystemLanguage-Outliner
+  outline
   pp
-  include/TypeSystemLanguage-parenthesize
+  pp/TypeSystemLanguage-parenthesize
   instructions
 
   generate-instruct // instead of generate
