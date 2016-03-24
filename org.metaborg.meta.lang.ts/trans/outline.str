@@ -1,7 +1,7 @@
 module editor/TypeSystemLanguage-Outliner
 
 imports
-  include/TypeSystemLanguage
+  signatures/TypeSystemLanguage-sig
   runtime/editor/outline-library
   runtime/editor/origins
 

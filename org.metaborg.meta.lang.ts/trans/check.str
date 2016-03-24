@@ -2,7 +2,7 @@ module check
 
 imports
 
-	include/TypeSystemLanguage
+	signatures/TypeSystemLanguage-sig
 
 rules // Extensions for error/warning/note reporting
 	
