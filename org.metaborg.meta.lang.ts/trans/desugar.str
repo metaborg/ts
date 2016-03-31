@@ -9,20 +9,20 @@ imports
 strategies // desugaring
   
   ts-desugar-all = 
-    innermost(desugar)
+    innermost(ts-desugar)
     
 rules // type signatures
 	
   split-rule :
   	TypeSig(cs@[_, _ | _], ts, t, form) -> <map(!TypeSig([<id>], ts, t, form))> cs
 
-  desugar :
+  ts-ts-desugar :
   	TypeSigUnCond(cs, ts, t) -> TypeSig(cs, ts, t, True())
   	
-  desugar :
+  ts-desugar :
   	TypeSigConst(cs, t) -> TypeSigUnCond(cs, [], t)
   	
-  desugar :
+  ts-desugar :
   	TypeSig([c], ts, t, form) -> 
   	TypeRule(
   		HasTypePat([Op(c, vars)], t),
@@ -68,12 +68,12 @@ rules // type signatures
 
 rules // unconditional rules
   
-  desugar :
+  ts-desugar :
     TypeRuleUnCond(prop) -> TypeRule(prop, True())
       
 rules // rule splitting
    
-  desugar :
+  ts-desugar :
   	TypeRules(t*) -> TypeRules(<mapconcat(split-rule <+ MkSingleton); not(?t*)> t*)  
   
   split-rule :
@@ -93,55 +93,55 @@ rules // rule splitting
    
 rules // normalization 	
   	
-  desugar :
+  ts-desugar :
     And(And(x, y), z) -> And(x, And(y, z))
     
-  desugar :
+  ts-desugar :
     And(True(), p) -> p
     
-  desugar :
+  ts-desugar :
     And(p, True()) -> p 
     
-  desugar :
+  ts-desugar :
     Or(p, False()) -> p
   
-  desugar :
+  ts-desugar :
     Or(False(), p) -> p
     
 rules // terms
 	
-	desugar :
+	ts-desugar :
 		Tuple([t]) -> t
     
 rules // propositions
       
-  desugar :
+  ts-desugar :
     HasType(trm, pat) -> Has(trm, "type", pat)
   
-  desugar :
+  ts-desugar :
     HasTypePat(pat, trm) -> HasPat(pat, "type", trm)
     
-  desugar :
+  ts-desugar :
     Has(trm, kind, pat) -> And(Has(trm, kind, Var(x)), Match(VarRef(x), pat))
     where <not(?Var(_))> pat; x := <newname> "x"
     
-  desugar :
+  ts-desugar :
     TypeRule(HasPat(pat, kind, trm), form) -> 
     TypeRule(HasPat(pat, kind, VarRef(x)), And(form, Match(trm, Var(x))))
     where <not(?VarRef(_))> trm; x := <newname> "x"
 
-  desugar :
+  ts-desugar :
   	Ia(Var(x), Return(trm)) -> I(Bind(trm, Var(x)))
 
-  desugar :
+  ts-desugar :
   	Iad(Var(x), Return(trm), VarRef(d)) -> Id(Bind(trm, Var(x)), VarRef(d))
   	
 rules // unstar list variables
       
-  desugar :
+  ts-desugar :
     ListVar(x) -> Var(<unstar>x)
     
-  desugar :
+  ts-desugar :
     ListVarRef(x) -> VarRef(<unstar>x) 
     
   unstar = 
@@ -149,20 +149,20 @@ rules // unstar list variables
     
 rules // split Match into more specific operations
   
-  desugar :
+  ts-desugar :
     Match(pat, Var(x)) -> Bind(pat, Var(x))
     
-  desugar :
+  ts-desugar :
     Match(trm, pat) -> Eq(trm, pat)
     where <pattern-vars> pat => []
         ; <pattern-wlds> pat => []
     
-  desugar :
+  ts-desugar :
     prop@Match(trm, pat) -> form
     where not(<?Var(_)> pat); ys := <pattern-vars> pat; not([])
         ; form := <foldr(!True(), !And(<Fst; mk-project(|trm, pat)>, <Snd>))> ys
     
-  desugar :
+  ts-desugar :
     prop@Match(trm, pat) -> form
     where not(<?Var(_)> pat); [] := <pattern-vars> pat; [_|_] := <pattern-wlds> pat
         ; form := And(Project(trm,<oncetd(\Wld() -> Var(<newname> "match")\)>pat), True())
@@ -172,7 +172,7 @@ rules // split Match into more specific operations
 
 rules // bindings in multiple branches of an Or
   
-  desugar :
+  ts-desugar :
     Or(form1, form2) -> And(Or(form1', form2'), form)
     where v* := <isect> (<form-vars> form1, <form-vars> form2) 
         ; not([])
