@@ -33,9 +33,9 @@ rules // Analysis
 	editor-analyze = analysis-default-editor
 	
 	analysis-single-default-interface = 
-		analysis-single-default(id, desugar-all, id|<language>)
+		analysis-single-default(id, ts-desugar-all, id|<language>)
 	analysis-multiple-default-interface = 
-		analysis-multiple-default(parse-file <+ !(), id, desugar-all, id|<language>, <project-path>)
+		analysis-multiple-default(parse-file <+ !(), id, ts-desugar-all, id|<language>, <project-path>)
 	
 	editor-save = where(generate-stratego; write-string-to-file); analysis-save-default(|<language>)
 
@@ -115,37 +115,37 @@ rules // code generation
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts")> path;
-      result   := <desugar-all; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      result   := <ts-desugar-all; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
 
   desugar-label-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts")> path;
-      result   := <desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      result   := <ts-desugar-all; label-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
 
   desugar-instruct-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts")> path;
-      result   := <desugar-all; instruct-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
+      result   := <ts-desugar-all; instruct-formulas; strip-annos; parenthesize-TypeSystemLanguage; pp-debug> selected
       
   desugar-ast-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts.aterm")> path;
-      result   := <desugar-all; strip-annos> selected
+      result   := <ts-desugar-all; strip-annos> selected
 
   desugar-label-ast-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts.aterm")> path;
-      result   := <desugar-all; label-formulas; strip-annos> selected
+      result   := <ts-desugar-all; label-formulas; strip-annos> selected
 
   desugar-instruct-ast-service :     
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       filename := <guarantee-extension(|"desugared.ts.aterm")> path;
-      result   := <desugar-all; instruct-formulas; strip-annos> selected
+      result   := <ts-desugar-all; instruct-formulas; strip-annos> selected
       
   // Formats the program using a pretty printer   
   format-service:

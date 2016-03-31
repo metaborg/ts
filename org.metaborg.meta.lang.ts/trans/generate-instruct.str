@@ -37,7 +37,7 @@ rules
         [projection*]
     ]
     where {| Projections:
-          sectionD*   := <desugar-all> section*
+          sectionD*   := <ts-desugar-all> section*
         ; sig*        := <collect(signature-to-stratego)> section*
         ; func*       := <collect(function-to-stratego)> section*
         ; rel*        := <collect(relation-to-stratego)> section*

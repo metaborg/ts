@@ -8,7 +8,7 @@ imports
 
 strategies // desugaring
   
-  desugar-all = 
+  ts-desugar-all = 
     innermost(desugar)
     
 rules // type signatures
