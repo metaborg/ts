@@ -1,9 +1,10 @@
 module names
 
-imports 
-	
-	include/TypeSystemLanguage
-	
+imports
+
+  signatures/-
+  signatures/terms/-
+
 namespaces
 
   Module
@@ -16,60 +17,60 @@ binding rules // Module
 
 	Module(x, _) :
 		defines non-unique Module x
-		
+
 	Import(x) :
 		refers to Module x
-	
+
 binding rules // Variables
 
   Var(x) :
     defines non-unique Variable x
-    
+
   ListVar(x) :
     defines non-unique ListVariable x
-    
+
   VarRef(x) :
     refers to Variable x
-    
+
   ListVarRef(x) :
     refers to ListVariable x
-    
+
 binding rules // Type rules
 
-  TypeRuleUnCond(_) : 
+  TypeRuleUnCond(_) :
     scopes Variable, ListVariable
-    
-  TypeRule(_, _) : 
+
+  TypeRule(_, _) :
     scopes Variable, ListVariable
-    
+
 binding rules // Type functions
-    
+
 	TypeFunctionUnCond(x, _, _) :
 		defines non-unique Function x
   	scopes Variable, ListVariable
-  	
+
 	TypeFunction(x, _, _, _) :
 		defines non-unique Function x
   	scopes Variable, ListVariable
-  	
+
 	FuncAppl(x, _, _) :
 		refers to Function x
-  	
+
 binding rules // Relations
 
 	RelationDef(_, x) :
 		defines non-unique Relation x
-		
+
 	RelationUnCond(_, x, _) :
 		defines non-unique Relation x
 		scopes Variable, ListVariable
-		
+
 	Relation(_, x, _, _) :
 		defines non-unique Relation x
 		scopes Variable, ListVariable
-		
+
 	RelationStore(_, x, _) :
 		defines non-unique Relation x
-	
+
 	RelationMatch(_, x, _) :
 		refers to Relation x

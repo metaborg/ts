@@ -1,9 +1,0 @@
-module TypeSystemLanguage-Completions
-
-imports
-
-  src-gen/completions/TypeSystemLanguage-esv
-
-completions
-
-  completion proposer : editor-complete

@@ -1,0 +1,10 @@
+module editor/TypeSystemLanguage-Outliner
+
+imports
+  signatures/TypeSystemLanguage-sig
+  runtime/editor/outline-library
+  runtime/editor/origins
+
+rules
+  
+  outline-expand-to-level = !3

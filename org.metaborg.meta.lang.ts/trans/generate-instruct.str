@@ -3,28 +3,28 @@ module generate-instruct
 // assume that all rules have been transformed to bodies with instructions
 
 imports
-  
-  include/TypeSystemLanguage 
-  lib/runtime/nabl/-
-  lib/runtime/task/-
+
+  signatures/TypeSystemLanguage-sig
+  runtime/nabl/-
+  runtime/task/-
   pp
   desugar
   label
   utils
-  
-rules 
- 
-  to-stratego(|project-path, modname) : 
+
+rules
+
+  to-stratego(|project-path, modname) :
     Module(name, section*) ->
     $[module [modname]
-    
+
       [import]
       [import*]
       signature constructors
-        
+
         [sig*]
-        
-      rules // functions 
+
+      rules // functions
         [func*]
 
       rules // relations
@@ -46,82 +46,85 @@ rules
         ; import*     := <collect(imports-to-stratego)> section*
         ; if <collect-all(?ImportWildcard(<string-ends-with(|"/types");not(string-starts-with(|"src-gen/"))>))> section* => []
           then
-            import := 
+            import :=
               $[imports
-                  
-                  lib/runtime/nabl/-
-                  lib/runtime/task/-
-                  lib/runtime/types/-
-                  lib/runtime/properties/-
-                  lib/runtime/relations/-
+
+                  runtime/nabl/-
+                  runtime/task/-
+                  runtime/types/-
+                  runtime/properties/-
+                  runtime/relations/-
                ]
          else
            import := ""
          end
-         |} 
- 
+         |}
+
 rules
-  
+
   imports-to-stratego:
-    Imports(import*) -> 
+    Imports(import*) ->
     $[imports
-      
+
         [<map(import-to-stratego)> import*]]
-    
+
   import-to-stratego:
-    Import(t) -> 
-    $[[t]
+    Import(m) ->
+    $[[m']
     ]
-    where task := <nabl-collect-use-task> t
-        ; <task-has-failed> task
-    
+    where
+       <nabl-collect-use-task; not(task-has-failed)> m
+    ;  m' := $[types/[m]]
+    <+ mn := <left-match; implode-string> (<explode-string> m, <explode-string> "syntax/")
+    ;  m' := $[signatures/[mn]-sig]
+    <+ m' := m
+
   import-to-stratego:
-    Import(t) -> 
-    $[[t].generated
+    ImportWildcard(m) ->
+    $[[m']/-
     ]
-    where task := <nabl-collect-use-task> t
-        ; <not(task-has-failed)> task
-    
-  import-to-stratego:
-    ImportWildcard(t) -> 
-    $[[t]/-
-    ]
-        
+    where
+       "syntax" := m
+    ;  m' := "signatures"
+    <+ mn := <left-match; implode-string> (<explode-string> m, <explode-string> "syntax/")
+    ;  m' := $[signatures/[mn]]
+    <+ m' := m
+
 rules
-  
+
   task-dependencies =
     collect(?Label(<![<id>]>, _) <+ ?Match(_, <pattern-vars>)); concat; make-set
 
 rules // signatures
-  
+
   signature-to-stratego :
     SignatureRule(n, t) -> $[[n] : [<signature-type-to-stratego> t]
     ]
-    
+
   signature-type-to-stratego :
     SigType(sort*, t) -> $[[<separate-by(|" * "); concat-strings> sort*] -> [t]]
-    
+
   signature-type-to-stratego :
     SigInj(t) -> $[[t]]
 
 rules // functions
-  
+
   function-to-stratego :
     TypeFunction(n, pat, trm, form) -> ${
-      type-func-{n}(|ctx) : 
+      type-func-{n}(|ctx) :
         {<term-to-stratego> pat} -> <task-create-id(|ctx, [{l}])> {<term-to-stratego> trm}
-        where 
+        where
         	{s}
     }
     where (l, s) := <formula-to-stratego> form
         //; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-    
+
   function-to-stratego :
     TypeFunctionUnCond(n, pat, trm) -> $[
-      type-func-[n](|ctx) : 
+      type-func-[n](|ctx) :
         [<term-to-stratego> pat] -> [<term-to-stratego> trm]
     ]
-                    
+
   instruction-to-stratego :
     I(FuncAppl(n, trm, Var(x))) ->
       ${{x} := <type-func-{n}(|ctx)> {<term-to-stratego> trm}}
@@ -134,7 +137,7 @@ rules // relations
 
   relation-to-stratego :
     RelationDef(prop*, rel) -> <map(relation-prop-to-stratego(|rel)); concat-strings> prop*
-    
+
   relation-prop-to-stratego(|rel) :
     Reflexive() -> $[
       relation-is-reflexive = ?"[rel]"
@@ -147,7 +150,7 @@ rules // relations
     Symmetric() -> $[
       relation-is-symmetric = ?"[rel]"
     ]
-  
+
   relation-to-stratego :
     RelationUnCond(trm1, rel, trm2) -> $[
       relation-store-value(store): ("[rel]", [trm1s]) -> <store> [trm2s]
@@ -155,17 +158,17 @@ rules // relations
     ]
     where <term-to-stratego>trm1 => trm1s
         ; <term-to-stratego>trm2 => trm2s
-    
+
   relation-to-stratego :
     Relation(trm1, rel, trm2, form) -> ${
-      relation-match-custom(|ctx) : 
+      relation-match-custom(|ctx) :
         ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2}) -> <task-create-id(|ctx, [{l}])> {<term-to-stratego>trm2}
-        where 
+        where
           {s}
     }
     where (l, s) := <formula-to-stratego> form
         //; deps := <task-dependencies; separate-by(|", "); concat-strings> form
-          
+
   instruction-to-stratego :
     Ia(Var(l), RelationMatch(trm1, rel, trm2)) ->
       ${{l} := <relation-create-match(|ctx)> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
@@ -173,15 +176,15 @@ rules // relations
   instruction-to-stratego :
     Iad(Var(l), RelationMatch(trm1, rel, trm2), VarRef(d)) ->
       ${{l} := <relation-create-match(|ctx); task-create-id(|ctx, [{d}])> ("{rel}", {<term-to-stratego>trm1}, {<term-to-stratego>trm2})}
-      
+
   instruction-to-stratego :
     Ia(Var(l), RelationStore(trm1, rel, trm2)) ->
       ${{l} := <new-rel-tuple(|ctx, "{rel}", {<term-to-stratego>trm2})> {<term-to-stratego>trm1}}
-      
+
   instruction-to-stratego :
     Iad(Var(l), RelationStore(trm1, rel, trm2), VarRef(d)) ->
       ${{l} := <new-rel-tuple(|ctx, "{rel}", {<term-to-stratego>trm2}); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm1}}
- 
+
 rules // type rule
 
   rule-to-stratego :
@@ -189,121 +192,121 @@ rules // type rule
       create-{kind}-task(|ctx) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[])> {x}
     }
-          
+
   rule-to-stratego :
     TypeRule(HasPat(pat, kind, VarRef(x)), form) -> ${
       create-{kind}-task(|ctx) :
         {<term-to-stratego>pat} -> <task-create-id(|ctx,[{l}])> {x}
-        where 
+        where
           {s}
     }
     where (l, s) := <formula-to-stratego> form
 
 rules // well-formedness constraint
-            
+
   // todo: target for WF rules
-  
+
   rule-to-stratego :
     TypeRule(IsWF(pat), Is([])) -> ${
       nabl-constraint(|ctx) :
         {<term-to-stratego>pat} -> <fail>
     }
-    
+
   rule-to-stratego :
     TypeRule(IsWF(pat), form) -> ${
       nabl-constraint(|ctx) :
         {<term-to-stratego>pat} -> <fail>
-        where 
+        where
           {s}
     }
     where (l, s) := <formula-to-stratego> form
-  
+
 rules // instructions
-	
+
 	formula-to-stratego :
 		Label(l, Is(is*)) -> (l, <separate-by(|";\n")> s*)
 		where s* := <map(instruction-to-stratego)> is*
-		
+
 rules // return
-  
+
 	// instruction-to-stratego :
 	// 	Ia(Var(l), Return(trm)) -> ${}
-	
+
 rules // negation
-	
+
 	instruction-to-stratego :
-		Ia(Var(x), Not(Return(VarRef(t)))) -> 
+		Ia(Var(x), Not(Return(VarRef(t)))) ->
 		  ${{x} := <task-create-not(|ctx)> {t}}
-		
+
 rules // else error
-	       
+
   instruction-to-stratego :
-    I(Else(Return(VarRef(t)), msg, target)) -> 
+    I(Else(Return(VarRef(t)), msg, target)) ->
       ${<task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg})> {<term-to-stratego>target}}
 
   instruction-to-stratego :
-    Id(Else(Return(VarRef(t)), msg, target), VarRef(d)) -> 
+    Id(Else(Return(VarRef(t)), msg, target), VarRef(d)) ->
       ${<task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg}); task-create-id(|ctx, [{d}])> {<term-to-stratego>target}}
-      
+
 rules // attribute of
-              
+
   // instruction-to-stratego :
-  //   I(Has(VarRef(x), attr, Var(t))) -> 
+  //   I(Has(VarRef(x), attr, Var(t))) ->
   //     ${{t} := <{attr}-task(|ctx)> {x}}
-  //     
+  //
   // instruction-to-stratego :
-  //   Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) -> 
+  //   Id(Has(VarRef(x), attr, Var(t)), VarRef(d)) ->
   //     ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {x}}
 
   instruction-to-stratego :
-    I(Has(trm, attr, Var(t))) -> 
+    I(Has(trm, attr, Var(t))) ->
       ${{t} := <{attr}-task(|ctx)> {<term-to-stratego>trm}}
-      
+
   instruction-to-stratego :
-    Id(Has(trm, attr, Var(t)), VarRef(d)) -> 
+    Id(Has(trm, attr, Var(t)), VarRef(d)) ->
       ${{t} := <{attr}-task(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm}}
-      
+
 rules // definition of
-            
+
   instruction-to-stratego :
-    I(Has(DefOf(trm), op, Var(t))) -> 
+    I(Has(DefOf(trm), op, Var(t))) ->
       ${{t} := <{op}-lookup(|ctx)> {<term-to-stratego>trm}}
-      
+
   instruction-to-stratego :
-    Id(Has(DefOf(trm), op, Var(t)), VarRef(d)) -> 
+    Id(Has(DefOf(trm), op, Var(t)), VarRef(d)) ->
       ${{t} := <{op}-lookup(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm}}
-       
+
 rules // equality check
-  
+
   instruction-to-stratego :
-    Ia(Var(l), Eq(trm1, trm2)) -> 
+    Ia(Var(l), Eq(trm1, trm2)) ->
       $[[l] := <type-match(|ctx, [<term-to-stratego>trm2])> [<term-to-stratego>trm1]]
 
   instruction-to-stratego :
-    Iad(Var(l), Eq(trm1, trm2), VarRef(d)) -> 
+    Iad(Var(l), Eq(trm1, trm2), VarRef(d)) ->
       ${{l} := <type-match(|ctx, {<term-to-stratego>trm2}); task-create-id(|ctx, [{d}])> {<term-to-stratego>trm1}}
-      
+
 rules // bind pattern to variable
-  
+
   instruction-to-stratego :
-    I(Bind(pat, Var(x))) -> 
+    I(Bind(pat, Var(x))) ->
       ${{x} := <type-is(|ctx)> {<term-to-stratego>pat}}
 
   instruction-to-stratego :
-    Id(Bind(pat, Var(x)), VarRef(d)) -> 
+    Id(Bind(pat, Var(x)), VarRef(d)) ->
       ${{x} := <type-is(|ctx); task-create-id(|ctx, [{d}])> {<term-to-stratego>pat}}
-      
+
 rules // projection
-  
+
   instruction-to-stratego :
     I(Project(x@VarRef(_), pat)) -> strat
-    where strat := <mk-projection(|x)> pat 
-    
+    where strat := <mk-projection(|x)> pat
+
   instruction-to-stratego :
-    Id(Project(x@VarRef(_), pat), VarRef(d)) -> 
+    Id(Project(x@VarRef(_), pat), VarRef(d)) ->
       ${{strat}; task-create-id(|ctx, [{d}])}
-    where strat := <mk-projection(|x)> pat 
-      
+    where strat := <mk-projection(|x)> pat
+
    mk-projection(|x) :
      pat -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
      where rl := <newname> "proj"
@@ -313,88 +316,88 @@ rules // projection
                ("[rl]", [<term-to-stratego>pat]) -> [y]
            ]
          ; rules( Projections :+ _ -> r )
-           
+
 rules // bind union
-        
+
   instruction-to-stratego :
-    I(Bind(Union(trm1, trm2), Var(x))) -> 
+    I(Bind(Union(trm1, trm2), Var(x))) ->
       ${{x} := <new-task(|ctx)> Combine([{<term-to-stratego>trm1}, {<term-to-stratego>trm2}])}
-      
+
   instruction-to-stratego :
-    Id(Bind(Union(trm1, trm2), Var(x)), VarRef(d)) -> 
+    Id(Bind(Union(trm1, trm2), Var(x)), VarRef(d)) ->
       ${{x} := <new-task(|ctx); task-create-id(|ctx, [{d}])> Combine([{<term-to-stratego>trm1}, {<term-to-stratego>trm2}])}
 
 rules // bind choice
-  
+
   instruction-to-stratego :
-    I(Bind(Choice(trm1, trm2), Var(x))) -> 
+    I(Bind(Choice(trm1, trm2), Var(x))) ->
       ${{x} := <new-task(|ctx)> Choice([{<term-to-stratego>trm1}, {<term-to-stratego>trm2}])}
-  
+
   instruction-to-stratego :
-    Id(Bind(Choice(trm1, trm2), Var(x)), VarRef(d)) -> 
+    Id(Bind(Choice(trm1, trm2), Var(x)), VarRef(d)) ->
       ${{x} := <new-task(|ctx); task-create-id(|ctx, [{d}])> Choice([{<term-to-stratego>trm1}, {<term-to-stratego>trm2}])}
 
 rules // term
-  
+
   term-to-stratego :
     Wld() -> "_"
-    
+
   term-to-stratego :
     Var(x) -> x
-    
+
   term-to-stratego :
     VarRef(x) -> x
 
   term-to-stratego :
     ListVar(x) -> x
-    
+
   term-to-stratego :
     ListVarRef(x) -> x
-        
+
   term-to-stratego :
     Int(i) -> i
-    
+
   term-to-stratego :
     Real(r) -> r
-    
+
   term-to-stratego :
     Str(s) -> s
 
   term-to-stratego :
     Char(s) -> s
-        
+
   term-to-stratego :
     As(v, p) -> $[[<term-to-stratego>v]@[<term-to-stratego>p]]
-    
+
   term-to-stratego :
     Op(cns, t*) -> $[[cns]([<map(term-to-stratego); separate-by(|", ")> t*])]
-    
+
   term-to-stratego :
     OpQ(cns, t*) -> $["[cns]"([<map(term-to-stratego); separate-by(|", ")> t*])]
-            
+
   term-to-stratego :
     Tuple(t*) -> $[([<map(term-to-stratego); separate-by(|", ")> t*])]
 
   term-to-stratego :
     List(t*) -> $<[<<map(term-to-stratego); separate-by(|", ")> t*>]>
-    
+
   term-to-stratego :
     ListTail(t*, t) -> $<[<<map(term-to-stratego); separate-by(|", ")> t*> | <<term-to-stratego>t>]>
-    
+
   term-to-stratego :
   	Choice(trm1, trm2) -> ${<task-create-choice(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
-  	
+
   term-to-stratego :
   	Union(trm1, trm2) -> ${<task-create-combine(|ctx)> [{<term-to-stratego>trm1}, {<term-to-stratego>trm2}]}
-    
-  term-to-stratego : 
+
+  term-to-stratego :
     StrInterp(StringQuotation1(_, part*)) -> $<[<<map(strinterp-part-to-stratego); separate-by(|", ")> part*>]>
-    
-  strinterp-part-to-stratego : 
+
+  strinterp-part-to-stratego :
     QStr(s) -> $["[s]"]
-    
-  strinterp-part-to-stratego : 
+
+  strinterp-part-to-stratego :
     QDollar(s) -> $["[s]"]
-    
-  strinterp-part-to-stratego : 
-    StringEscape1(_, VarRef(x)) -> $[[x]] 
+
+  strinterp-part-to-stratego :
+    StringEscape1(_, VarRef(x)) -> $[[x]]
