@@ -19,7 +19,8 @@ language General properties
   table         : include/TypeSystemLanguage.tbl
   start symbols : Module
                                                              
-  provider : include/typesystemlanguage-java.jar                                                             
+  provider : include/typesystemlanguage-java.jar
+  provider : include/typesystemlanguage.jar                                                         
                                                                                                              
   observer : editor-analyze                      (multifile)                                                 
                                                                                                                                                                                                 
