@@ -56,6 +56,10 @@ context-free syntax // formulas
     <Formula> else error <Term> on <Term>
   > {left} 
   
+  Formula.ElseWarning = <
+    <Formula> else warning <Term> on <Term>
+  > {left} 
+
   Formula.Not = <
     not <Formula>
   >
@@ -90,7 +94,7 @@ context-free syntax // instructions
     
 context-free priorities
 
-   Formula.Label > Formula.Not > Formula.Else > Formula.And > Formula.Or
+   Formula.Label > Formula.Not > Formula.Else > Formula.ElseWarning > Formula.And > Formula.Or
    
 context-free syntax // propositions
   

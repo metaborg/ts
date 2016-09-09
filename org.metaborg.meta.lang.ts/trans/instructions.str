@@ -53,6 +53,10 @@ rules
       where Label(l, Is(is*)) := <instruct-formula(|dep)> form
 
   instruct-formula(|dep) :
+    ElseWarning(form, msg, target) -> Label(l, Is([is*, I(ElseWarning(Return(VarRef(l)), msg, target))]))
+      where Label(l, Is(is*)) := <instruct-formula(|dep)> form
+
+  instruct-formula(|dep) :
     form@Has(trm, op, Var(x)) -> Label(x, Is([Id(form, dep)]))
   
   instruct-formula(|dep) :
