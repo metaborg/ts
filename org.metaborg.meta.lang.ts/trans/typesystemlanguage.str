@@ -5,13 +5,12 @@ imports
 	libstratego-lib
 	libstratego-gpp
 	libstratego-aterm
+	libspoofax/core/language
 	signatures/TypeSystemLanguage-sig
-	stratego/metaborg
 	runtime/analysis/-
 	runtime/nabl/-
 	runtime/task/-
 	runtime/index/-
-	runtime/tmpl/-
 	pp/-
   names/names
 	check

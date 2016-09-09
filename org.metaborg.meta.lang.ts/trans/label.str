@@ -1,6 +1,6 @@
 module label
 
-imports signatures/TypeSystemLanguage-sig
+imports signatures/-
 
 rules
   
