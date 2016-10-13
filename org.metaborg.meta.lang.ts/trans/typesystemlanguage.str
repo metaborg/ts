@@ -88,8 +88,9 @@ rules // code generation
     (selected, position, ast, path, project-path) -> (filename, result)
     with
       Module(modname, _) := ast;
-      filename := $[src-gen/types/[<guarantee-extension(|"str")> modname]];
-      result   := <instruct-formulas; to-stratego(|project-path, $[types/[modname]])> selected
+      filename := $[src-gen/types/[<guarantee-extension(|"str")> modname]]
+    ; {|CurrentModule : rules(CurrentModule := modname); result := <instruct-formulas; to-stratego(|project-path, $[types/[modname]])> selected |}
+      
 
   // When given a tuple (path, string) this writes string into path.
   write-string-to-file =
