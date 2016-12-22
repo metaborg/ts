@@ -248,6 +248,16 @@ rules // else error
     Id(Else(Return(VarRef(t)), msg, target), VarRef(d)) ->
       ${<task-create-error-on-failure(|ctx, {t}, {<term-to-stratego>msg}); task-create-id(|ctx, [{d}])> {<term-to-stratego>target}}
 
+rules // else warning
+
+  instruction-to-stratego :
+    I(ElseWarning(Return(VarRef(t)), msg, target)) ->
+      ${<task-create-warning-on-failure(|ctx, {t}, {<term-to-stratego>msg})> {<term-to-stratego>target}}
+
+  instruction-to-stratego :
+    Id(ElseWarning(Return(VarRef(t)), msg, target), VarRef(d)) ->
+      ${<task-create-warning-on-failure(|ctx, {t}, {<term-to-stratego>msg}); task-create-id(|ctx, [{d}])> {<term-to-stratego>target}}
+
 rules // attribute of
 
   // instruction-to-stratego :
@@ -309,7 +319,7 @@ rules // projection
 
    mk-projection(|x) :
      pat -> $[[y] := <new-task(|ctx)> Rewrite("[rl]", [<term-to-stratego>x])]
-     where rl := <newname> "proj"
+     where rl := <concat-strings; newname> ["proj_", <CurrentModule>, "_"]
          ; [y] := <pattern-vars> pat
          ; r := $[
              task-rewrite :

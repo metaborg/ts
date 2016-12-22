@@ -1,6 +1,6 @@
 module label
 
-imports signatures/TypeSystemLanguage-sig
+imports signatures/-
 
 rules
   
@@ -32,6 +32,9 @@ rules
 
   label-formula :
     Else(form, msg, target) -> Else(<label-formula>form, msg, target)
+
+  label-formula :
+    ElseWarning(form, msg, target) -> ElseWarning(<label-formula>form, msg, target)
 
   label-formula :
     form@Has(trm, op, Var(t)) -> Label(t, form)

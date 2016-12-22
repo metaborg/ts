@@ -1,6 +1,6 @@
 module instructions
 
-imports signatures/TypeSystemLanguage-sig
+imports signatures/-
 
 // signature
 //   constructors
@@ -50,6 +50,10 @@ rules
     
   instruct-formula(|dep) :
     Else(form, msg, target) -> Label(l, Is([is*, I(Else(Return(VarRef(l)), msg, target))]))
+      where Label(l, Is(is*)) := <instruct-formula(|dep)> form
+
+  instruct-formula(|dep) :
+    ElseWarning(form, msg, target) -> Label(l, Is([is*, I(ElseWarning(Return(VarRef(l)), msg, target))]))
       where Label(l, Is(is*)) := <instruct-formula(|dep)> form
 
   instruct-formula(|dep) :
