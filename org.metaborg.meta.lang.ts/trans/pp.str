@@ -8,11 +8,11 @@ imports
   
 strategies 
   
-  pp-pattern = prettyprint-Pattern; box2text-string(|80)
+  pp-pattern = prettyprint-TypeSystemLanguage-Pattern; box2text-string(|80)
   
-  pp-term = prettyprint-Term; box2text-string(|80)
+  pp-term = prettyprint-TypeSystemLanguage-Term; box2text-string(|80)
 
 rules // Hacks for missing string interpolation pp rules.
   
-  prettyprint-StringQuotation = with(fail|"Pretty printing string quotations is not yet supported")
+  prettyprint-TypeSystemLanguage-StringQuotation = with(fail|"Pretty printing string quotations is not yet supported")
   
