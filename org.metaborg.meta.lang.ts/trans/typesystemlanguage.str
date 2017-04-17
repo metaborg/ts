@@ -98,8 +98,7 @@ rules // code generation
     with(
       handle := <fopen> (filename, "w");
       <fputs> (string, handle);
-      <fclose> handle;
-      <refresh-workspace-file> filename
+      <fclose> handle
     )
 
   desugar-service :
